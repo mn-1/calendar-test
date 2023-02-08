@@ -5,18 +5,41 @@ import {
   EventClickArg,
   EventContentArg,
   formatDate,
+  EventInput,
 } from '@fullcalendar/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { INITIAL_EVENTS, createEventId } from '../utils/event';
 
 interface DemoAppState {
   weekendsVisible: boolean;
   currentEvents: EventApi[];
 }
 
+let eventGuid = 0;
+let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
+
+const INITIAL_EVENTS: EventInput[] = [
+  {
+    id: createEventId(),
+    title: 'All-day event',
+    start: todayStr, // 2023-02-08
+  },
+  {
+    id: createEventId(),
+    title: 'Timed event',
+    start: todayStr + 'T12:00:00', // 2023-02-08T12:00:00
+  },
+  {
+    id: createEventId(),
+    title: 'Conference',
+    start: '2023-02-03',
+    end: '2023-02-07',
+  },
+  { id: createEventId(), title: 'Party(1day)', start: '2023-02-09T20:00:00' },
+];
+console.log(INITIAL_EVENTS);
 export default class DemoApp extends React.Component<{}, DemoAppState> {
   state: DemoAppState = {
     weekendsVisible: true,
@@ -148,4 +171,8 @@ function renderSidebarEvent(event: EventApi) {
       <i>{event.title}</i>
     </li>
   );
+}
+
+export function createEventId() {
+  return String(eventGuid++);
 }

@@ -32,4 +32,12 @@ yarn add react-datepicker @types/react-datepicker date-fns
 // validate
 yarn add react-hook-form yup @hookform/resolvers
 
+// reactstrap
+https://reactstrap.github.io/?path=/story/home-installation--page
+yarn add reactstrap
+
+// sweetalert2
+https://sweetalert2.github.io/
+yarn add sweetalert2
+
 ## .env

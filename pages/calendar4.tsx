@@ -1,5 +1,6 @@
 /**
- * resourceTimeGridPluginを使っている
+ * resourceTimeGridPluginを使っているcalendar2に
+ * calendar3を追加していくやつ
  */
 import React, { useState } from 'react';
 // MUI
@@ -37,26 +38,39 @@ export type UpdateFormDataInfo = {
 };
 
 const SampleCalendar = () => {
-  /**
-   * 予定を追加する際にCalendarオブジェクトのメソッドを使用する必要がある。
-   * (CalendarオブジェクトはRef経由でアクセスする必要がある。)
-   */
-  const ref = React.createRef<any>();
-
+  // 予約の配列
+  const [myEvents, setMyEvents] = useState<EventApi[]>([]);
+  // IDカウント
+  const [countId, setCountId] = useState<number>(0);
   const [inView, setInView] = useState<boolean>(false);
-  // 登録されたイベントが格納されていく配列
-  const [myEvents, setMyEvents] = useState<newEventsType[]>([]);
 
-  const events = [
-    { title: 'eventを', start: '2023-01-09' },
-    {
-      title: 'こんな感じで追加できます',
-      start: '2023-01-10',
-      end: '2023-01-12',
-    },
-  ];
+  // 予約追加
+  const handleDateSelect = (selectInfo: DateSelectArg) => {
+    const title = prompt('Please enter a new title for your event');
+    const calendarApi = selectInfo.view.calendar;
 
-  const eventData = { title: 'my event', duration: '02:00' };
+    calendarApi.unselect();
+
+    const add = countId + 1;
+    setCountId(add);
+
+    if (!title) return;
+    calendarApi.addEvent({
+      id: String(countId),
+      title,
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      allDay: false,
+    });
+  };
+
+  // 予約削除
+  const handleEventClick = (clickInfo: EventClickArg) => {
+    if (confirm(`${clickInfo.event.title}の予定を削除してよろしいでしょうか。`))
+      clickInfo.event.remove();
+  };
+
+  // dropした時
   const eventDrop = (event: any) => {};
 
   return (
@@ -71,6 +85,21 @@ const SampleCalendar = () => {
           }}
         >
           <Grid item sm={2}>
+            <h2>予約一覧 ( {myEvents.length} )</h2>
+            <ul>
+              {myEvents.map((event) => (
+                <li key={event.id}>
+                  <b>
+                    {formatDate(event.start!, {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </b>
+                  <i>{event.title}</i>
+                </li>
+              ))}
+            </ul>
             <div
               id='draggable-el'
               draggable={true}
@@ -90,11 +119,18 @@ const SampleCalendar = () => {
                 right: '',
               }}
               initialView='resourceTimeGridDay'
-              selectable={true}
-              // this allows things to be dropped onto the calendar
               droppable={true}
-              drop={(arg) => {
-                console.log(arg);
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              weekends={true}
+              select={handleDateSelect}
+              eventContent={renderEventContent}
+              eventClick={handleEventClick}
+              eventsSet={(events: EventApi[]) => {
+                console.log(events);
+                setMyEvents(events);
               }}
               resources={[
                 { title: '店舗A' },
@@ -121,3 +157,13 @@ const SampleCalendar = () => {
 };
 
 export default SampleCalendar;
+
+// カレンダーに表示する内容
+function renderEventContent(eventContent: EventContentArg) {
+  return (
+    <>
+      <b>{eventContent.timeText}</b>
+      <i>{eventContent.event.title}</i>
+    </>
+  );
+}

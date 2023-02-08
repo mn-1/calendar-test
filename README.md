@@ -15,8 +15,16 @@ npx create-next-app calendar-test --typescript
 yarn add @mui/material @emotion/react @emotion/styled @material-ui/core
 
 // fullcalendar
-yarn add @fullcalendar/core @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list
-yarn add @fullcalendar/resource-timeline
+yarn add \
+ @fullcalendar/core \
+ @fullcalendar/react \
+ @fullcalendar/daygrid \
+ @fullcalendar/timegrid \
+ @fullcalendar/interaction \
+ @fullcalendar/list \
+ @fullcalendar/resource-timeline \
+ @fullcalendar/resource \
+ @fullcalendar/resource-timegrid
 
 // datapicker
 yarn add react-datepicker @types/react-datepicker date-fns

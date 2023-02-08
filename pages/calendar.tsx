@@ -1,3 +1,6 @@
+/**
+ * 基本の使い方の説明
+ */
 import React, { useState } from 'react';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';

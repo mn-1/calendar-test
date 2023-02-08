@@ -223,6 +223,23 @@
   resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-6.1.2.tgz#6bddcc217e69a5c63b3c5ec6b6204e457625e9fa"
   integrity sha512-GNKKOGQESVStj66vCd5Qd3fcQYy5ItqzmBVOWxpp5fj/eyhUf2in6Mwox+PeoLPjtroOFlrNvB5aSZDPKManew==
 
+"@fullcalendar/resource-daygrid@~6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-daygrid/-/resource-daygrid-6.1.1.tgz#6efca7dd6114b8db9767a7b8eb4d2fd0ef75bf44"
+  integrity sha512-jijJiXjq3e9vjghmo6FEoUtKEtyk+qg4Uun4qpH2G7P1liY/kTteXyVPAWMeTzvRlW7QfpSqEyHfmtoGOtdp8A==
+  dependencies:
+    "@fullcalendar/daygrid" "~6.1.1"
+    "@fullcalendar/premium-common" "~6.1.1"
+
+"@fullcalendar/resource-timegrid@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-timegrid/-/resource-timegrid-6.1.1.tgz#418e53543256611cf77c4852fc96d3bf508b9a7b"
+  integrity sha512-OUfPbirY93GFdSRQHWMBfl4pf2ssqkW8KAyKjAVGI1GeRz3eG1YhAs6r+kdismUnFRlx+N+3jQayKMiY39lM1A==
+  dependencies:
+    "@fullcalendar/premium-common" "~6.1.1"
+    "@fullcalendar/resource-daygrid" "~6.1.1"
+    "@fullcalendar/timegrid" "~6.1.1"
+
 "@fullcalendar/resource-timeline@^6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@fullcalendar/resource-timeline/-/resource-timeline-6.1.1.tgz#6c17c5a625098dbe0da54e50e3b0f3b4921bb58c"
@@ -232,6 +249,13 @@
     "@fullcalendar/scrollgrid" "~6.1.1"
     "@fullcalendar/timeline" "~6.1.1"
 
+"@fullcalendar/resource@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource/-/resource-6.1.1.tgz#663f6970e6c38df379c0193a9709ddfcd9298b9a"
+  integrity sha512-YbLd7dlTv+Gbn5XZ4wXyXGskd6Fu5P92unvTgJQ25aSAE2di7xLZbn11jKlqKntUIoR8/PK0F1ueWy7swT8W6Q==
+  dependencies:
+    "@fullcalendar/premium-common" "~6.1.1"
+
 "@fullcalendar/scrollgrid@~6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@fullcalendar/scrollgrid/-/scrollgrid-6.1.1.tgz#1c35536a00600eaefa486e4d9864fa7cf1103437"
@@ -239,7 +263,7 @@
   dependencies:
     "@fullcalendar/premium-common" "~6.1.1"
 
-"@fullcalendar/timegrid@^6.1.1":
+"@fullcalendar/timegrid@^6.1.1", "@fullcalendar/timegrid@~6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-6.1.1.tgz#1ad24cd1fd9e8aa4374dd3dbb3e6ba680214651a"
   integrity sha512-JWjSxjxCBxIhkLsKT1uQmRWUHqfQWjtXJIy25Ur0jPlTHSLne5CBAyW2UWPwdV0nXpUnN5QWXjjTVLpMJB6uNA==

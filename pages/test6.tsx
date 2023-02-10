@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Col, Row } from 'reactstrap';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -11,6 +10,7 @@ import interactionPlugin, {
 import Alert from 'sweetalert2';
 import { EventClickArg } from '@fullcalendar/core';
 import { Grid } from '@mui/material';
+import { useRef } from 'react';
 
 const state = {
   calendarEvents: [
@@ -35,6 +35,8 @@ const state = {
 };
 
 export default function Test() {
+  const calendarComponentRef = useRef(null);
+
   const componentDidMount = () => {
     let draggableEl = document.getElementById('external-events');
     if (draggableEl)
@@ -133,10 +135,10 @@ export default function Test() {
                 editable={true}
                 droppable={true}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                // ref={calendarComponentRef}
+                ref={calendarComponentRef}
                 weekends={true}
                 events={state.calendarEvents}
-                // eventDrop={this.drop}
+                // eventDrop={drop}
                 // drop={drop}
                 // eventReceive={this.eventReceive}
                 eventClick={eventClick}

@@ -22,9 +22,11 @@ yarn add \
  @fullcalendar/timegrid \
  @fullcalendar/interaction \
  @fullcalendar/list \
- @fullcalendar/resource-timeline \
  @fullcalendar/resource \
- @fullcalendar/resource-timegrid
+ @fullcalendar/resource-timeline \
+ @fullcalendar/resource-timegrid \
+ @fullcalendar/moment-timezone \
+ moment-timezone
 
 // datapicker
 yarn add react-datepicker @types/react-datepicker date-fns
@@ -39,5 +41,8 @@ yarn add reactstrap
 // sweetalert2
 https://sweetalert2.github.io/
 yarn add sweetalert2
+
+// react-beautiful-dnd
+yarn add @types/react-beautiful-dnd react-beautiful-dnd
 
 ## .env

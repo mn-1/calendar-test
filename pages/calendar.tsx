@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid'; // 週表示を可能にする
 import dayGridPlugin from '@fullcalendar/daygrid'; // 月表示を可能にする
-import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が選択できるようになる
+import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が[ 選択 ]きるようになる
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
 // components
@@ -77,11 +77,11 @@ const SampleCalendar: React.FC = (props) => {
         slotDuration='00:30:00'
         // interactionPluginが有効になっている場合のみ日付選択を可能にする
         selectable={true}
-        // ビジネス時間の設定。
+        // ビジネス時間の設定。仕事してる時間てことかな
         businessHours={{
-          daysOfWeek: [1, 2, 3, 4, 5], // 0:日曜 〜 7:土曜
-          startTime: '00:00',
-          endTIme: '24:00',
+          daysOfWeek: [1, 2, 3, 4, 5, 6], // 0:日曜 〜 6:土曜
+          startTime: '8:00:00',
+          endTime: '20:00:00',
         }}
         // 週末を強調表示する。
         weekends={true}

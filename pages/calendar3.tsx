@@ -4,30 +4,25 @@
  */
 
 // react
-import React, { useState } from 'react';
+import React, { useState, useRef, createRef } from 'react';
 // MUI
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Stack, Typography } from '@mui/material';
 // fullcalendar
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin, { DropArg } from '@fullcalendar/interaction';
+import jaLocale from '@fullcalendar/core/locales/ja';
 import {
   EventApi,
   DateSelectArg,
   EventClickArg,
   EventContentArg,
   formatDate,
-  EventInput,
-  EventDropArg,
 } from '@fullcalendar/core';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, {
-  Draggable,
-  DropArg,
-} from '@fullcalendar/interaction';
-import jaLocale from '@fullcalendar/core/locales/ja';
-import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 
 export default function Test5() {
+  const eventRef = createRef<any>();
   // 予約の配列
   const [myEvents, setMyEvents] = useState<EventApi[]>([]);
   // IDカウント
@@ -51,9 +46,32 @@ export default function Test5() {
       id: String(countId),
       title,
       start: selectInfo.startStr,
-      end: selectInfo.endStr,
+      // end: selectInfo.endStr,
+      slotDuration: '01:00:00',
       allDay: false,
+      color: '#3CB371',
     });
+  };
+
+  // 同じく予約追加
+  const add = ({ start, end, view: { calendar } }: DateSelectArg): void => {
+    const title = prompt('Please enter a new title for your event');
+    calendar.unselect();
+
+    const add = countId + 1;
+    setCountId(add);
+
+    if (!title) return;
+    calendar.addEvent({
+      id: String(countId),
+      title,
+      start,
+      end: end + '01:00:00',
+      // slotDuration: '01:00:00',// 間隔決めれる
+      allDay: false,
+      color: '#3CB371',
+    });
+    console.log('eventRef:', eventRef.current);
   };
 
   // 予約削除
@@ -62,7 +80,8 @@ export default function Test5() {
       clickInfo.event.remove();
   };
 
-  const handleEventDrop = (arg: DropArg) => {
+  const handleDrop = (arg: DropArg) => {
+    console.log(arg);
     const calendarApi = arg.view.calendar;
 
     calendarApi.unselect();
@@ -70,12 +89,22 @@ export default function Test5() {
     const add = countId + 1;
     setCountId(add);
 
+    const event = {
+      id: myEvents.length,
+      title: 'test',
+      start: new Date(),
+      slotDuration: '01:00:00',
+    };
+
+    eventRef.current.getApi().addEvent(event);
+
     calendarApi.addEvent({
       id: String(countId),
       title: 'drop test',
       duration: '02:00',
     });
   };
+  //
 
   return (
     <>
@@ -90,6 +119,7 @@ export default function Test5() {
         >
           <Grid item sm={2}>
             <div
+              id='mydraggable'
               draggable={true}
               data-event='{ "title": "my event", "duration": "02:00" }'
             >
@@ -113,8 +143,10 @@ export default function Test5() {
           </Grid>
           <Grid item sm={10}>
             <FullCalendar
+              ref={eventRef}
               locales={[jaLocale]}
               locale='ja'
+              eventColor='#6A5ACD'
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               headerToolbar={{
                 left: 'prev,next today',
@@ -122,6 +154,7 @@ export default function Test5() {
                 right: 'dayGridMonth,timeGridWeek,timeGridDay',
               }}
               initialView='timeGridWeek'
+              eventContent={renderEventContent}
               // this allows things to be dropped onto the calendar
               droppable={true}
               editable={true}
@@ -129,14 +162,16 @@ export default function Test5() {
               selectMirror={true}
               dayMaxEvents={true}
               weekends={true}
+              nowIndicator={true}
+              allDaySlot={false}
               // 外からのeventをドロップした時
-              drop={handleEventDrop}
-              select={handleDateSelect}
-              eventContent={renderEventContent}
+              drop={handleDrop}
+              // select={handleDateSelect}
+              select={add}
               eventClick={handleEventClick}
               // これは予約が変更・追加・削除全部
               eventsSet={(events: EventApi[]) => {
-                console.log(events);
+                console.log('events:', events);
                 setMyEvents(events);
               }}
               /* こっちは個別の設定できる DB操作とかに使う
@@ -154,6 +189,9 @@ export default function Test5() {
               eventDrop={(eventDropInfo) => {
                 console.log('eventDropInfo:', eventDropInfo);
               }}
+              eventReceive={(eventReceiveInfo) => {
+                console.log(eventReceiveInfo);
+              }}
             />
           </Grid>
         </Grid>
@@ -164,10 +202,6 @@ export default function Test5() {
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {
-  return (
-    <>
-      <b>{eventContent.timeText}</b>
-      <i>{eventContent.event.title}</i>
-    </>
-  );
+  const text = `${eventContent.timeText}  ${eventContent.event.title}`;
+  return <Typography>{text}</Typography>;
 }

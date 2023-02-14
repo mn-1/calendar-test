@@ -27,6 +27,7 @@ const Test = () => {
     moment: moment.tz('Asia/Tokyo').toISOString(),
     moment2: moment.utc().add('90', 'minutes').toISOString(),
     '2時間前': new Date(b).toISOString(),
+    UNIXタイム: new Date().getTime(),
   };
   console.log(a);
   return <></>;

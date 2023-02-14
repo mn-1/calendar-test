@@ -1,6 +1,8 @@
 /**
  * resourceTimeGridPluginを使っている
  * https://fullcalendar.io/docs/vertical-resource-view
+ *
+ * libから配列に入れたものを持ってくるパターン
  */
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
@@ -12,26 +14,15 @@ import jaLocale from '@fullcalendar/core/locales/ja';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import {
   EventApi,
-  DateSelectArg,
   EventClickArg,
   EventContentArg,
   formatDate,
-  EventInput,
-  EventDropArg,
-  EventChangeArg,
 } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, {
-  DateClickArg,
-  EventResizeDoneArg,
-} from '@fullcalendar/interaction';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import { Draggable, DropArg } from '@fullcalendar/interaction';
 // lib
-import { eventConstraints, resources } from '../lib/data';
-import { divideColor, getEvents } from '../lib/eventControl';
+import { resources } from '../lib/data';
+import EventControl from '../lib/eventControl-2';
 
 export type UpdateFormDataInfo = {
   title: string;
@@ -40,86 +31,20 @@ export type UpdateFormDataInfo = {
 };
 
 const SampleCalendar = () => {
-  // 予定を追加する際にCalendarオブジェクトのメソッドを使用する必要がある。(CalendarオブジェクトはRef経由でアクセスする必要がある。)
+  // 予定を追加する際にCalendarオブジェクトのメソッドを使用する必要がある。 (CalendarオブジェクトはRef経由でアクセスする必要がある。)
   const calendarRef = createRef<FullCalendar>();
 
-  const [countId, setCountId] = useState<number>(0);
-  // const [myEvents, setMyEvents] = useState<EventApi[]>([]);
-  const [myEvents, setMyEvents] = useState<any>([]);
+  const { myEvents, getEvents, handleDateSelect, setMyEvents } = EventControl();
 
   useEffect(() => {
-    const events = getEvents();
-    // イベントリスト収納
-    setMyEvents(events);
-    // IDの初期値設定
-    setCountId(events.length + 1);
-  }, []);
+    getEvents();
+  });
 
-  // イベント追加
-  const handleDateSelect = (arg: DateSelectArg): void => {
-    const { resource, start, end, view } = arg;
-    const title = prompt('Please enter a new title for your event');
-    view.calendar.unselect();
-
-    const { backgroundColor, borderColor } = divideColor(
-      new Date(start).getTime(),
-      new Date(end).getTime()
-    );
-
-    const add = countId + 1;
-    setCountId(add);
-
-    if (!title || !resource) return;
-    view.calendar.addEvent({
-      id: String(countId),
-      title,
-      start,
-      end,
-      resourceId: resource.id,
-      allDay: false,
-      backgroundColor,
-      borderColor,
-    });
+  // 予約削除
+  const handleEventClick = (clickInfo: EventClickArg) => {
+    if (confirm(`${clickInfo.event.title}の予定を削除してよろしいでしょうか。`))
+      clickInfo.event.remove();
   };
-
-  // イベント削除
-  const handleEventClick = (arg: EventClickArg) => {
-    if (confirm(`${arg.event.title}の予定を削除してよろしいでしょうか。`))
-      arg.event.remove();
-  };
-
-  // イベント移動
-  const handleInnerEventDrop = (arg: EventDropArg) => {
-    const { start, end } = arg.event;
-
-    // startとendを取得できなかったら戻す
-    if (!start || !end) return arg.revert();
-    const { backgroundColor, borderColor } = divideColor(
-      new Date(start).getTime(),
-      new Date(end).getTime()
-    );
-
-    // 色だけ修正
-    arg.event.setProp('backgroundColor', backgroundColor);
-    arg.event.setProp('borderColor', borderColor);
-  };
-
-  const handleEventResize = (arg: EventResizeDoneArg) => {
-    const { start, end } = arg.event;
-
-    // startとendを取得できなかったら戻す
-    if (!start || !end) return arg.revert();
-    const { backgroundColor, borderColor } = divideColor(
-      new Date(start).getTime(),
-      new Date(end).getTime()
-    );
-
-    // 色だけ修正
-    arg.event.setProp('backgroundColor', backgroundColor);
-    arg.event.setProp('borderColor', borderColor);
-  };
-
-  const handleEventChange = () => {};
 
   return (
     <>
@@ -165,6 +90,11 @@ const SampleCalendar = () => {
                 eventColor='#6A5ACD'
                 resources={resources}
                 slotDuration='00:30:00'
+                businessHours={{
+                  daysOfWeek: [1, 2, 3, 4, 5, 6], // 0:日曜 〜 6:土曜
+                  startTime: '8:00:00',
+                  endTime: '20:00:00',
+                }}
                 plugins={[
                   resourceTimeGridPlugin,
                   interactionPlugin,
@@ -191,28 +121,13 @@ const SampleCalendar = () => {
                 // expandRows={true}
                 nowIndicator={true}
                 slotEventOverlap={false}
-                // ここからボタンとか
-                // customButtons={{
-                //   futureDay: {
-                //     text: 'Future Date',
-                //     click: () => {
-                //       const calendarApi = calendarRef?.current?.getApi();
-                //       let futureDate = new Date('2021-07-30');
-                //       calendarApi?.gotoDate(futureDate);
-                //     },
-                //   },
-                // }}
-                eventDrop={handleInnerEventDrop}
-                eventChange={handleEventChange}
-                eventReceive={() => {}}
                 select={handleDateSelect}
                 eventClick={handleEventClick}
                 // dateClick={handleDateClick}
                 eventsSet={(events: EventApi[]) => {
-                  console.log('events:', events);
+                  // console.log('events:', events);
                   setMyEvents(events);
                 }}
-                eventResize={handleEventResize}
               />
             </Grid>
           </Grid>

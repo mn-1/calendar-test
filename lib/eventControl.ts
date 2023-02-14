@@ -15,42 +15,48 @@ import {
 import { RefObject } from '@fullcalendar/core/preact';
 import { resources, events } from './data';
 
-export default function EventControl() {
-  const [countId, setCountId] = useState<number>(0);
-  const [myEvents, setMyEvents] = useState<any>([]);
+/**
+ * event配列をDBからとってくる
+ * @returns event配列
+ */
+export const getEvents = () => {
+  // 背景色を変更してから収納
+  for (let i = 0; i < events.length; i++) {
+    const item = events[i];
 
-  /**
-   * DBから撮ってきたeventsを色分けしてカレンダーに入れる
-   * @param calendarRef
-   * @returns イベントリスト
-   */
-  const getEvents = () => {
-    // 背景色を変更してから収納
-    for (let i = 0; i < events.length; i++) {
-      const item = events[i];
-      const now = new Date().getTime();
+    const { backgroundColor, borderColor } = divideColor(item.start, item.end);
+    item.backgroundColor = backgroundColor;
+    item.borderColor = borderColor;
+  }
+  return events;
+};
 
-      if (item.start && item.end) {
-        // 予約
-        if (item.start > now) {
-          item.backgroundColor = '#90EE90';
-          item.borderColor = '#90EE90';
-        }
-        // 稼働中
-        if (item.start <= now && now <= item.end) {
-          item.backgroundColor = '#4169E1';
-          item.borderColor = '#4169E1';
-        }
-        // 古い
-        if (item.end < now) {
-          item.backgroundColor = '#A9A9A9';
-          item.borderColor = '#A9A9A9';
-        }
-      }
-    }
+/**
+ * 予定の色分け
+ * @param start
+ * @param end
+ * @returns イベントの色
+ */
+export const divideColor = (start: number, end: number) => {
+  let backgroundColor: string = '';
+  let borderColor: string = '';
 
-    return events;
-  };
+  const now = new Date().getTime();
 
-  return { countId, myEvents, getEvents };
-}
+  // 予定
+  if (start > now) {
+    backgroundColor = '#90EE90';
+    borderColor = '#90EE90';
+  }
+  // 稼働中
+  if (start <= now && now <= end) {
+    backgroundColor = '#4169E1';
+    borderColor = '#4169E1';
+  }
+  // 古い
+  if (end < now) {
+    backgroundColor = '#A9A9A9';
+    borderColor = '#A9A9A9';
+  }
+  return { backgroundColor, borderColor };
+};

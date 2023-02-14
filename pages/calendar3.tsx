@@ -66,7 +66,7 @@ export default function Test5() {
       id: String(countId),
       title,
       start,
-      end: end + '01:00:00',
+      end: end,
       // slotDuration: '01:00:00',// 間隔決めれる
       allDay: false,
       color: '#3CB371',

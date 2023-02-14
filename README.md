@@ -11,38 +11,64 @@ npx create-next-app calendar-test --typescript
 
 ## 追加したもの
 
-// MUI
-yarn add @mui/material @emotion/react @emotion/styled @material-ui/core
+- MUI
+  yarn add @mui/material @emotion/react @emotion/styled @material-ui/core
 
-// fullcalendar
-yarn add \
- @fullcalendar/core \
- @fullcalendar/react \
- @fullcalendar/daygrid \
- @fullcalendar/timegrid \
- @fullcalendar/interaction \
- @fullcalendar/list \
- @fullcalendar/resource \
- @fullcalendar/resource-timeline \
- @fullcalendar/resource-timegrid \
- @fullcalendar/moment-timezone \
- moment-timezone
+- fullcalendar
+  yarn add \
+   @fullcalendar/core \
+   @fullcalendar/react \
+   @fullcalendar/daygrid \
+   @fullcalendar/timegrid \
+   @fullcalendar/interaction \
+   @fullcalendar/list \
+   @fullcalendar/resource \
+   @fullcalendar/resource-timeline \
+   @fullcalendar/resource-timegrid \
+   @fullcalendar/moment-timezone \
+   moment-timezone
 
-// datapicker
-yarn add react-datepicker @types/react-datepicker date-fns
+- datapicker
+  yarn add react-datepicker @types/react-datepicker date-fns
 
-// validate
-yarn add react-hook-form yup @hookform/resolvers
+- validate
+  yarn add react-hook-form yup @hookform/resolvers
 
-// reactstrap
-https://reactstrap.github.io/?path=/story/home-installation--page
-yarn add reactstrap
+- reactstrap
+  https://reactstrap.github.io/?path=/story/home-installation--page
+  yarn add reactstrap
 
-// sweetalert2
-https://sweetalert2.github.io/
-yarn add sweetalert2
+- sweetalert2
+  https://sweetalert2.github.io/
+  yarn add sweetalert2
 
-// react-beautiful-dnd
-yarn add @types/react-beautiful-dnd react-beautiful-dnd
+- react-beautiful-dnd
+  yarn add @types/react-beautiful-dnd react-beautiful-dnd
 
 ## .env
+
+## 参考
+
+### アクション
+
+https://fullcalendar.io/docs/event-dragging-resizing
+
+- eventChange
+
+  - fire after eventDrop and eventResize
+  - https://fullcalendar.io/docs/eventChange
+
+- eventReceive
+
+  - Called when an external draggable element with associated event data was dropped onto the calendar
+  - https://fullcalendar.io/docs/eventReceive
+
+- eventDrop
+  - カレンダー内部の event が drop された時に発火
+
+### イベント追加・更新・削除
+
+- update
+  - https://fullcalendar.io/docs/Resource-setProp
+- remove
+  - https://fullcalendar.io/docs/Resource-remove

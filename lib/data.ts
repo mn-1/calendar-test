@@ -59,13 +59,12 @@ export const events = [
   {
     id: '1',
     title: '90 Minute Massage',
-    resourceId: '1', // これかな
+    resourceId: '1', // 拠点ID
     start: new Date().setHours(date.getHours() - 4),
     end: new Date().setHours(date.getHours() - 2),
-    groupId: 'zzTop',
-
+    // groupId: '',
     backgroundColor: '',
-    // borderColor: '#DB7093',
+    borderColor: '',
     editable: true,
     // 時間をドラッグで変更できるか
     durationEditable: true,
@@ -79,6 +78,7 @@ export const events = [
     start: new Date().setHours(date.getHours() - 1),
     end: new Date().setHours(date.getHours() + 1),
     backgroundColor: '',
+    borderColor: '',
     editable: true,
     durationEditable: true,
     resourceEditable: true,
@@ -90,7 +90,7 @@ export const events = [
     resourceId: '3',
     start: new Date().setHours(date.getHours() + 2),
     end: new Date().setHours(date.getHours() + 4),
-    groupId: 'zzTop',
+    // groupId: '',
     backgroundColor: '',
     borderColor: '',
     durationEditable: true,

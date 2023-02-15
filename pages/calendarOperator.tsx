@@ -121,50 +121,11 @@ const SampleCalendar = () => {
     arg.event.setProp('borderColor', borderColor);
   };
 
-  const extarnalEvents = [
-    { title: 'Event 1', id: '1' },
-    { title: 'Event 2', id: '2' },
-    { title: 'Event 3', id: '3' },
-    { title: 'Event 4', id: '4' },
-    { title: 'Event 5', id: '5' },
-  ];
-
-  function componentDidMount() {
-    let draggableEl = document.getElementById('external-events');
-
-    if (draggableEl)
-      new Draggable(draggableEl, {
-        itemSelector: '.fc-event',
-        eventData: function (eventEl) {
-          let title = eventEl.getAttribute('title');
-          let id = eventEl.getAttribute('data');
-          return {
-            title: title,
-            id: id,
-          };
-        },
-      });
-  }
-
-  const drop = () => {
-    const draggableEl = document.getElementById('external-events');
-
-    if (draggableEl)
-      new Draggable(draggableEl, {
-        itemSelector: '.fc-event',
-        eventData: function (eventEl) {
-          let title = eventEl.getAttribute('title');
-          let id = eventEl.getAttribute('data');
-          return {
-            title: title,
-            id: id,
-          };
-        },
-      });
-  };
+  const handleEventChange = () => {};
 
   return (
     <>
+      <Header userType='operator' />
       <Container
         maxWidth={false}
         sx={{
@@ -183,38 +144,21 @@ const SampleCalendar = () => {
             }}
           >
             <Grid item sm={2}>
-              <Grid container direction='column'>
-                <div
-                  id='draggable-el'
-                  draggable={true}
-                  data-event='{ "title": "my event", "duration": "02:00" }'
-                >
-                  drag me
-                </div>
-                <div
-                  id='external-events'
-                  style={{
-                    padding: '10px',
-                    width: '80%',
-                    height: 'auto',
-                    maxHeight: '-webkit-fill-available',
-                  }}
-                >
-                  <p> Events</p>
-
-                  {extarnalEvents.map((event) => (
-                    <div
-                      draggable={true}
-                      className='fc-event'
-                      title={event.title}
-                      // data={event.id}
-                      key={event.id}
-                    >
-                      {event.title}
-                    </div>
-                  ))}
-                </div>
-              </Grid>
+              <h2>予約一覧 ( {myEvents.length} )</h2>
+              <ul>
+                {myEvents.map((event: any) => (
+                  <li key={event.id}>
+                    <b>
+                      {formatDate(event.start!, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </b>
+                    <i>{event.title}</i>
+                  </li>
+                ))}
+              </ul>
             </Grid>
             <Grid item sm={10}>
               <FullCalendar
@@ -242,29 +186,13 @@ const SampleCalendar = () => {
                 droppable={true}
                 editable={true}
                 selectable={true}
-                // Whether to draw a “placeholder” event while the user is dragging
                 selectMirror={true}
-                // 週末表示するか否か
                 weekends={true}
-                //Whether the user can resize an event from its starting edge.
                 eventResizableFromStart={true}
-                // expandRows={true}
                 nowIndicator={true}
                 slotEventOverlap={false}
-                // ここからボタンとか
-                // customButtons={{
-                //   futureDay: {
-                //     text: 'Future Date',
-                //     click: () => {
-                //       const calendarApi = calendarRef?.current?.getApi();
-                //       let futureDate = new Date('2021-07-30');
-                //       calendarApi?.gotoDate(futureDate);
-                //     },
-                //   },
-                // }}
                 eventDrop={handleInnerEventDrop}
-                eventDidMount={componentDidMount}
-                drop={drop}
+                eventChange={handleEventChange}
                 eventReceive={() => {}}
                 select={handleDateSelect}
                 eventClick={handleEventClick}

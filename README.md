@@ -49,6 +49,9 @@ npx create-next-app calendar-test --typescript
 
 ## 参考
 
+- fullcalendar+typescript
+  https://github.com/fullcalendar/fullcalendar-examples/tree/main/typescript
+
 ### アクション
 
 https://fullcalendar.io/docs/event-dragging-resizing

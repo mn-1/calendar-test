@@ -1,6 +1,8 @@
 /**
  * resourceTimeGridPluginを使っている
  * https://fullcalendar.io/docs/vertical-resource-view
+ *
+ * calendar2から
  */
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
@@ -121,50 +123,9 @@ const SampleCalendar = () => {
     arg.event.setProp('borderColor', borderColor);
   };
 
-  const extarnalEvents = [
-    { title: 'Event 1', id: '1' },
-    { title: 'Event 2', id: '2' },
-    { title: 'Event 3', id: '3' },
-    { title: 'Event 4', id: '4' },
-    { title: 'Event 5', id: '5' },
-  ];
-
-  function componentDidMount() {
-    let draggableEl = document.getElementById('external-events');
-
-    if (draggableEl)
-      new Draggable(draggableEl, {
-        itemSelector: '.fc-event',
-        eventData: function (eventEl) {
-          let title = eventEl.getAttribute('title');
-          let id = eventEl.getAttribute('data');
-          return {
-            title: title,
-            id: id,
-          };
-        },
-      });
-  }
-
-  const drop = () => {
-    const draggableEl = document.getElementById('external-events');
-
-    if (draggableEl)
-      new Draggable(draggableEl, {
-        itemSelector: '.fc-event',
-        eventData: function (eventEl) {
-          let title = eventEl.getAttribute('title');
-          let id = eventEl.getAttribute('data');
-          return {
-            title: title,
-            id: id,
-          };
-        },
-      });
-  };
-
   return (
     <>
+      <Header userType='client' />
       <Container
         maxWidth={false}
         sx={{
@@ -184,36 +145,21 @@ const SampleCalendar = () => {
           >
             <Grid item sm={2}>
               <Grid container direction='column'>
-                <div
-                  id='draggable-el'
-                  draggable={true}
-                  data-event='{ "title": "my event", "duration": "02:00" }'
-                >
-                  drag me
-                </div>
-                <div
-                  id='external-events'
-                  style={{
-                    padding: '10px',
-                    width: '80%',
-                    height: 'auto',
-                    maxHeight: '-webkit-fill-available',
-                  }}
-                >
-                  <p> Events</p>
-
-                  {extarnalEvents.map((event) => (
-                    <div
-                      draggable={true}
-                      className='fc-event'
-                      title={event.title}
-                      // data={event.id}
-                      key={event.id}
-                    >
-                      {event.title}
-                    </div>
+                <h2>予約一覧 ( {myEvents.length} )</h2>
+                <ul>
+                  {myEvents.map((event: any) => (
+                    <li key={event.id}>
+                      <b>
+                        {formatDate(event.start!, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </b>
+                      <i>{event.title}</i>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </Grid>
             </Grid>
             <Grid item sm={10}>
@@ -251,20 +197,6 @@ const SampleCalendar = () => {
                 // expandRows={true}
                 nowIndicator={true}
                 slotEventOverlap={false}
-                // ここからボタンとか
-                // customButtons={{
-                //   futureDay: {
-                //     text: 'Future Date',
-                //     click: () => {
-                //       const calendarApi = calendarRef?.current?.getApi();
-                //       let futureDate = new Date('2021-07-30');
-                //       calendarApi?.gotoDate(futureDate);
-                //     },
-                //   },
-                // }}
-                eventDrop={handleInnerEventDrop}
-                eventDidMount={componentDidMount}
-                drop={drop}
                 eventReceive={() => {}}
                 select={handleDateSelect}
                 eventClick={handleEventClick}
@@ -274,6 +206,8 @@ const SampleCalendar = () => {
                   setMyEvents(events);
                 }}
                 eventResize={handleEventResize}
+                eventDrop={handleInnerEventDrop}
+                // eventChange={handleEventChange}
               />
             </Grid>
           </Grid>

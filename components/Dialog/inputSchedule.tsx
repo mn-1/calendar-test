@@ -12,35 +12,44 @@ import { addScheduleSchema } from '../../schema/inputSchedule';
 import FormInput from '../FormControl/FormInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
-import { UpdateFormDataInfo } from '../../pages/calendar';
+import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
 
 type Props = {
   open: boolean;
   handleClose: VoidFunction;
+  registerSchedule: Function;
 };
 
 export default function InputSchedule(props: Props) {
-  const { open, handleClose } = props;
+  const { open, handleClose, registerSchedule } = props;
 
-  const defaultValues: UpdateFormDataInfo = {
+  const defaultValues: RegisterScheduleDataInfo = {
     title: '',
-    start: new Date(),
-    end: new Date(),
+    memo: '',
   };
 
-  const useFormMethods = useForm<UpdateFormDataInfo>({
+  const useFormMethods = useForm<RegisterScheduleDataInfo>({
     resolver: yupResolver(addScheduleSchema),
     defaultValues,
   });
 
   const { control, handleSubmit, reset } = useFormMethods;
 
-  const onUpdate: SubmitHandler<UpdateFormDataInfo> = async (
-    values: UpdateFormDataInfo
+  const onUpdate: SubmitHandler<RegisterScheduleDataInfo> = async (
+    values: RegisterScheduleDataInfo
   ) => {
     reset({
       title: '',
     });
+    registerSchedule(values);
+  };
+
+  // キャンセルボタンアクション
+  const handleCancelButton = () => {
+    reset({
+      title: '',
+    });
+    handleClose();
   };
 
   return (
@@ -62,16 +71,17 @@ export default function InputSchedule(props: Props) {
               placeholder='タイトル'
               fullWidth
             />
-
+            <FormInput
+              name='memo'
+              autoComplete='off'
+              focused
+              placeholder='メモ'
+              fullWidth
+            />
             <Grid container justifyContent='end'>
               <Button
                 variant='outlined'
-                onClick={() => {
-                  reset({
-                    title: '',
-                  });
-                  handleClose();
-                }}
+                onClick={handleCancelButton}
                 sx={{
                   fontWeight: 'bold',
                   mr: '1rem',
@@ -86,7 +96,7 @@ export default function InputSchedule(props: Props) {
                   fontWeight: 'bold',
                 }}
               >
-                更新する
+                登録する
               </Button>
             </Grid>
           </Box>

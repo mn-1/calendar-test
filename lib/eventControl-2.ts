@@ -1,68 +1,90 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
-import { EventApi, DateSelectArg } from '@fullcalendar/core';
+// lib
 import { resources, events } from './data';
+import { divideColor } from './colorControl';
+import { RegisterScheduleDataInfo } from './inputDataControl';
+// validate
+import { SubmitHandler } from 'react-hook-form';
+import { ViewApi } from '@fullcalendar/core';
 
 export default function EventControl() {
+  // IDセット
   const [countId, setCountId] = useState<number>(0);
+  // イベントリスト収納
   const [myEvents, setMyEvents] = useState<any>([]);
+  // イベント登録用
+  const [newSchedule, setNewSchedule] = useState({
+    id: '',
+    start: new Date(),
+    end: new Date(),
+    resourceId: '',
+  });
+  // ref.current.getApi().calendar.view登録用
+  const [view, setView] = useState<ViewApi>();
+  // 予定登録ダイアログopen
+  const [inputScheduleDialogOpen, setInputScheduleDialogOpen] =
+    useState<boolean>(false);
 
-  /**
+  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
    * @param calendarRef
    * @returns イベントリスト
-   */
+   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const getEvents = () => {
     // 背景色を変更してから収納
     for (let i = 0; i < events.length; i++) {
       const item = events[i];
-      const now = new Date().getTime();
 
-      if (item.start && item.end) {
-        // 予約
-        if (item.start > now) {
-          item.backgroundColor = '#90EE90';
-          item.borderColor = '#90EE90';
-        }
-        // 稼働中
-        if (item.start <= now && now <= item.end) {
-          item.backgroundColor = '#4169E1';
-          item.borderColor = '#4169E1';
-        }
-        // 古い
-        if (item.end < now) {
-          item.backgroundColor = '#A9A9A9';
-          item.borderColor = '#A9A9A9';
-        }
-      }
+      const { backgroundColor, borderColor } = divideColor(
+        item.start,
+        item.end
+      );
+      item.backgroundColor = backgroundColor;
+      item.borderColor = borderColor;
     }
+
     setMyEvents(events);
   };
 
-  const handleDateSelect = ({
-    resource,
-    start,
-    end,
-    view: { calendar },
-  }: DateSelectArg): void => {
-    const title = prompt('Please enter a new title for your event');
-    calendar.unselect();
+  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+   * 予定登録
+   * @param values 
+   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+  const registerSchedule = async (values: RegisterScheduleDataInfo) => {
+    if (!view) return console.log('view none');
 
-    const add = countId + 1;
-    setCountId(add);
+    const { backgroundColor, borderColor } = divideColor(
+      new Date(newSchedule.start).getTime(),
+      new Date(newSchedule.end).getTime()
+    );
 
-    if (!title) return;
-    calendar.addEvent({
-      id: String(countId),
-      title,
-      start,
-      end: end + '01:00:00',
-      resourceId: resource?.id,
-      // slotDuration: '01:00:00',// 間隔決めれる
+    view.calendar.unselect();
+
+    view.calendar.addEvent({
+      id: newSchedule.id,
+      title: values.title,
+      start: newSchedule.start,
+      end: newSchedule.end,
+      resourceId: newSchedule.resourceId,
+      extendedProps: { memo: values.memo },
       allDay: false,
-      color: '#3CB371',
+      backgroundColor,
+      borderColor,
     });
+    setInputScheduleDialogOpen(false);
   };
 
-  return { countId, myEvents, getEvents, handleDateSelect, setMyEvents };
+  return {
+    countId,
+    myEvents,
+    inputScheduleDialogOpen,
+    getEvents,
+    setCountId,
+    setView,
+    setMyEvents,
+    setNewSchedule,
+    registerSchedule,
+    setInputScheduleDialogOpen,
+  };
 }

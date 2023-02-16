@@ -14,6 +14,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
+import resourceTimelinePlugIn from '@fullcalendar/resource-timeline';
 import {
   EventApi,
   DateSelectArg,
@@ -176,6 +177,7 @@ const ClientCalendar = () => {
                 slotMaxTime='23:00:00'
                 plugins={[
                   resourceTimeGridPlugin,
+                  resourceTimelinePlugIn,
                   interactionPlugin,
                   scrollGridPlugin,
                   dayGridPlugin,
@@ -185,7 +187,8 @@ const ClientCalendar = () => {
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
-                  right: 'dayGridMonth,timeGridWeek,resourceTimeGridDay',
+                  right:
+                    'dayGridMonth,timeGridWeek,resourceTimeGridWeek,resourceTimelineDay,resourceTimeGridDay',
                 }}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}

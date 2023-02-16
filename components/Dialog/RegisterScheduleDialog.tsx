@@ -1,3 +1,4 @@
+import dayjs, { Dayjs } from 'dayjs';
 // MUI
 import {
   DialogTitle,
@@ -15,6 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // components
 import FormInput from '../FormControl/FormInput';
 import FormSelect from '../FormControl/FormSelect';
+import DatePickerForm from '../FormControl/DatePicker';
 // validate
 import { addScheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -29,6 +31,7 @@ type Props = {
   avatar: any;
   handleClose: VoidFunction;
   registerSchedule: Function;
+  date: Dayjs;
 };
 
 export default function RegisterScheduleDialog(props: Props) {
@@ -93,7 +96,7 @@ export default function RegisterScheduleDialog(props: Props) {
             予定を追加
           </Typography>
         </Grid>
-
+        <DatePickerForm date={props.date} />
         <FormProvider {...useFormMethods}>
           <Box
             component='form'

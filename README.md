@@ -13,6 +13,10 @@ npx create-next-app calendar-test --typescript
 
 - MUI
   yarn add @mui/material @emotion/react @emotion/styled @material-ui/core
+  // Install component (community version)
+  yarn add @mui/x-date-pickers
+  // Install date library (if not already installed)
+  yarn add dayjs
 
 - fullcalendar
   yarn add \

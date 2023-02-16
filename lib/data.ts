@@ -1,5 +1,3 @@
-import moment from 'moment-timezone';
-
 // ヘッダーのタイトル
 export const resources = [
   {
@@ -63,6 +61,11 @@ export const events = [
     resourceId: '1', // 拠点ID
     start: new Date().setHours(date.getHours() - 4),
     end: new Date().setHours(date.getHours() - 2),
+    extendedProps: {
+      memo: '',
+      operatorName: 'オペレーターサンプル',
+      avatar: 'アバターサンプル',
+    },
     // groupId: '',
     backgroundColor: '',
     borderColor: '',
@@ -78,6 +81,11 @@ export const events = [
     resourceId: '2',
     start: new Date().setHours(date.getHours() - 1),
     end: new Date().setHours(date.getHours() + 1),
+    extendedProps: {
+      memo: '',
+      operatorName: 'オペレーターサンプル',
+      avatar: 'アバターサンプル',
+    },
     backgroundColor: '',
     borderColor: '',
     editable: true,
@@ -91,6 +99,11 @@ export const events = [
     resourceId: '3',
     start: new Date().setHours(date.getHours() + 2),
     end: new Date().setHours(date.getHours() + 4),
+    extendedProps: {
+      memo: '',
+      operatorName: 'オペレーターサンプル',
+      avatar: 'アバターサンプル',
+    },
     // groupId: '',
     backgroundColor: '',
     borderColor: '',
@@ -105,6 +118,11 @@ export const events = [
     resourceId: '1',
     start: new Date().setHours(date.getHours() + 2),
     end: new Date().setHours(date.getHours() + 4),
+    extendedProps: {
+      memo: '',
+      operatorName: 'オペレーターサンプル',
+      avatar: 'アバターサンプル',
+    },
     backgroundColor: '',
     borderColor: '',
     constraint: 'sample1',
@@ -119,6 +137,11 @@ export const events = [
     resourceId: '4',
     start: new Date().setHours(date.getHours() - 4),
     end: new Date().setHours(date.getHours() - 2),
+    extendedProps: {
+      memo: '',
+      operatorName: 'オペレーターサンプル',
+      avatar: 'アバターサンプル',
+    },
     backgroundColor: '',
     borderColor: '',
     // textColor: '#000',
@@ -144,23 +167,4 @@ export const avatar = [
   { id: 3, name: 'アバターC' },
   { id: 4, name: 'アバターD' },
   { id: 5, name: 'アバターE' },
-];
-
-export const eventConstraints = [
-  {
-    id: 'sample1',
-    groupId: 'sample1',
-    start: `${moment().format('YYYY-MM-DD')}T09:00:00-0700`,
-    end: `${moment().format('YYYY-MM-DD')}T18:00:00-0700`,
-    resourceId: '1',
-    display: 'background',
-  },
-  {
-    id: 'sample2',
-    groupId: 'sample2',
-    start: `${moment().format('YYYY-MM-DD')}T08:00:00-0700`,
-    end: `${moment().format('YYYY-MM-DD')}T17:00:00-0700`,
-    resourceId: '3',
-    display: 'background',
-  },
 ];

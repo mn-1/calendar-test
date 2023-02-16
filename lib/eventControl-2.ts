@@ -3,22 +3,26 @@ import React, { useState, useRef, createRef, useEffect } from 'react';
 // lib
 import { resources, events } from './data';
 import { divideColor } from './colorControl';
-import { RegisterScheduleDataInfo } from './inputDataControl';
-// validate
-import { SubmitHandler } from 'react-hook-form';
+import {
+  EditScheduleDataInfo,
+  RegisterScheduleDataInfo,
+} from './inputDataControl';
 // Fullcalendar
-import { DateSelectArg, ViewApi } from '@fullcalendar/core';
+import { DateSelectArg, EventClickArg, ViewApi } from '@fullcalendar/core';
 
 export default function EventControl() {
   // IDセット
   const [countId, setCountId] = useState<number>(0);
-  // イベントリスト収納
+  // イベント一覧収納
   const [myEvents, setMyEvents] = useState<any>([]);
-  // イベント登録用
+  // 予約登録
   const [selectInfo, setSelectInfo] = useState<DateSelectArg>();
-
+  // 予定情報
+  const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定登録ダイアログopen
   const [registerDialogOpen, setRegisterDialogOpen] = useState<boolean>(false);
+  // 予定編集ダイアログopen
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
@@ -54,7 +58,7 @@ export default function EventControl() {
     const end = new Date(selectInfo.end).getTime();
     const { backgroundColor, borderColor } = divideColor(start, end);
 
-    calendar.unselect();
+    // calendar.unselect();
 
     calendar.addEvent({
       id: `${countId}`,
@@ -75,12 +79,33 @@ export default function EventControl() {
     setRegisterDialogOpen(false);
   };
 
-  const updateSchedule = () => {};
+  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+   * 予定編集
+   * @param values 
+   * @returns 
+   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+  const editSchedule = async (values: EditScheduleDataInfo) => {
+    const event = eventInfo?.event;
+
+    if (!event) return console.log('event none');
+
+    event.setProp('title', values.title);
+    event.setExtendedProp('memo', values.memo);
+    event.setExtendedProp('operatorName', values.operatorName);
+    event.setExtendedProp('avatar', values.avatar);
+
+    setEditDialogOpen(false);
+  };
 
   return {
     countId,
     myEvents,
     registerDialogOpen,
+    eventInfo,
+    editDialogOpen,
+    setEditDialogOpen,
+    editSchedule,
+    setEventInfo,
     setSelectInfo,
     getEvents,
     setCountId,

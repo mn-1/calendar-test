@@ -13,7 +13,7 @@ type Props = {
 export default function DeleteSnackbar(props: Props) {
   const action = (
     <React.Fragment>
-      <Button color='secondary' size='small' onClick={props.undoDelete}>
+      <Button color='inherit' size='small' onClick={props.undoDelete}>
         元に戻す
       </Button>
       <IconButton

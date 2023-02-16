@@ -16,22 +16,27 @@ type FormSelectProps = {
   errorMessage: string | undefined;
   name: 'operatorName' | 'avatar';
   control: Control<RegisterScheduleDataInfo>;
+  defaultValue: string;
 } & SelectProps;
 
-const FormSelect: FC<FormSelectProps> = ({
-  errorMessage,
-  control,
-  name,
-  users,
-  label,
-  ...otherProps
-}) => {
+const EditFormSelect: FC<FormSelectProps> = (props: FormSelectProps) => {
+  const {
+    errorMessage,
+    control,
+    name,
+    users,
+    label,
+    defaultValue,
+    ...otherProps
+  } = props;
+
   return (
     <Controller
+      defaultValue={defaultValue}
       control={control}
       name={name}
       render={({ field }) => (
-        <CssFormControl fullWidth sx={{ my: 1 }}>
+        <CssFormControl fullWidth sx={{ my: '0.5rem' }}>
           <InputLabel id='demo-simple-select-label'>{label}</InputLabel>
           <Select {...otherProps} {...field} required>
             <MenuItem disabled value=''>
@@ -53,7 +58,7 @@ const FormSelect: FC<FormSelectProps> = ({
   );
 };
 
-export default FormSelect;
+export default EditFormSelect;
 
 // Styled Material UI TextField Component
 const CssFormControl = styled(FormControl)({

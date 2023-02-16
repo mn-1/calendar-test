@@ -7,38 +7,36 @@ import {
   Button,
   Grid,
   Typography,
+  DialogActions,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 // components
-import FormInput from '../FormControl/FormInput';
-import FormSelect from '../FormControl/FormSelect';
+import EditFormInput from '../FormControl/EditFormInput';
+import EditFormSelect from '../FormControl/EditFormSelect';
 // validate
-import { addScheduleSchema } from '../../schema/inputSchedule';
+import { editScheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
 import { EditScheduleDataInfo } from '../../lib/inputDataControl';
+import { EventClickArg } from '@fullcalendar/core';
 
 type Props = {
-  open: boolean;
   operator: any;
   avatar: any;
+  eventInfo: EventClickArg | null;
   handleClose: VoidFunction;
-  registerSchedule: Function;
+  editSchedule: Function;
 };
 
 export default function EditScheduleDialog(props: Props) {
-  const { open, handleClose, registerSchedule } = props;
-
-  const defaultValues: EditScheduleDataInfo = {
-    title: '',
-    memo: '',
-    operatorName: '',
-    avatar: '',
-  };
+  const { handleClose, editSchedule, eventInfo } = props;
+  const event = eventInfo?.event;
 
   const useFormMethods = useForm<EditScheduleDataInfo>({
-    resolver: yupResolver(addScheduleSchema),
-    defaultValues,
+    resolver: yupResolver(editScheduleSchema),
   });
 
   const {
@@ -48,11 +46,10 @@ export default function EditScheduleDialog(props: Props) {
     formState: { errors },
   } = useFormMethods;
 
-  const onRegister: SubmitHandler<EditScheduleDataInfo> = async (
+  const onEdit: SubmitHandler<EditScheduleDataInfo> = async (
     values: EditScheduleDataInfo
   ) => {
-    console.log(values);
-    registerSchedule(values);
+    editSchedule(values);
     reset({
       title: '',
       memo: '',
@@ -61,81 +58,105 @@ export default function EditScheduleDialog(props: Props) {
     });
   };
 
-  // キャンセルボタンアクション
+  // キャンセルボタン
   const handleCancelButton = () => {
+    handleClose();
     reset({
       title: '',
       memo: '',
       operatorName: '',
       avatar: '',
     });
-    handleClose();
   };
 
-  return (
-    <Dialog open={open} fullScreen>
-      <DialogTitle>新しい予定</DialogTitle>
-      <DialogContent>
-        <FormProvider {...useFormMethods}>
-          <Box
-            component='form'
-            noValidate
-            autoComplete='off'
-            onSubmit={handleSubmit(onRegister)}
-          >
-            <FormSelect
-              label='オペレーター名'
-              users={props.operator}
-              errorMessage={errors.operatorName?.message}
-              name='operatorName'
-              control={control}
-            />
+  if (event)
+    return (
+      <Dialog open={true} fullScreen>
+        <DialogActions sx={{ px: '3rem' }}>
+          <Tooltip title='閉じる'>
+            <IconButton onClick={handleCancelButton}>
+              <CloseIcon fontSize='large' />
+            </IconButton>
+          </Tooltip>
+        </DialogActions>
 
-            <FormSelect
-              label='アバター名'
-              users={props.avatar}
-              errorMessage={errors.avatar?.message}
-              name='avatar'
-              control={control}
-            />
-            <FormInput
-              name='title'
+        <DialogContent sx={{ px: '3rem' }}>
+          <Grid container justifyContent='center'>
+            <Typography variant='h4' color='secondary'>
+              予定を編集
+            </Typography>
+          </Grid>
+          <FormProvider {...useFormMethods}>
+            <Box
+              component='form'
+              noValidate
               autoComplete='off'
-              focused
-              placeholder='タイトル'
-              fullWidth
-            />
-            <FormInput
-              name='memo'
-              autoComplete='off'
-              focused
-              placeholder='メモ'
-              fullWidth
-            />
-            <Grid container justifyContent='end'>
+              onSubmit={handleSubmit(onEdit)}
+            >
+              <Typography color='secondary'>オペレーター名</Typography>
+              <EditFormSelect
+                defaultValue={event.extendedProps.operatorName ?? ''}
+                users={props.operator}
+                errorMessage={errors.operatorName?.message}
+                name='operatorName'
+                control={control}
+              />
+              <Typography color='secondary'>アバター名</Typography>
+              <EditFormSelect
+                defaultValue={event.extendedProps.avatar ?? ''}
+                users={props.avatar}
+                errorMessage={errors.avatar?.message}
+                name='avatar'
+                control={control}
+              />
+              <Typography color='secondary'>タイトル</Typography>
+              <EditFormInput
+                defaultValue={event.title ?? ''}
+                name='title'
+                autoComplete='off'
+                focused
+                placeholder='タイトル'
+                fullWidth
+              />
+              <Typography color='secondary'>メモ</Typography>
+              <EditFormInput
+                defaultValue={event.extendedProps.memo ?? ''}
+                name='memo'
+                autoComplete='off'
+                focused
+                placeholder='メモ'
+                fullWidth
+                multiline
+                minRows={3}
+                maxRows={10}
+              />
               <Button
-                variant='outlined'
-                onClick={handleCancelButton}
-                sx={{
-                  fontWeight: 'bold',
-                  mr: '1rem',
-                }}
-              >
-                キャンセル
-              </Button>
-              <Button
+                fullWidth
                 variant='contained'
                 type='submit'
-                sx={{
-                  fontWeight: 'bold',
-                }}
+                sx={{ fontWeight: 'bold', my: '0.5rem' }}
               >
-                登録する
+                保存
               </Button>
-            </Grid>
-          </Box>
-        </FormProvider>
-      </DialogContent>
-    </Dialog>
-  );
+            </Box>
+          </FormProvider>
+        </DialogContent>
+      </Dialog>
+    );
+  else
+    return (
+      <Dialog open={true} fullWidth>
+        <DialogActions>
+          <Grid container justifyContent='end' alignItems='center'>
+            <Box sx={{ px: 1 }} />
+            <Tooltip title='閉じる'>
+              <IconButton onClick={props.handleClose}>
+                <CloseIcon fontSize='medium' />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </DialogActions>
+        <DialogTitle sx={{ mb: '2rem' }}>予定の取得に失敗しました</DialogTitle>
+      </Dialog>
+    );
 }

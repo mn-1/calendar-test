@@ -155,7 +155,6 @@ export default function Test5() {
               }}
               initialView='timeGridWeek'
               eventContent={renderEventContent}
-              // this allows things to be dropped onto the calendar
               droppable={true}
               editable={true}
               selectable={true}
@@ -164,7 +163,6 @@ export default function Test5() {
               weekends={true}
               nowIndicator={true}
               allDaySlot={false}
-              // 外からのeventをドロップした時
               drop={handleDrop}
               // select={handleDateSelect}
               select={add}

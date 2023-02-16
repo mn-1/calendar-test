@@ -6,37 +6,29 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
-import { Box, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import multiMonthPlugin from '@fullcalendar/multimonth';
 import {
   EventApi,
   DateSelectArg,
   EventClickArg,
   EventContentArg,
-  formatDate,
-  EventInput,
   EventDropArg,
-  EventChangeArg,
 } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, {
-  DateClickArg,
   EventResizeDoneArg,
-  Draggable,
-  DropArg,
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import { EventImpl } from '@fullcalendar/core/internal';
 // lib
-import { eventConstraints, resources, operator, avatar } from '../../lib/data';
+import { resources, operator, avatar } from '../../lib/data';
 import EventControl from '../../lib/eventControl-2';
 import { divideColor } from '../../lib/colorControl';
-import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
 // components
 import Header from '../../components/Header/Header';
 import RegisterScheduleDialog from '../../components/Dialog/RegisterScheduleDialog';
@@ -50,14 +42,16 @@ const ClientCalendar = () => {
   // ダイアログ
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
-  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
-  // 予定情報
-  const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
 
   const {
     countId,
     myEvents,
     registerDialogOpen,
+    eventInfo,
+    editDialogOpen,
+    setEditDialogOpen,
+    editSchedule,
+    setEventInfo,
     getEvents,
     setCountId,
     setMyEvents,
@@ -184,11 +178,14 @@ const ClientCalendar = () => {
                   resourceTimeGridPlugin,
                   interactionPlugin,
                   scrollGridPlugin,
+                  dayGridPlugin,
+                  timeGridPlugin,
+                  multiMonthPlugin,
                 ]}
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
-                  right: '',
+                  right: 'dayGridMonth,timeGridWeek,resourceTimeGridDay',
                 }}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
@@ -226,15 +223,16 @@ const ClientCalendar = () => {
           }}
           registerSchedule={registerSchedule}
         />
-        <EditScheduleDialog
-          operator={operator}
-          avatar={avatar}
-          open={editDialogOpen}
-          handleClose={() => {
-            setEditDialogOpen(false);
-          }}
-          registerSchedule={registerSchedule}
-        />
+        {/* defalutValueを動的にしないためにレンダリング少なくしている */}
+        {eventInfo && editDialogOpen && (
+          <EditScheduleDialog
+            eventInfo={eventInfo}
+            operator={operator}
+            avatar={avatar}
+            handleClose={() => setEditDialogOpen(false)}
+            editSchedule={editSchedule}
+          />
+        )}
         <ScheduleInfoDialog
           eventInfo={eventInfo}
           open={infoDialogOpen}
@@ -243,10 +241,11 @@ const ClientCalendar = () => {
             setInfoDialogOpen(false);
             setDeleteSnackbarOpen(true);
           }}
-          edit={() => setEditDialogOpen(true)}
-          close={() => {
+          edit={() => {
+            setEditDialogOpen(true);
             setInfoDialogOpen(false);
           }}
+          handleClose={() => setInfoDialogOpen(false)}
         />
         <DeleteSnackbar
           open={deleteSnackbarOpen}
@@ -263,7 +262,6 @@ export default ClientCalendar;
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {
-  const text = `${eventContent.timeText}  ${eventContent.event.title}`;
   return (
     <Typography>
       {eventContent.timeText} {eventContent.event.extendedProps.operatorName}

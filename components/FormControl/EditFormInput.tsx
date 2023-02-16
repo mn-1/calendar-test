@@ -6,9 +6,14 @@ import { styled } from '@mui/material/styles';
 // Type of Props the FormInput will receive
 type FormInputProps = {
   name: string;
+  defaultValue: string;
 } & TextFieldProps;
 
-const FormInput: FC<FormInputProps> = ({ name, ...otherProps }) => {
+const EditFormInput: FC<FormInputProps> = ({
+  name,
+  defaultValue,
+  ...otherProps
+}) => {
   // Utilizing useFormContext to have access to the form Context
   const {
     formState: { errors },
@@ -17,13 +22,13 @@ const FormInput: FC<FormInputProps> = ({ name, ...otherProps }) => {
   return (
     <Controller
       name={name}
-      defaultValue=''
+      defaultValue={defaultValue}
       render={({ field }) => (
         <CssTextField
           {...field}
           {...otherProps}
-          sx={{ my: 0.5 }}
           variant='outlined'
+          sx={{ my: '0.5rem' }}
           error={!!errors[name]}
           helperText={
             errors[name] ? (errors[name]?.message as unknown as string) : ''
@@ -34,7 +39,7 @@ const FormInput: FC<FormInputProps> = ({ name, ...otherProps }) => {
   );
 };
 
-export default FormInput;
+export default EditFormInput;
 
 // Styled Material UI TextField Component
 const CssTextField = styled(TextField)({

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 // MUI
 import {
   DialogTitle,
@@ -8,7 +7,11 @@ import {
   Button,
   Grid,
   Typography,
+  DialogActions,
+  Tooltip,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 // components
 import FormInput from '../FormControl/FormInput';
 import FormSelect from '../FormControl/FormSelect';
@@ -18,6 +21,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
 import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
+import { EventClickArg } from '@fullcalendar/core';
 
 type Props = {
   open: boolean;
@@ -75,8 +79,21 @@ export default function RegisterScheduleDialog(props: Props) {
 
   return (
     <Dialog open={open} fullWidth>
-      <DialogTitle>新しい予定</DialogTitle>
+      <DialogActions>
+        <Tooltip title='閉じる'>
+          <IconButton onClick={handleCancelButton}>
+            <CloseIcon fontSize='large' />
+          </IconButton>
+        </Tooltip>
+      </DialogActions>
+
       <DialogContent>
+        <Grid container justifyContent='center'>
+          <Typography variant='h4' color='secondary'>
+            予定を追加
+          </Typography>
+        </Grid>
+
         <FormProvider {...useFormMethods}>
           <Box
             component='form'
@@ -84,21 +101,21 @@ export default function RegisterScheduleDialog(props: Props) {
             autoComplete='off'
             onSubmit={handleSubmit(onRegister)}
           >
+            <Typography color='secondary'>オペレーター名</Typography>
             <FormSelect
-              label='オペレーター名'
               users={props.operator}
               errorMessage={errors.operatorName?.message}
               name='operatorName'
               control={control}
             />
-
+            <Typography color='secondary'>アバター名</Typography>
             <FormSelect
-              label='アバター名'
               users={props.avatar}
               errorMessage={errors.avatar?.message}
               name='avatar'
               control={control}
             />
+            <Typography color='secondary'>タイトル</Typography>
             <FormInput
               name='title'
               autoComplete='off'
@@ -106,34 +123,26 @@ export default function RegisterScheduleDialog(props: Props) {
               placeholder='タイトル'
               fullWidth
             />
+            <Typography color='secondary'>メモ</Typography>
             <FormInput
               name='memo'
               autoComplete='off'
               focused
               placeholder='メモ'
               fullWidth
+              multiline
+              minRows={3}
+              maxRows={10}
             />
-            <Grid container justifyContent='end'>
-              <Button
-                variant='outlined'
-                onClick={handleCancelButton}
-                sx={{
-                  fontWeight: 'bold',
-                  mr: '1rem',
-                }}
-              >
-                キャンセル
-              </Button>
-              <Button
-                variant='contained'
-                type='submit'
-                sx={{
-                  fontWeight: 'bold',
-                }}
-              >
-                登録する
-              </Button>
-            </Grid>
+
+            <Button
+              fullWidth
+              variant='contained'
+              type='submit'
+              sx={{ fontWeight: 'bold', my: '0.5rem' }}
+            >
+              登録する
+            </Button>
           </Box>
         </FormProvider>
       </DialogContent>

@@ -9,12 +9,13 @@ const theme = createTheme({
       contrastText: '#f5f5f5',
     },
     secondary: {
-      main: '#559ED6',
-      contrastText: '#f5f5f5',
+      main: '#696969',
+      contrastText: '#696969',
     },
     error: {
       main: red.A400,
     },
+
     // text: {
     //   primary: '#ff0000',
     // },

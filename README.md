@@ -26,7 +26,7 @@ npx create-next-app calendar-test --typescript
    @fullcalendar/resource-timeline \
    @fullcalendar/resource-timegrid \
    @fullcalendar/moment-timezone \
-   moment-timezone
+   @fullcalendar/multimonth
 
 - datapicker
   yarn add react-datepicker @types/react-datepicker date-fns
@@ -49,8 +49,10 @@ npx create-next-app calendar-test --typescript
 
 ## 参考
 
-- fullcalendar+typescript
+- fullcalendar + typescript
   https://github.com/fullcalendar/fullcalendar-examples/tree/main/typescript
+- イベントの中身
+  https://fullcalendar.io/docs/event-parsing
 
 ### アクション
 
@@ -75,3 +77,12 @@ https://fullcalendar.io/docs/event-dragging-resizing
   - https://fullcalendar.io/docs/Resource-setProp
 - remove
   - https://fullcalendar.io/docs/Resource-remove
+
+### オプション
+
+- selectMirror
+  - Whether to draw a “placeholder” event while the user is dragging
+- weekends
+  - 週末表示するか否か
+- eventResizableFromStart
+  - Whether the user can resize an event from its starting edge

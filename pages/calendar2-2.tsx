@@ -12,6 +12,8 @@ import { Box, Container, Grid, Stack, Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
 import {
   EventApi,
   EventClickArg,
@@ -34,7 +36,7 @@ const SampleCalendar = () => {
   // 予定を追加する際にCalendarオブジェクトのメソッドを使用する必要がある。 (CalendarオブジェクトはRef経由でアクセスする必要がある。)
   const calendarRef = createRef<FullCalendar>();
 
-  const { myEvents, getEvents, handleDateSelect, setMyEvents } = EventControl();
+  const { myEvents, getEvents, setMyEvents } = EventControl();
 
   useEffect(() => {
     getEvents();
@@ -99,33 +101,29 @@ const SampleCalendar = () => {
                   resourceTimeGridPlugin,
                   interactionPlugin,
                   scrollGridPlugin,
+                  dayGridPlugin,
+                  timeGridPlugin,
                 ]}
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
-                  right: '',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay',
                 }}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
-                //
                 allDaySlot={false}
                 droppable={true}
                 editable={true}
                 selectable={true}
-                // Whether to draw a “placeholder” event while the user is dragging
                 selectMirror={true}
-                // 週末表示するか否か
                 weekends={true}
-                //Whether the user can resize an event from its starting edge.
                 eventResizableFromStart={true}
                 // expandRows={true}
                 nowIndicator={true}
                 slotEventOverlap={false}
-                select={handleDateSelect}
                 eventClick={handleEventClick}
                 // dateClick={handleDateClick}
                 eventsSet={(events: EventApi[]) => {
-                  // console.log('events:', events);
                   setMyEvents(events);
                 }}
               />

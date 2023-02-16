@@ -30,7 +30,7 @@ import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { Draggable, DropArg } from '@fullcalendar/interaction';
 // lib
-import { eventConstraints, resources } from '../lib/data';
+import { resources } from '../lib/data';
 import { getEvents } from '../lib/eventControl';
 import { divideColor } from '../lib/colorControl';
 // components

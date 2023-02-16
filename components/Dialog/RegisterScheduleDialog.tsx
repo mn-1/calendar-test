@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { useState } from 'react';
+// MUI
 import {
   DialogTitle,
   Box,
@@ -8,24 +9,32 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { addScheduleSchema } from '../../schema/inputSchedule';
+// components
 import FormInput from '../FormControl/FormInput';
+import FormSelect from '../FormControl/FormSelect';
+// validate
+import { addScheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+// lib
 import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
 
 type Props = {
   open: boolean;
+  operator: any;
+  avatar: any;
   handleClose: VoidFunction;
   registerSchedule: Function;
 };
 
-export default function InputSchedule(props: Props) {
+export default function RegisterScheduleDialog(props: Props) {
   const { open, handleClose, registerSchedule } = props;
 
   const defaultValues: RegisterScheduleDataInfo = {
     title: '',
     memo: '',
+    operatorName: '',
+    avatar: '',
   };
 
   const useFormMethods = useForm<RegisterScheduleDataInfo>({
@@ -33,21 +42,33 @@ export default function InputSchedule(props: Props) {
     defaultValues,
   });
 
-  const { control, handleSubmit, reset } = useFormMethods;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useFormMethods;
 
-  const onUpdate: SubmitHandler<RegisterScheduleDataInfo> = async (
+  const onRegister: SubmitHandler<RegisterScheduleDataInfo> = async (
     values: RegisterScheduleDataInfo
   ) => {
+    console.log(values);
+    registerSchedule(values);
     reset({
       title: '',
+      memo: '',
+      operatorName: '',
+      avatar: '',
     });
-    registerSchedule(values);
   };
 
   // キャンセルボタンアクション
   const handleCancelButton = () => {
     reset({
       title: '',
+      memo: '',
+      operatorName: '',
+      avatar: '',
     });
     handleClose();
   };
@@ -61,9 +82,23 @@ export default function InputSchedule(props: Props) {
             component='form'
             noValidate
             autoComplete='off'
-            onSubmit={handleSubmit(onUpdate)}
+            onSubmit={handleSubmit(onRegister)}
           >
-            <Typography>タイトル</Typography>
+            <FormSelect
+              label='オペレーター名'
+              users={props.operator}
+              errorMessage={errors.operatorName?.message}
+              name='operatorName'
+              control={control}
+            />
+
+            <FormSelect
+              label='アバター名'
+              users={props.avatar}
+              errorMessage={errors.avatar?.message}
+              name='avatar'
+              control={control}
+            />
             <FormInput
               name='title'
               autoComplete='off'

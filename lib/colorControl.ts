@@ -12,8 +12,8 @@ export const divideColor = (start: number, end: number) => {
 
   // 予定
   if (start > now) {
-    backgroundColor = '#90EE90';
-    borderColor = '#90EE90';
+    backgroundColor = '#2E8B57';
+    borderColor = '#2E8B57';
   }
   // 稼働中
   if (start <= now && now <= end) {

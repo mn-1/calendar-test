@@ -39,7 +39,7 @@ import { divideColor } from '../../lib/colorControl';
 
 // components
 import Header from '../../components/Header/Header';
-import InputSchedule from '../../components/Dialog/inputSchedule';
+import InputSchedule from '../../components/Dialog/RegisterScheduleDialog';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();

@@ -55,6 +55,7 @@ export const resources = [
 
 const date = new Date();
 
+// サンプルイベント一覧
 export const events = [
   {
     id: '1',
@@ -126,6 +127,23 @@ export const events = [
     resourceEditable: true,
     startEditable: true,
   },
+];
+
+// サンプルオペレーター一覧
+export const operator = [
+  { id: 1, name: 'オペレーターAさん' },
+  { id: 2, name: 'オペレーターBさん' },
+  { id: 3, name: 'オペレーターCさん' },
+  { id: 4, name: 'オペレーターDさん' },
+  { id: 5, name: 'オペレーターEさん' },
+];
+
+export const avatar = [
+  { id: 1, name: 'アバターA' },
+  { id: 2, name: 'アバターB' },
+  { id: 3, name: 'アバターC' },
+  { id: 4, name: 'アバターD' },
+  { id: 5, name: 'アバターE' },
 ];
 
 export const eventConstraints = [

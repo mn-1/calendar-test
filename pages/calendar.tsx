@@ -10,7 +10,7 @@ import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
 // components
-import InputSchedule from '../components/Dialog/inputSchedule';
+import InputSchedule from '../components/Dialog/RegisterScheduleDialog';
 
 // 追加するイベントの型。
 interface newEventsType {
@@ -100,7 +100,6 @@ const SampleCalendar: React.FC = (props) => {
         // その日を選択した時
         dateClick={handleDateCLick}
       />
-      <InputSchedule open={inView} handleClose={() => setInView(false)} />
     </>
   );
 };

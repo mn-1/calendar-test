@@ -6,7 +6,8 @@ import { divideColor } from './colorControl';
 import { RegisterScheduleDataInfo } from './inputDataControl';
 // validate
 import { SubmitHandler } from 'react-hook-form';
-import { ViewApi } from '@fullcalendar/core';
+// Fullcalendar
+import { DateSelectArg, ViewApi } from '@fullcalendar/core';
 
 export default function EventControl() {
   // IDセット
@@ -14,22 +15,14 @@ export default function EventControl() {
   // イベントリスト収納
   const [myEvents, setMyEvents] = useState<any>([]);
   // イベント登録用
-  const [newSchedule, setNewSchedule] = useState({
-    id: '',
-    start: new Date(),
-    end: new Date(),
-    resourceId: '',
-  });
-  // ref.current.getApi().calendar.view登録用
-  const [view, setView] = useState<ViewApi>();
+  const [selectInfo, setSelectInfo] = useState<DateSelectArg>();
+
   // 予定登録ダイアログopen
-  const [inputScheduleDialogOpen, setInputScheduleDialogOpen] =
-    useState<boolean>(false);
+  const [registerDialogOpen, setRegisterDialogOpen] = useState<boolean>(false);
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
-   * @param calendarRef
-   * @returns イベントリスト
+   *
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const getEvents = () => {
     // 背景色を変更してから収納
@@ -52,39 +45,47 @@ export default function EventControl() {
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const registerSchedule = async (values: RegisterScheduleDataInfo) => {
-    if (!view) return console.log('view none');
+    if (!selectInfo || !selectInfo.resource)
+      return console.log('selectInfo none');
 
-    const { backgroundColor, borderColor } = divideColor(
-      new Date(newSchedule.start).getTime(),
-      new Date(newSchedule.end).getTime()
-    );
+    const calendar = selectInfo.view.calendar;
 
-    view.calendar.unselect();
+    const start = new Date(selectInfo.start).getTime();
+    const end = new Date(selectInfo.end).getTime();
+    const { backgroundColor, borderColor } = divideColor(start, end);
 
-    view.calendar.addEvent({
-      id: newSchedule.id,
+    calendar.unselect();
+
+    calendar.addEvent({
+      id: `${countId}`,
       title: values.title,
-      start: newSchedule.start,
-      end: newSchedule.end,
-      resourceId: newSchedule.resourceId,
-      extendedProps: { memo: values.memo },
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      resourceId: selectInfo.resource?.id,
+      extendedProps: {
+        memo: values.memo,
+        operatorName: values.operatorName,
+        avatar: values.avatar,
+      },
       allDay: false,
       backgroundColor,
       borderColor,
     });
-    setInputScheduleDialogOpen(false);
+
+    setRegisterDialogOpen(false);
   };
+
+  const updateSchedule = () => {};
 
   return {
     countId,
     myEvents,
-    inputScheduleDialogOpen,
+    registerDialogOpen,
+    setSelectInfo,
     getEvents,
     setCountId,
-    setView,
     setMyEvents,
-    setNewSchedule,
     registerSchedule,
-    setInputScheduleDialogOpen,
+    setRegisterDialogOpen,
   };
 }

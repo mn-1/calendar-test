@@ -32,7 +32,7 @@ import EventControl from '../../lib/eventControl-2';
 import { divideColor } from '../../lib/colorControl';
 // components
 import Header from '../../components/Header/Header';
-import RegisterScheduleDialog from '../../components/Dialog/RegisterScheduleDialog';
+import AddScheduleDialog from '../../components/Dialog/AddScheduleDialog';
 import ScheduleInfoDialog from '../../components/Dialog/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
@@ -47,9 +47,10 @@ const ClientCalendar = () => {
   const {
     countId,
     myEvents,
-    registerDialogOpen,
+    addDialogOpen,
     eventInfo,
     editDialogOpen,
+    selectInfo,
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
@@ -57,24 +58,33 @@ const ClientCalendar = () => {
     setCountId,
     setMyEvents,
     setSelectInfo,
-    registerSchedule,
-    setRegisterDialogOpen,
+    addSchedule,
+    setAddDialogOpen,
   } = EventControl();
 
   useEffect(() => {
     getEvents();
   }, []);
 
+  // 予定登録ダイアログ開く
   const handleDateSelect = (arg: DateSelectArg) => {
-    setRegisterDialogOpen(true);
+    if (!arg.resource) return;
+    console.log('selectInfo:', arg);
+    setAddDialogOpen(true);
 
     const add = countId + 1;
     setCountId(add);
 
-    setSelectInfo(arg);
+    setSelectInfo({
+      id: `${countId}`,
+      startStr: arg.startStr,
+      endStr: arg.endStr,
+      resourceId: arg.resource.id,
+      calendar: arg.view.calendar,
+    });
   };
 
-  // イベント詳細表示
+  // イベント詳細表示ダイアログ開く
   const handleEventClick = (arg: EventClickArg) => {
     setInfoDialogOpen(true);
     setEventInfo(arg);
@@ -217,14 +227,15 @@ const ClientCalendar = () => {
           )}
         </Grid>
         {/* utils ↓ */}
-        <RegisterScheduleDialog
+        <AddScheduleDialog
+          date={selectInfo?.startStr}
           operator={operator}
           avatar={avatar}
-          open={registerDialogOpen}
+          open={addDialogOpen}
           handleClose={() => {
-            setRegisterDialogOpen(false);
+            setAddDialogOpen(false);
           }}
-          registerSchedule={registerSchedule}
+          addSchedule={addSchedule}
         />
         {/* defalutValueを動的にしないためにレンダリング少なくしている */}
         {eventInfo && editDialogOpen && (

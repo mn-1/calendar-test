@@ -37,7 +37,7 @@ import { divideColor } from '../../lib/colorControl';
 import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
 // components
 import Header from '../../components/Header/Header';
-import RegisterScheduleDialog from '../../components/Dialog/RegisterScheduleDialog';
+import RegisterScheduleDialog from '../../components/Dialog/AddScheduleDialog';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();

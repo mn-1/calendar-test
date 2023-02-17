@@ -3,12 +3,23 @@ import React, { useState, useRef, createRef, useEffect } from 'react';
 // lib
 import { resources, events } from './data';
 import { divideColor } from './colorControl';
-import {
-  EditScheduleDataInfo,
-  RegisterScheduleDataInfo,
-} from './inputDataControl';
+import { EditScheduleDataInfo, AddScheduleDataInfo } from './inputDataControl';
 // Fullcalendar
-import { DateSelectArg, EventClickArg, ViewApi } from '@fullcalendar/core';
+import {
+  CalendarApi,
+  DateSelectArg,
+  EventClickArg,
+  ViewApi,
+} from '@fullcalendar/core';
+
+interface SelectInfoType {
+  id: string;
+  startStr: string;
+  endStr: string;
+  resourceId: string;
+  // view: ViewApi;
+  calendar: CalendarApi;
+}
 
 export default function EventControl() {
   // IDセット
@@ -16,11 +27,11 @@ export default function EventControl() {
   // イベント一覧収納
   const [myEvents, setMyEvents] = useState<any>([]);
   // 予約登録
-  const [selectInfo, setSelectInfo] = useState<DateSelectArg>();
+  const [selectInfo, setSelectInfo] = useState<SelectInfoType>();
   // 予定情報
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定登録ダイアログopen
-  const [registerDialogOpen, setRegisterDialogOpen] = useState<boolean>(false);
+  const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   // 予定編集ダイアログopen
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
@@ -48,24 +59,22 @@ export default function EventControl() {
    * 予定登録
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const registerSchedule = async (values: RegisterScheduleDataInfo) => {
-    if (!selectInfo || !selectInfo.resource)
-      return console.log('selectInfo none');
+  const addSchedule = async (values: AddScheduleDataInfo) => {
+    if (!selectInfo) return console.log('selectInfo none');
+    if (!selectInfo.resourceId) return console.log('resource none');
 
-    const calendar = selectInfo.view.calendar;
-
-    const start = new Date(selectInfo.start).getTime();
-    const end = new Date(selectInfo.end).getTime();
+    const start = new Date(selectInfo.startStr).getTime();
+    const end = new Date(selectInfo.endStr).getTime();
     const { backgroundColor, borderColor } = divideColor(start, end);
 
     // calendar.unselect();
 
-    calendar.addEvent({
+    selectInfo.calendar.addEvent({
       id: `${countId}`,
       title: values.title,
       start: selectInfo.startStr,
       end: selectInfo.endStr,
-      resourceId: selectInfo.resource?.id,
+      resourceId: selectInfo.resourceId,
       extendedProps: {
         memo: values.memo,
         operatorName: values.operatorName,
@@ -76,7 +85,7 @@ export default function EventControl() {
       borderColor,
     });
 
-    setRegisterDialogOpen(false);
+    setAddDialogOpen(false);
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -100,9 +109,10 @@ export default function EventControl() {
   return {
     countId,
     myEvents,
-    registerDialogOpen,
+    addDialogOpen,
     eventInfo,
     editDialogOpen,
+    selectInfo,
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
@@ -110,7 +120,7 @@ export default function EventControl() {
     getEvents,
     setCountId,
     setMyEvents,
-    registerSchedule,
-    setRegisterDialogOpen,
+    addSchedule,
+    setAddDialogOpen,
   };
 }

@@ -1,4 +1,4 @@
-export type RegisterScheduleDataInfo = {
+export type AddScheduleDataInfo = {
   title: string;
   memo: string;
   operatorName: string;

@@ -1,5 +1,5 @@
 CREATE TABLE `event_list` (
-    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'イベントリストID',
+    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'イベントID',
     ---
     `operator_name` varchar(64) NOT NULL COMMENT 'オペレーター名',
     `location_name` varchar(64) NOT NULL COMMENT '拠点名',

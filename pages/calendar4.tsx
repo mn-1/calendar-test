@@ -21,7 +21,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 // components
-import InputSchedule from '../components/Dialog/RegisterScheduleDialog';
+import InputSchedule from '../components/Dialog/AddScheduleDialog';
 
 // 追加するイベントの型。
 interface newEventsType {

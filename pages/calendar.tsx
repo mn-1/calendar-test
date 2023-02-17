@@ -10,7 +10,7 @@ import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
 // components
-import InputSchedule from '../components/Dialog/RegisterScheduleDialog';
+import InputSchedule from '../components/Dialog/AddScheduleDialog';
 
 // 追加するイベントの型。
 interface newEventsType {

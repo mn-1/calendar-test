@@ -22,29 +22,28 @@ import { addScheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
-import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
-import { EventClickArg } from '@fullcalendar/core';
+import { AddScheduleDataInfo } from '../../lib/inputDataControl';
 
 type Props = {
   open: boolean;
   operator: any;
   avatar: any;
   handleClose: VoidFunction;
-  registerSchedule: Function;
-  date: Dayjs;
+  addSchedule: Function;
+  date: string | undefined;
 };
 
-export default function RegisterScheduleDialog(props: Props) {
-  const { open, handleClose, registerSchedule } = props;
+export default function AddScheduleDialog(props: Props) {
+  const { open, handleClose, addSchedule } = props;
 
-  const defaultValues: RegisterScheduleDataInfo = {
+  const defaultValues: AddScheduleDataInfo = {
     title: '',
     memo: '',
     operatorName: '',
     avatar: '',
   };
 
-  const useFormMethods = useForm<RegisterScheduleDataInfo>({
+  const useFormMethods = useForm<AddScheduleDataInfo>({
     resolver: yupResolver(addScheduleSchema),
     defaultValues,
   });
@@ -56,11 +55,11 @@ export default function RegisterScheduleDialog(props: Props) {
     formState: { errors },
   } = useFormMethods;
 
-  const onRegister: SubmitHandler<RegisterScheduleDataInfo> = async (
-    values: RegisterScheduleDataInfo
+  const onAdd: SubmitHandler<AddScheduleDataInfo> = async (
+    values: AddScheduleDataInfo
   ) => {
     console.log(values);
-    registerSchedule(values);
+    addSchedule(values);
     reset({
       title: '',
       memo: '',
@@ -96,13 +95,13 @@ export default function RegisterScheduleDialog(props: Props) {
             予定を追加
           </Typography>
         </Grid>
-        <DatePickerForm date={props.date} />
+        <DatePickerForm date={dayjs(props.date)} />
         <FormProvider {...useFormMethods}>
           <Box
             component='form'
             noValidate
             autoComplete='off'
-            onSubmit={handleSubmit(onRegister)}
+            onSubmit={handleSubmit(onAdd)}
           >
             <Typography color='secondary'>オペレーター名</Typography>
             <FormSelect

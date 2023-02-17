@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { EventClickArg } from '@fullcalendar/core';
 import { formatDate } from '../../lib/dateControl';
+import FailedDialog from './FailedDialog';
 
 type Props = {
   open: boolean;
@@ -75,19 +76,5 @@ export default function ScheduleInfoDialog(props: Props) {
       </Dialog>
     );
   else
-    return (
-      <Dialog open={props.open} fullWidth>
-        <DialogActions>
-          <Grid container justifyContent='end' alignItems='center'>
-            <Box sx={{ px: 1 }} />
-            <Tooltip title='閉じる'>
-              <IconButton onClick={props.handleClose}>
-                <CloseIcon fontSize='medium' />
-              </IconButton>
-            </Tooltip>
-          </Grid>
-        </DialogActions>
-        <DialogTitle sx={{ mb: '2rem' }}>予定の取得に失敗しました</DialogTitle>
-      </Dialog>
-    );
+    return <FailedDialog open={props.open} handleClose={props.handleClose} />;
 }

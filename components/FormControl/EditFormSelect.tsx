@@ -8,14 +8,14 @@ import {
   InputLabel,
 } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
-import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
+import { scheduleDataInfo } from '../../lib/inputDataControl';
 import { styled } from '@mui/material/styles';
 
 type FormSelectProps = {
   users: any;
   errorMessage: string | undefined;
-  name: 'operatorName' | 'avatar';
-  control: Control<RegisterScheduleDataInfo>;
+  name: 'operatorName' | 'locationName';
+  control: Control<scheduleDataInfo>;
   defaultValue: string;
 } & SelectProps;
 
@@ -37,7 +37,7 @@ const EditFormSelect: FC<FormSelectProps> = (props: FormSelectProps) => {
       name={name}
       render={({ field }) => (
         <CssFormControl fullWidth sx={{ my: '0.5rem' }}>
-          <InputLabel id='demo-simple-select-label'>{label}</InputLabel>
+          <InputLabel>{label}</InputLabel>
           <Select {...otherProps} {...field} required>
             <MenuItem disabled value=''>
               <em>選択してください</em>

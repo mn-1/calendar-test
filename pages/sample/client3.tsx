@@ -1,8 +1,3 @@
-/**
- * 予定登録
- * 予定クリックしたら詳細開く
- */
-
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
@@ -27,7 +22,7 @@ import interactionPlugin, {
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, operator, avatar } from '../../lib/data';
+import { resources, operator } from '../../lib/data';
 import EventControl from '../../lib/eventControl-2';
 import { divideColor } from '../../lib/colorControl';
 // components
@@ -68,7 +63,6 @@ const ClientCalendar = () => {
 
   // 予定登録ダイアログ開く
   const handleDateSelect = (arg: DateSelectArg) => {
-    if (!arg.resource) return;
     console.log('selectInfo:', arg);
     setAddDialogOpen(true);
 
@@ -79,7 +73,8 @@ const ClientCalendar = () => {
       id: `${countId}`,
       startStr: arg.startStr,
       endStr: arg.endStr,
-      resourceId: arg.resource.id,
+      resourceId: arg.resource ? arg.resource.id : '',
+      resourceTitle: arg.resource ? arg.resource.title : '',
       calendar: arg.view.calendar,
     });
   };
@@ -90,6 +85,7 @@ const ClientCalendar = () => {
     setEventInfo(arg);
   };
 
+  // 予定を削除したのを取り消す
   const undoDelete = () => {
     if (!eventInfo || !calendarRef.current) return;
     const {
@@ -227,22 +223,25 @@ const ClientCalendar = () => {
           )}
         </Grid>
         {/* utils ↓ */}
-        <AddScheduleDialog
-          date={selectInfo?.startStr}
-          operator={operator}
-          avatar={avatar}
-          open={addDialogOpen}
-          handleClose={() => {
-            setAddDialogOpen(false);
-          }}
-          addSchedule={addSchedule}
-        />
         {/* defalutValueを動的にしないためにレンダリング少なくしている */}
+        {selectInfo && addDialogOpen && (
+          <AddScheduleDialog
+            selectInfo={selectInfo}
+            operator={operator}
+            location={resources}
+            open={addDialogOpen}
+            handleClose={() => {
+              setAddDialogOpen(false);
+            }}
+            addSchedule={addSchedule}
+          />
+        )}
         {eventInfo && editDialogOpen && (
           <EditScheduleDialog
+            open={editDialogOpen}
             eventInfo={eventInfo}
             operator={operator}
-            avatar={avatar}
+            location={resources}
             handleClose={() => setEditDialogOpen(false)}
             editSchedule={editSchedule}
           />
@@ -278,7 +277,9 @@ export default ClientCalendar;
 function renderEventContent(eventContent: EventContentArg) {
   return (
     <Typography>
-      {eventContent.timeText} {eventContent.event.extendedProps.operatorName}
+      {eventContent.timeText}
+      <br />
+      {eventContent.event.extendedProps.operatorName}
     </Typography>
   );
 }

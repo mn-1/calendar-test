@@ -1,7 +1,7 @@
 /**
  * 基本の使い方の説明
  */
-import React, { useState } from 'react';
+import React from 'react';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid'; // 週表示を可能にする
@@ -9,16 +9,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // 月表示を可能にす�
 import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が[ 選択 ]きるようになる
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
-// components
-import InputSchedule from '../components/Dialog/AddScheduleDialog';
-
-// 追加するイベントの型。
-interface newEventsType {
-  id: number;
-  title: string;
-  start: Date;
-  end: Date;
-}
 
 export type UpdateFormDataInfo = {
   title: string;
@@ -33,36 +23,6 @@ const SampleCalendar: React.FC = (props) => {
    */
   const ref = React.createRef<any>();
 
-  const [inputTitle, setInputTitle] = useState('');
-  const [inputStart, setInputStart] = useState(new Date());
-  const [inputEnd, setInputEnd] = useState(new Date());
-  const [inView, setInView] = useState<boolean>(false);
-  // 登録されたイベントが格納されていく配列
-  const [myEvents, setMyEvents] = useState<newEventsType[]>([]);
-
-  const events = [
-    { title: 'eventを', start: '2023-01-09' },
-    {
-      title: 'こんな感じで追加できます',
-      start: '2023-01-10',
-      end: '2023-01-12',
-    },
-  ];
-
-  // カレンダーがクリックされた時にイベント登録用フォームが開く
-  const handleDateCLick = (info: any) => {
-    setInView(true);
-    console.log(info, info.event);
-    // const event = myEvents[info.event.id];
-    // const title = event.title;
-    // const start = event.start;
-    // const end = event.end;
-
-    // setInputTitle(title);
-    // setInputStart(start);
-    // setInputEnd(end);
-    // setInView(true);
-  };
   return (
     <>
       <FullCalendar
@@ -96,9 +56,6 @@ const SampleCalendar: React.FC = (props) => {
           center: 'title',
           right: 'dayGridMonth,timeGridWeek listWeek',
         }}
-        // events={myEvents}
-        // その日を選択した時
-        dateClick={handleDateCLick}
       />
     </>
   );

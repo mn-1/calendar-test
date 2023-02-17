@@ -1,13 +1,7 @@
-export type AddScheduleDataInfo = {
+export type scheduleDataInfo = {
   title: string;
   memo: string;
-  operatorName: string;
-  avatar: string;
-};
-
-export type EditScheduleDataInfo = {
-  title: string;
-  memo: string;
+  locationName: string;
   operatorName: string;
   avatar: string;
 };

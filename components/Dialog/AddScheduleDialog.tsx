@@ -1,7 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
 // MUI
 import {
-  DialogTitle,
   Box,
   DialogContent,
   Dialog,
@@ -15,37 +14,40 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 // components
 import FormInput from '../FormControl/FormInput';
-import FormSelect from '../FormControl/FormSelect';
 import DatePickerForm from '../FormControl/DatePicker';
+import FailedDialog from './FailedDialog';
+import AddFormSelect from '../FormControl/FormSelect';
 // validate
-import { addScheduleSchema } from '../../schema/inputSchedule';
+import { scheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
-import { AddScheduleDataInfo } from '../../lib/inputDataControl';
+import { scheduleDataInfo } from '../../lib/inputDataControl';
+import { SelectInfoType } from '../../lib/eventControl-2';
 
 type Props = {
   open: boolean;
   operator: any;
-  avatar: any;
+  location: any;
   handleClose: VoidFunction;
   addSchedule: Function;
-  date: string | undefined;
+  selectInfo: SelectInfoType;
 };
 
 export default function AddScheduleDialog(props: Props) {
-  const { open, handleClose, addSchedule } = props;
+  const { open, selectInfo, handleClose, addSchedule, operator, location } =
+    props;
 
-  const defaultValues: AddScheduleDataInfo = {
+  const defaultValues: scheduleDataInfo = {
     title: '',
     memo: '',
+    locationName: '',
     operatorName: '',
     avatar: '',
   };
 
-  const useFormMethods = useForm<AddScheduleDataInfo>({
-    resolver: yupResolver(addScheduleSchema),
-    defaultValues,
+  const useFormMethods = useForm<scheduleDataInfo>({
+    resolver: yupResolver(scheduleSchema),
   });
 
   const {
@@ -55,99 +57,93 @@ export default function AddScheduleDialog(props: Props) {
     formState: { errors },
   } = useFormMethods;
 
-  const onAdd: SubmitHandler<AddScheduleDataInfo> = async (
-    values: AddScheduleDataInfo
+  // 登録ボタンアクション
+  const onAdd: SubmitHandler<scheduleDataInfo> = async (
+    values: scheduleDataInfo
   ) => {
-    console.log(values);
     addSchedule(values);
-    reset({
-      title: '',
-      memo: '',
-      operatorName: '',
-      avatar: '',
-    });
+    reset(defaultValues);
   };
 
   // キャンセルボタンアクション
   const handleCancelButton = () => {
-    reset({
-      title: '',
-      memo: '',
-      operatorName: '',
-      avatar: '',
-    });
     handleClose();
+    reset(defaultValues);
   };
 
-  return (
-    <Dialog open={open} fullWidth>
-      <DialogActions>
-        <Tooltip title='閉じる'>
-          <IconButton onClick={handleCancelButton}>
-            <CloseIcon fontSize='large' />
-          </IconButton>
-        </Tooltip>
-      </DialogActions>
+  if (selectInfo)
+    return (
+      <Dialog open={open} fullScreen>
+        <DialogActions>
+          <Tooltip title='閉じる'>
+            <IconButton onClick={handleCancelButton}>
+              <CloseIcon fontSize='large' />
+            </IconButton>
+          </Tooltip>
+        </DialogActions>
 
-      <DialogContent>
-        <Grid container justifyContent='center'>
-          <Typography variant='h4' color='secondary'>
-            予定を追加
-          </Typography>
-        </Grid>
-        <DatePickerForm date={dayjs(props.date)} />
-        <FormProvider {...useFormMethods}>
-          <Box
-            component='form'
-            noValidate
-            autoComplete='off'
-            onSubmit={handleSubmit(onAdd)}
-          >
-            <Typography color='secondary'>オペレーター名</Typography>
-            <FormSelect
-              users={props.operator}
-              errorMessage={errors.operatorName?.message}
-              name='operatorName'
-              control={control}
-            />
-            <Typography color='secondary'>アバター名</Typography>
-            <FormSelect
-              users={props.avatar}
-              errorMessage={errors.avatar?.message}
-              name='avatar'
-              control={control}
-            />
-            <Typography color='secondary'>タイトル</Typography>
-            <FormInput
-              name='title'
+        <DialogContent>
+          <Grid container justifyContent='center'>
+            <Typography variant='h4' color='secondary'>
+              予定を追加
+            </Typography>
+          </Grid>
+          <DatePickerForm date={dayjs(selectInfo.startStr)} />
+          <FormProvider {...useFormMethods}>
+            <Box
+              component='form'
+              noValidate
               autoComplete='off'
-              focused
-              placeholder='タイトル'
-              fullWidth
-            />
-            <Typography color='secondary'>メモ</Typography>
-            <FormInput
-              name='memo'
-              autoComplete='off'
-              focused
-              placeholder='メモ'
-              fullWidth
-              multiline
-              minRows={3}
-              maxRows={10}
-            />
-
-            <Button
-              fullWidth
-              variant='contained'
-              type='submit'
-              sx={{ fontWeight: 'bold', my: '0.5rem' }}
+              onSubmit={handleSubmit(onAdd)}
             >
-              登録する
-            </Button>
-          </Box>
-        </FormProvider>
-      </DialogContent>
-    </Dialog>
-  );
+              <AddFormSelect
+                operator={operator}
+                location={location}
+                control={control}
+                errors={errors}
+                locationDefaultValue={selectInfo.resourceTitle ?? ''}
+                operatorDefaultValue=''
+              />
+
+              <Typography color='secondary'>タイトル</Typography>
+              <FormInput
+                name='title'
+                autoComplete='off'
+                focused
+                placeholder='タイトル'
+                fullWidth
+              />
+              <Typography color='secondary'>アバター名</Typography>
+              <FormInput
+                name='avatar'
+                autoComplete='off'
+                focused
+                placeholder='タイトル'
+                fullWidth
+              />
+              <Typography color='secondary'>メモ</Typography>
+              <FormInput
+                name='memo'
+                autoComplete='off'
+                focused
+                placeholder='メモ'
+                fullWidth
+                multiline
+                minRows={3}
+                maxRows={10}
+              />
+              <Button
+                fullWidth
+                variant='contained'
+                type='submit'
+                sx={{ fontWeight: 'bold', my: '0.5rem' }}
+              >
+                登録する
+              </Button>
+            </Box>
+          </FormProvider>
+        </DialogContent>
+      </Dialog>
+    );
+  else return <FailedDialog open={open} handleClose={handleClose} />;
 }

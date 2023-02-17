@@ -1,55 +1,86 @@
 import { FC } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 import {
   FormControl,
   Select,
   MenuItem,
   SelectProps,
-  InputLabel,
+  Typography,
 } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
-import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
+import { scheduleDataInfo } from '../../lib/inputDataControl';
 import { styled } from '@mui/material/styles';
 
 type FormSelectProps = {
-  users: any;
-  errorMessage: string | undefined;
-  name: 'operatorName' | 'avatar';
-  control: Control<RegisterScheduleDataInfo>;
+  operator: any;
+  location: any;
+  control: Control<scheduleDataInfo>;
+  locationDefaultValue: string;
+  operatorDefaultValue: string;
+  errors: FieldErrors<scheduleDataInfo>;
 } & SelectProps;
 
 const FormSelect: FC<FormSelectProps> = ({
-  errorMessage,
+  errors,
   control,
   name,
-  users,
-  label,
+  location,
+  operator,
+  locationDefaultValue,
+  operatorDefaultValue,
   ...otherProps
-}) => {
+}: FormSelectProps) => {
   return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <CssFormControl fullWidth sx={{ my: 1 }}>
-          <InputLabel id='demo-simple-select-label'>{label}</InputLabel>
-          <Select {...otherProps} {...field} required>
-            <MenuItem disabled value=''>
-              <em>選択してください</em>
-            </MenuItem>
-            {users &&
-              users.map((user: any) => (
-                <MenuItem key={user.id} value={user.name}>
-                  {user.name}
-                </MenuItem>
-              ))}
-          </Select>
-          <FormHelperText sx={{ color: '#FF0000' }}>
-            {errorMessage}
-          </FormHelperText>
-        </CssFormControl>
-      )}
-    />
+    <>
+      <Typography color='secondary'>拠点名</Typography>
+      <Controller
+        defaultValue={locationDefaultValue}
+        control={control}
+        name='locationName'
+        render={({ field }) => (
+          <CssFormControl fullWidth sx={{ my: '0.5rem' }}>
+            <Select {...otherProps} {...field} required>
+              <MenuItem disabled value=''>
+                <em>選択してください</em>
+              </MenuItem>
+              {location &&
+                location.map((user: any) => (
+                  <MenuItem key={user.id} value={user.title}>
+                    {user.title}
+                  </MenuItem>
+                ))}
+            </Select>
+            <FormHelperText sx={{ color: '#FF0000' }}>
+              {errors.locationName?.message}
+            </FormHelperText>
+          </CssFormControl>
+        )}
+      />
+      <Typography color='secondary'>オペレーター名</Typography>
+      <Controller
+        defaultValue={operatorDefaultValue}
+        control={control}
+        name='operatorName'
+        render={({ field }) => (
+          <CssFormControl fullWidth sx={{ my: '0.5rem' }}>
+            <Select {...otherProps} {...field} required>
+              <MenuItem disabled value=''>
+                <em>選択してください</em>
+              </MenuItem>
+              {operator &&
+                operator.map((user: any) => (
+                  <MenuItem key={user.id} value={user.name}>
+                    {user.name}
+                  </MenuItem>
+                ))}
+            </Select>
+            <FormHelperText sx={{ color: '#FF0000' }}>
+              {errors.operatorName?.message}
+            </FormHelperText>
+          </CssFormControl>
+        )}
+      />
+    </>
   );
 };
 

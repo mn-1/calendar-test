@@ -53,7 +53,7 @@ export const resources = [
 
 const date = new Date();
 
-// サンプルイベント一覧
+// Eイベント一覧
 export const events = [
   {
     id: '1',
@@ -63,8 +63,8 @@ export const events = [
     end: new Date().setHours(date.getHours() - 2),
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターサンプル',
-      avatar: 'アバターサンプル',
+      operatorName: 'オペレーターEさん',
+      avatar: 'アバターE',
     },
     // groupId: '',
     backgroundColor: '',
@@ -83,8 +83,8 @@ export const events = [
     end: new Date().setHours(date.getHours() + 1),
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターサンプル',
-      avatar: 'アバターサンプル',
+      operatorName: 'オペレーターEさん',
+      avatar: 'アバターE',
     },
     backgroundColor: '',
     borderColor: '',
@@ -101,8 +101,8 @@ export const events = [
     end: new Date().setHours(date.getHours() + 4),
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターサンプル',
-      avatar: 'アバターサンプル',
+      operatorName: 'オペレーターEさん',
+      avatar: 'アバターE',
     },
     // groupId: '',
     backgroundColor: '',
@@ -120,8 +120,8 @@ export const events = [
     end: new Date().setHours(date.getHours() + 4),
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターサンプル',
-      avatar: 'アバターサンプル',
+      operatorName: 'オペレーターEさん',
+      avatar: 'アバターE',
     },
     backgroundColor: '',
     borderColor: '',
@@ -139,8 +139,8 @@ export const events = [
     end: new Date().setHours(date.getHours() - 2),
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターサンプル',
-      avatar: 'アバターサンプル',
+      operatorName: 'オペレーターEさん',
+      avatar: 'アバターE',
     },
     backgroundColor: '',
     borderColor: '',
@@ -152,7 +152,7 @@ export const events = [
   },
 ];
 
-// サンプルオペレーター一覧
+// Eオペレーター一覧
 export const operator = [
   { id: 1, name: 'オペレーターAさん' },
   { id: 2, name: 'オペレーターBさん' },
@@ -161,10 +161,21 @@ export const operator = [
   { id: 5, name: 'オペレーターEさん' },
 ];
 
-export const avatar = [
-  { id: 1, name: 'アバターA' },
-  { id: 2, name: 'アバターB' },
-  { id: 3, name: 'アバターC' },
-  { id: 4, name: 'アバターD' },
-  { id: 5, name: 'アバターE' },
+export const eventConstraints = [
+  {
+    id: 'sample1',
+    groupId: 'sample1',
+    // start: `${moment().format('YYYY-MM-DD')}T09:00:00-0700`,
+    // end: `${moment().format('YYYY-MM-DD')}T18:00:00-0700`,
+    resourceId: '1',
+    display: 'background',
+  },
+  {
+    id: 'sample2',
+    groupId: 'sample2',
+    // start: `${moment().format('YYYY-MM-DD')}T08:00:00-0700`,
+    // end: `${moment().format('YYYY-MM-DD')}T17:00:00-0700`,
+    resourceId: '3',
+    display: 'background',
+  },
 ];

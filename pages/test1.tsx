@@ -8,7 +8,6 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import moment from 'moment-timezone';
 import { events, eventConstraints, resources } from '../lib/data';
 
 export default function App() {
@@ -59,7 +58,7 @@ export default function App() {
   // 設定以上に予定を大きくできなくする
   const handleResizeStart = (arg: any) => {
     const resources = arg.event.getResources();
-    const eventEndTime = moment(arg.event.endStr).minute();
+    const eventEndTime = new Date(arg.event.endStr);
     if (calendarRef.current) {
       if (+eventEndTime === 10) {
         console.log('sfsdfsd');

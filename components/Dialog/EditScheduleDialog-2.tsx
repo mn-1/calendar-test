@@ -1,6 +1,6 @@
-import dayjs, { Dayjs } from 'dayjs';
 // MUI
 import {
+  DialogTitle,
   Box,
   DialogContent,
   Dialog,
@@ -13,40 +13,28 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 // components
-import FormInput from '../FormControl/FormInput';
 import EditFormInput from '../FormControl/EditFormInput';
-import DatePickerForm from '../FormControl/DatePicker';
+import EditFormSelect from '../FormControl/EditFormSelect';
 import FailedDialog from './FailedDialog';
-import FormSelect from '../FormControl/FormSelect';
 // validate
 import { scheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
 import { scheduleDataInfo } from '../../lib/inputDataControl';
-import { DateSelectArg, EventClickArg } from '@fullcalendar/core';
-import { SelectInfoType } from '../../lib/eventControl-2';
+import { EventClickArg } from '@fullcalendar/core';
 
 type Props = {
-  open: boolean;
   operator: any;
-  location: any;
+  avatar: any;
+  eventInfo: EventClickArg | null;
   handleClose: VoidFunction;
   editSchedule: Function;
-  eventInfo: EventClickArg;
 };
 
 export default function EditScheduleDialog(props: Props) {
-  const { open, eventInfo, handleClose, editSchedule, operator, location } =
-    props;
-
-  const defaultValues: scheduleDataInfo = {
-    title: '',
-    memo: '',
-    locationName: '',
-    operatorName: '',
-    avatar: '',
-  };
+  const { handleClose, editSchedule, eventInfo } = props;
+  const event = eventInfo?.event;
 
   const useFormMethods = useForm<scheduleDataInfo>({
     resolver: yupResolver(scheduleSchema),
@@ -59,27 +47,33 @@ export default function EditScheduleDialog(props: Props) {
     formState: { errors },
   } = useFormMethods;
 
-  // 登録ボタンアクション
-  const onAdd: SubmitHandler<scheduleDataInfo> = async (
+  const onEdit: SubmitHandler<scheduleDataInfo> = async (
     values: scheduleDataInfo
   ) => {
     editSchedule(values);
-    reset(defaultValues);
+    reset({
+      title: '',
+      memo: '',
+      operatorName: '',
+      avatar: '',
+    });
   };
 
-  // キャンセルボタンアクション
+  // キャンセルボタン
   const handleCancelButton = () => {
     handleClose();
-    reset(defaultValues);
+    reset({
+      title: '',
+      memo: '',
+      operatorName: '',
+      avatar: '',
+    });
   };
 
-  const locationDefaultValue =
-    eventInfo.event.getResources()[0]._resource.title;
-
-  if (eventInfo)
+  if (event)
     return (
-      <Dialog open={open} fullScreen>
-        <DialogActions>
+      <Dialog open={true} fullScreen>
+        <DialogActions sx={{ px: '3rem' }}>
           <Tooltip title='閉じる'>
             <IconButton onClick={handleCancelButton}>
               <CloseIcon fontSize='large' />
@@ -87,49 +81,47 @@ export default function EditScheduleDialog(props: Props) {
           </Tooltip>
         </DialogActions>
 
-        <DialogContent>
+        <DialogContent sx={{ px: '3rem' }}>
           <Grid container justifyContent='center'>
             <Typography variant='h4' color='secondary'>
               予定を編集
             </Typography>
           </Grid>
-          <DatePickerForm date={dayjs(eventInfo.event.startStr)} />
           <FormProvider {...useFormMethods}>
             <Box
               component='form'
               noValidate
               autoComplete='off'
-              onSubmit={handleSubmit(onAdd)}
+              onSubmit={handleSubmit(onEdit)}
             >
-              <FormSelect
-                operator={operator}
-                location={location}
+              <Typography color='secondary'>オペレーター名</Typography>
+              <EditFormSelect
+                defaultValue={event.extendedProps.operatorName ?? ''}
+                users={props.operator}
+                errorMessage={errors.operatorName?.message}
+                name='operatorName'
                 control={control}
-                errors={errors}
-                locationDefaultValue={locationDefaultValue ?? ''}
-                operatorDefaultValue={
-                  eventInfo.event.extendedProps.operatorName ?? ''
-                }
               />
-
+              {/* <Typography color='secondary'>アバター名</Typography>
+              <EditFormSelect
+                defaultValue={event.extendedProps.avatar ?? ''}
+                users={props.avatar}
+                errorMessage={errors.avatar?.message}
+                name='avatar'
+                control={control}
+              /> */}
               <Typography color='secondary'>タイトル</Typography>
-              <FormInput
+              <EditFormInput
+                defaultValue={event.title ?? ''}
                 name='title'
                 autoComplete='off'
                 focused
                 placeholder='タイトル'
                 fullWidth
               />
-              <Typography color='secondary'>アバター名</Typography>
-              <FormInput
-                name='avatar'
-                autoComplete='off'
-                focused
-                placeholder='タイトル'
-                fullWidth
-              />
               <Typography color='secondary'>メモ</Typography>
-              <FormInput
+              <EditFormInput
+                defaultValue={event.extendedProps.memo ?? ''}
                 name='memo'
                 autoComplete='off'
                 focused
@@ -145,12 +137,12 @@ export default function EditScheduleDialog(props: Props) {
                 type='submit'
                 sx={{ fontWeight: 'bold', my: '0.5rem' }}
               >
-                登録する
+                保存
               </Button>
             </Box>
           </FormProvider>
         </DialogContent>
       </Dialog>
     );
-  else return <FailedDialog open={open} handleClose={handleClose} />;
+  else return <FailedDialog open={true} handleClose={handleClose} />;
 }

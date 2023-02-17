@@ -31,10 +31,9 @@ import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { Draggable, DropArg } from '@fullcalendar/interaction';
 // lib
-import { eventConstraints, resources, operator, avatar } from '../../lib/data';
+import { resources, operator } from '../../lib/data';
 import EventControl from '../../lib/eventControl-2';
 import { divideColor } from '../../lib/colorControl';
-import { RegisterScheduleDataInfo } from '../../lib/inputDataControl';
 // components
 import Header from '../../components/Header/Header';
 import RegisterScheduleDialog from '../../components/Dialog/AddScheduleDialog';

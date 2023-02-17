@@ -3,21 +3,16 @@ import React, { useState, useRef, createRef, useEffect } from 'react';
 // lib
 import { resources, events } from './data';
 import { divideColor } from './colorControl';
-import { EditScheduleDataInfo, AddScheduleDataInfo } from './inputDataControl';
+import { scheduleDataInfo } from './inputDataControl';
 // Fullcalendar
-import {
-  CalendarApi,
-  DateSelectArg,
-  EventClickArg,
-  ViewApi,
-} from '@fullcalendar/core';
+import { CalendarApi, EventClickArg } from '@fullcalendar/core';
 
-interface SelectInfoType {
+export interface SelectInfoType {
   id: string;
   startStr: string;
   endStr: string;
   resourceId: string;
-  // view: ViewApi;
+  resourceTitle: string;
   calendar: CalendarApi;
 }
 
@@ -27,7 +22,7 @@ export default function EventControl() {
   // イベント一覧収納
   const [myEvents, setMyEvents] = useState<any>([]);
   // 予約登録
-  const [selectInfo, setSelectInfo] = useState<SelectInfoType>();
+  const [selectInfo, setSelectInfo] = useState<SelectInfoType | null>(null);
   // 予定情報
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定登録ダイアログopen
@@ -59,22 +54,25 @@ export default function EventControl() {
    * 予定登録
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const addSchedule = async (values: AddScheduleDataInfo) => {
+  const addSchedule = async (values: scheduleDataInfo) => {
     if (!selectInfo) return console.log('selectInfo none');
-    if (!selectInfo.resourceId) return console.log('resource none');
 
     const start = new Date(selectInfo.startStr).getTime();
     const end = new Date(selectInfo.endStr).getTime();
     const { backgroundColor, borderColor } = divideColor(start, end);
 
-    // calendar.unselect();
+    const resource = resources.find((item) => {
+      if (item.title === values.locationName) return item;
+    });
+
+    if (!resource) return console.log('resorce none');
 
     selectInfo.calendar.addEvent({
       id: `${countId}`,
       title: values.title,
       start: selectInfo.startStr,
       end: selectInfo.endStr,
-      resourceId: selectInfo.resourceId,
+      resourceId: `${resource.id}`,
       extendedProps: {
         memo: values.memo,
         operatorName: values.operatorName,
@@ -93,7 +91,7 @@ export default function EventControl() {
    * @param values 
    * @returns 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const editSchedule = async (values: EditScheduleDataInfo) => {
+  const editSchedule = async (values: scheduleDataInfo) => {
     const event = eventInfo?.event;
 
     if (!event) return console.log('event none');

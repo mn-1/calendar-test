@@ -1,6 +1,4 @@
-/**
- * ダイアログでイベント追加
- */
+/** */
 
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
@@ -22,12 +20,14 @@ import {
   EventDropArg,
 } from '@fullcalendar/core';
 import interactionPlugin, {
+  DropArg,
+  EventReceiveArg,
   EventResizeDoneArg,
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, operator } from '../../lib/data';
-import EventControl from '../../lib/eventControl-2';
+import { resources, externalEvents, operator } from '../../lib/data';
+import EventControl from '../../lib/eventControl-3';
 import { divideColor } from '../../lib/colorControl';
 // components
 import Header from '../../components/Header/Header';
@@ -35,6 +35,7 @@ import AddScheduleDialog from '../../components/Dialog/AddScheduleDialog';
 import ScheduleInfoDialog from '../../components/Dialog/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
+import { ExternalEvent } from '../../components/FullCalendar/ExternalEvents';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
@@ -102,7 +103,6 @@ const ClientCalendar = () => {
       extendedProps,
     } = eventInfo.event;
 
-    console.log(eventInfo);
     calendarRef.current.getApi().addEvent({
       id,
       title,
@@ -137,6 +137,7 @@ const ClientCalendar = () => {
     arg.event.setProp('color', color);
   };
 
+  // 予定のサイズ変更
   const handleEventResize = (arg: EventResizeDoneArg) => {
     const { start, end } = arg.event;
 
@@ -149,6 +150,28 @@ const ClientCalendar = () => {
 
     // 色だけ修正
     arg.event.setProp('color', color);
+  };
+
+  // 外部のイベント追加
+  const drop = (arg: DropArg) => {
+    console.log(arg);
+  };
+
+  // 外部のイベント受付
+  const handleEventReceive = (arg: EventReceiveArg) => {
+    const start = arg.event.start;
+    let end = start;
+
+    if (!start || !end) return console.log('start none');
+    end = new Date(end.setHours(start.getHours() + 2));
+
+    const { color } = divideColor(
+      new Date(start).getTime(),
+      new Date(end).getTime()
+    );
+
+    arg.event.setProp('color', color);
+    arg.event.setEnd(end);
   };
 
   return (
@@ -170,8 +193,18 @@ const ClientCalendar = () => {
             height: '100%',
           }}
         >
-          {myEvents.length != 0 && (
-            <Grid item sm={12} sx={{ mx: 6 }}>
+          <Grid item sm={2}>
+            <Grid container direction='column'>
+              {externalEvents.map((event) => (
+                <ExternalEvent
+                  key={event.extendedProps.Username}
+                  event={event}
+                />
+              ))}
+            </Grid>
+          </Grid>
+          <Grid item sm={9} sx={{ mx: 6 }}>
+            {myEvents.length != 0 && (
               <FullCalendar
                 initialEvents={myEvents}
                 ref={calendarRef}
@@ -203,7 +236,7 @@ const ClientCalendar = () => {
                 //
                 droppable={true}
                 editable={true}
-                selectable={true}
+                selectable={false}
                 selectMirror={true}
                 weekends={true}
                 eventResizableFromStart={true}
@@ -211,7 +244,8 @@ const ClientCalendar = () => {
                 allDaySlot={false}
                 slotEventOverlap={true}
                 //
-                eventReceive={() => {}}
+                eventReceive={handleEventReceive}
+                drop={drop}
                 select={handleDateSelect}
                 eventClick={handleEventClick}
                 eventsSet={(events: EventApi[]) => {
@@ -221,8 +255,8 @@ const ClientCalendar = () => {
                 eventResize={handleEventResize}
                 eventDrop={handleInnerEventDrop}
               />
-            </Grid>
-          )}
+            )}
+          </Grid>
         </Grid>
         {/* utils ↓ */}
         {/* defalutValueを動的にしないためにレンダリング少なくしている */}
@@ -280,7 +314,6 @@ function renderEventContent(eventContent: EventContentArg) {
   return (
     <Typography>
       {eventContent.timeText}
-
       {eventContent.event.extendedProps.operatorName}
     </Typography>
   );

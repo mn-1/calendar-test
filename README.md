@@ -90,3 +90,9 @@ https://fullcalendar.io/docs/event-dragging-resizing
   - 週末表示するか否か
 - eventResizableFromStart
   - Whether the user can resize an event from its starting edge
+- slotEventOverlap
+  - 予定同士が被って表示してもいいか
+  - https://fullcalendar.io/docs/slotEventOverlap
+- selectable
+  - Allows a user to highlight multiple days or timeslots by clicking and dragging.
+  - https://fullcalendar.io/docs/selectable

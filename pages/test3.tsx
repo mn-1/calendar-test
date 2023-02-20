@@ -20,9 +20,10 @@ import {
 } from '@fullcalendar/core';
 import interactionPlugin, {
   EventResizeDoneArg,
+  Draggable,
+  DropArg,
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import { Draggable, DropArg } from '@fullcalendar/interaction';
 // lib
 import { resources } from '../lib/data';
 import { getEvents } from '../lib/eventControl';
@@ -36,6 +37,7 @@ export type UpdateFormDataInfo = {
 
 const SampleCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
+  const extarnalEventsRef = createRef<HTMLElement>();
 
   const [countId, setCountId] = useState<number>(0);
   const [myEvents, setMyEvents] = useState<any>([]);
@@ -48,6 +50,21 @@ const SampleCalendar = () => {
     setCountId(events.length + 1);
 
     if (calendarRef.current) console.log(calendarRef.current);
+
+    (() => {
+      if (extarnalEventsRef.current)
+        new Draggable(extarnalEventsRef.current, {
+          itemSelector: '.fc-event',
+          eventData: function (eventEl) {
+            let title = eventEl.getAttribute('title');
+            let id = eventEl.getAttribute('data');
+            return {
+              title: title,
+              id: id,
+            };
+          },
+        });
+    })();
   }, []);
 
   // イベント追加
@@ -56,7 +73,7 @@ const SampleCalendar = () => {
     const title = prompt('Please enter a new title for your event');
     view.calendar.unselect();
 
-    const { backgroundColor, borderColor } = divideColor(
+    const { color } = divideColor(
       new Date(start).getTime(),
       new Date(end).getTime()
     );
@@ -72,8 +89,7 @@ const SampleCalendar = () => {
       end,
       resourceId: resource.id,
       allDay: false,
-      backgroundColor,
-      borderColor,
+      color,
     });
   };
 
@@ -89,14 +105,13 @@ const SampleCalendar = () => {
 
     // startとendを取得できなかったら戻す
     if (!start || !end) return arg.revert();
-    const { backgroundColor, borderColor } = divideColor(
+    const { color } = divideColor(
       new Date(start).getTime(),
       new Date(end).getTime()
     );
 
     // 色だけ修正
-    arg.event.setProp('backgroundColor', backgroundColor);
-    arg.event.setProp('borderColor', borderColor);
+    arg.event.setProp('color', color);
   };
 
   const handleEventResize = (arg: EventResizeDoneArg) => {
@@ -104,14 +119,13 @@ const SampleCalendar = () => {
 
     // startとendを取得できなかったら戻す
     if (!start || !end) return arg.revert();
-    const { backgroundColor, borderColor } = divideColor(
+    const { color } = divideColor(
       new Date(start).getTime(),
       new Date(end).getTime()
     );
 
     // 色だけ修正
-    arg.event.setProp('backgroundColor', backgroundColor);
-    arg.event.setProp('borderColor', borderColor);
+    arg.event.setProp('color', color);
   };
 
   const extarnalEvents = [
@@ -123,10 +137,8 @@ const SampleCalendar = () => {
   ];
 
   function componentDidMount() {
-    let draggableEl = document.getElementById('external-events');
-
-    if (draggableEl)
-      new Draggable(draggableEl, {
+    if (extarnalEventsRef.current)
+      new Draggable(extarnalEventsRef.current, {
         itemSelector: '.fc-event',
         eventData: function (eventEl) {
           let title = eventEl.getAttribute('title');
@@ -138,23 +150,6 @@ const SampleCalendar = () => {
         },
       });
   }
-
-  const drop = () => {
-    const draggableEl = document.getElementById('external-events');
-
-    if (draggableEl)
-      new Draggable(draggableEl, {
-        itemSelector: '.fc-event',
-        eventData: function (eventEl) {
-          let title = eventEl.getAttribute('title');
-          let id = eventEl.getAttribute('data');
-          return {
-            title: title,
-            id: id,
-          };
-        },
-      });
-  };
 
   return (
     <>
@@ -184,15 +179,7 @@ const SampleCalendar = () => {
                 >
                   drag me
                 </div>
-                <div
-                  id='external-events'
-                  style={{
-                    padding: '10px',
-                    width: '80%',
-                    height: 'auto',
-                    maxHeight: '-webkit-fill-available',
-                  }}
-                >
+                <Box ref={extarnalEventsRef}>
                   <p> Events</p>
 
                   {extarnalEvents.map((event) => (
@@ -206,7 +193,16 @@ const SampleCalendar = () => {
                       {event.title}
                     </div>
                   ))}
-                </div>
+                </Box>
+                <div
+                  id='external-events'
+                  style={{
+                    padding: '10px',
+                    width: '80%',
+                    height: 'auto',
+                    maxHeight: '-webkit-fill-available',
+                  }}
+                ></div>
                 <h2>予約一覧 ( {myEvents.length} )</h2>
                 <ul>
                   {myEvents.map((event: any) => (
@@ -272,8 +268,8 @@ const SampleCalendar = () => {
                 // }}
                 // 登録済みのeventをドロップした時
                 eventDrop={handleInnerEventDrop}
-                eventDidMount={componentDidMount}
-                drop={drop}
+                // eventDidMount={componentDidMount}
+
                 eventReceive={(eventReceiveInfo) => {
                   console.log(eventReceiveInfo);
                 }}

@@ -135,7 +135,7 @@ const SampleCalendar: React.FC = (props) => {
                 headerToolbar={{
                   left: 'prev,next today',
                   center: 'title',
-                  right: 'timeGridWeek,timeGridDay listWeek',
+                  right: 'timeGridWeek,timeGridDay listMonth',
                 }}
                 businessHours={{
                   daysOfWeek: [0, 1, 2, 3, 4, 5, 6], // 0:日曜 〜 6:土曜

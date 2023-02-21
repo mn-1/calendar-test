@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 // components
-import FormInput from '../FormControl/FormInput';
 import EditFormInput from '../FormControl/EditFormInput';
 import DatePickerForm from '../FormControl/DatePicker';
 import FailedDialog from './FailedDialog';
@@ -101,7 +100,7 @@ export default function EditScheduleDialog(props: Props) {
               autoComplete='off'
               onSubmit={handleSubmit(onAdd)}
             >
-              <FormSelect
+              {/* <FormSelect
                 operator={operator}
                 location={location}
                 control={control}
@@ -110,27 +109,30 @@ export default function EditScheduleDialog(props: Props) {
                 operatorDefaultValue={
                   eventInfo.event.extendedProps.operatorName ?? ''
                 }
-              />
+              /> */}
 
               <Typography color='secondary'>タイトル</Typography>
-              <FormInput
+              <EditFormInput
                 name='title'
+                defaultValue={eventInfo.event.title ?? ''}
                 autoComplete='off'
                 focused
                 placeholder='タイトル'
                 fullWidth
               />
               <Typography color='secondary'>アバター名</Typography>
-              <FormInput
+              <EditFormInput
                 name='avatar'
+                defaultValue={eventInfo.event.extendedProps.avatar}
                 autoComplete='off'
                 focused
                 placeholder='タイトル'
                 fullWidth
               />
               <Typography color='secondary'>メモ</Typography>
-              <FormInput
+              <EditFormInput
                 name='memo'
+                defaultValue={eventInfo.event.extendedProps.memo}
                 autoComplete='off'
                 focused
                 placeholder='メモ'

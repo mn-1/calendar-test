@@ -7,22 +7,11 @@ import { scheduleDataInfo } from './inputDataControl';
 // Fullcalendar
 import { CalendarApi, EventClickArg } from '@fullcalendar/core';
 
-export interface SelectInfoType {
-  id: string;
-  startStr: string;
-  endStr: string;
-  resourceId: string;
-  resourceTitle: string;
-  calendar: CalendarApi;
-}
-
 export default function EventControl() {
   // IDセット
   const [countId, setCountId] = useState<number>(0);
   // イベント一覧収納
   const [myEvents, setMyEvents] = useState<any>([]);
-  // 予約登録
-  const [selectInfo, setSelectInfo] = useState<SelectInfoType | null>(null);
   // 予定情報
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定登録ダイアログopen
@@ -43,42 +32,10 @@ export default function EventControl() {
       item.color = color;
     }
 
+    const add = events.length;
+    setCountId(add);
+
     setMyEvents(events);
-  };
-
-  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
-   * 予定登録
-   * @param values 
-   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const addSchedule = async (values: scheduleDataInfo) => {
-    if (!selectInfo) return console.log('selectInfo none');
-
-    const start = new Date(selectInfo.startStr).getTime();
-    const end = new Date(selectInfo.endStr).getTime();
-    const { color } = divideColor(start, end);
-
-    const resource = resources.find((item) => {
-      if (item.title === values.locationName) return item;
-    });
-
-    if (!resource) return console.log('resorce none');
-
-    selectInfo.calendar.addEvent({
-      id: `${countId}`,
-      title: values.title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      resourceId: `${resource.id}`,
-      extendedProps: {
-        memo: values.memo,
-        operatorName: values.operatorName,
-        avatar: values.avatar,
-      },
-      allDay: false,
-      color,
-    });
-
-    setAddDialogOpen(false);
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -105,15 +62,15 @@ export default function EventControl() {
     addDialogOpen,
     eventInfo,
     editDialogOpen,
-    selectInfo,
+    // selectInfo,
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
-    setSelectInfo,
+    // setSelectInfo,
     getEvents,
     setCountId,
     setMyEvents,
-    addSchedule,
+
     setAddDialogOpen,
   };
 }

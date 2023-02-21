@@ -176,6 +176,11 @@ export const operator = [
   { id: 3, name: 'オペレーターCさん' },
   { id: 4, name: 'オペレーターDさん' },
   { id: 5, name: 'オペレーターEさん' },
+  { id: 6, name: 'オペレーターKさん' },
+  { id: 7, name: 'オペレーターLさん' },
+  { id: 8, name: 'オペレーターMさん' },
+  { id: 9, name: 'オペレーターNさん' },
+  { id: 10, name: 'オペレーターOさん' },
 ];
 
 export const eventConstraints = [
@@ -202,44 +207,44 @@ export const externalEvents = [
     title: '',
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターK',
+      operatorName: 'オペレーターKさん',
       Username: 'RC-HvIzf9STs8JB3M5Q',
       avatar: '',
     },
     color: '',
-    id: 34432,
+    id: '',
   },
   {
     title: '',
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターL',
+      operatorName: 'オペレーターLさん',
       Username: 'RC-t6vWhbAiYLSUT2kR',
       avatar: '',
     },
     color: '',
-    id: 323232,
+    id: '',
   },
   {
-    title: 'Art 3',
+    title: '',
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターM',
+      operatorName: 'オペレーターMさん',
       Username: 'RC-ijuixbWWY8lww4US',
       avatar: '',
     },
     color: '',
-    id: 1111,
+    id: '',
   },
   {
-    title: 'Art 4',
+    title: '',
     extendedProps: {
       memo: '',
-      operatorName: 'オペレーターN',
+      operatorName: 'オペレーターNさん',
       Username: 'RC-WvD67gCo7h24mCud',
       avatar: '',
     },
     color: '',
-    id: 432432,
+    id: '',
   },
 ];

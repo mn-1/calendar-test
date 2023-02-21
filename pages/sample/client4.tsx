@@ -3,7 +3,7 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid, Typography, Button } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -31,11 +31,11 @@ import EventControl from '../../lib/eventControl-3';
 import { divideColor } from '../../lib/colorControl';
 // components
 import Header from '../../components/Header/Header';
-import AddScheduleDialog from '../../components/Dialog/AddScheduleDialog';
 import ScheduleInfoDialog from '../../components/Dialog/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
 import { ExternalEvent } from '../../components/FullCalendar/ExternalEvents';
+import { CalendarHeader } from '../../components/FullCalendar/Header';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
@@ -43,6 +43,7 @@ const ClientCalendar = () => {
   // ダイアログ
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
 
   const {
     countId,
@@ -50,39 +51,21 @@ const ClientCalendar = () => {
     addDialogOpen,
     eventInfo,
     editDialogOpen,
-    selectInfo,
+
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
     getEvents,
     setCountId,
     setMyEvents,
-    setSelectInfo,
-    addSchedule,
+
     setAddDialogOpen,
   } = EventControl();
 
   useEffect(() => {
     getEvents();
+    if (calendarRef.current) console.log(calendarRef.current.getApi().view);
   }, []);
-
-  // 予定登録ダイアログ開く
-  const handleDateSelect = (arg: DateSelectArg) => {
-    console.log('selectInfo:', arg);
-    setAddDialogOpen(true);
-
-    const add = countId + 1;
-    setCountId(add);
-
-    setSelectInfo({
-      id: `${countId}`,
-      startStr: arg.startStr,
-      endStr: arg.endStr,
-      resourceId: arg.resource ? arg.resource.id : '',
-      resourceTitle: arg.resource ? arg.resource.title : '',
-      calendar: arg.view.calendar,
-    });
-  };
 
   // イベント詳細表示ダイアログ開く
   const handleEventClick = (arg: EventClickArg) => {
@@ -122,7 +105,9 @@ const ClientCalendar = () => {
     setDeleteSnackbarOpen(false);
   };
 
-  // イベント移動
+  /**
+   * イベント移動
+   */
   const handleInnerEventDrop = (arg: EventDropArg) => {
     const { start, end } = arg.event;
 
@@ -133,46 +118,51 @@ const ClientCalendar = () => {
       new Date(end).getTime()
     );
 
-    // 色だけ修正
     arg.event.setProp('color', color);
   };
 
-  // 予定のサイズ変更
+  /**
+   * 予定のサイズ変更
+   */
   const handleEventResize = (arg: EventResizeDoneArg) => {
     const { start, end } = arg.event;
 
     // startとendを取得できなかったら戻す
     if (!start || !end) return arg.revert();
-    const { color } = divideColor(
-      new Date(start).getTime(),
-      new Date(end).getTime()
-    );
+    const { color } = divideColor(start.getTime(), end.getTime());
 
-    // 色だけ修正
     arg.event.setProp('color', color);
   };
 
-  // 外部のイベント追加
+  /**
+   * 外部のイベント追加
+   */
   const drop = (arg: DropArg) => {
     console.log(arg);
   };
 
-  // 外部のイベント受付
+  /**
+   * 外部のイベント受付
+   */
   const handleEventReceive = (arg: EventReceiveArg) => {
     const start = arg.event.start;
     let end = start;
 
-    if (!start || !end) return console.log('start none');
+    if (!start || !end) return arg.event.remove();
     end = new Date(end.setHours(start.getHours() + 2));
 
-    const { color } = divideColor(
-      new Date(start).getTime(),
-      new Date(end).getTime()
-    );
+    const { color } = divideColor(start.getTime(), end.getTime());
 
+    const add = countId + 1;
+    setCountId(add);
+
+    arg.event.setProp('id', `${add}`);
     arg.event.setProp('color', color);
     arg.event.setEnd(end);
   };
+
+  let calendarSize: any = 12;
+  if (editMode) calendarSize = 9;
 
   return (
     <>
@@ -185,6 +175,20 @@ const ClientCalendar = () => {
           mt: '4rem',
         }}
       >
+        <Button
+          variant='contained'
+          sx={{ mb: '1rem', mx: '1rem' }}
+          onClick={() => {
+            if (!calendarRef.current) return;
+            console.log(calendarRef.current.getApi().view.type);
+            if (calendarRef.current.getApi().view.type != 'resourceTimeGridDay')
+              return;
+            setEditMode(!editMode);
+          }}
+        >
+          {editMode ? '編集終了' : '編集する'}
+        </Button>
+
         <Grid
           container
           direction='row'
@@ -193,17 +197,21 @@ const ClientCalendar = () => {
             height: '100%',
           }}
         >
-          <Grid item sm={2}>
-            <Grid container direction='column'>
-              {externalEvents.map((event) => (
-                <ExternalEvent
-                  key={event.extendedProps.Username}
-                  event={event}
-                />
-              ))}
+          {editMode && (
+            <Grid item sm={3} sx={{ px: '1rem' }}>
+              <Grid container direction='column'>
+                {externalEvents.map((event) => (
+                  <ExternalEvent
+                    key={event.extendedProps.Username}
+                    event={event}
+                  />
+                ))}
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid item sm={9} sx={{ mx: 6 }}>
+          )}
+
+          <Grid item sm={calendarSize} sx={{ px: '1rem' }}>
+            <CalendarHeader calendarRef={calendarRef} editMode={editMode} />
             {myEvents.length != 0 && (
               <FullCalendar
                 initialEvents={myEvents}
@@ -225,15 +233,10 @@ const ClientCalendar = () => {
                   timeGridPlugin,
                   multiMonthPlugin,
                 ]}
-                headerToolbar={{
-                  left: 'prev,next today',
-                  center: 'title',
-                  right:
-                    'dayGridMonth,timeGridWeek,resourceTimeGridWeek,resourceTimelineDay,resourceTimeGridDay',
-                }}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
                 //
+                headerToolbar={false}
                 droppable={true}
                 editable={true}
                 selectable={false}
@@ -246,7 +249,6 @@ const ClientCalendar = () => {
                 //
                 eventReceive={handleEventReceive}
                 drop={drop}
-                select={handleDateSelect}
                 eventClick={handleEventClick}
                 eventsSet={(events: EventApi[]) => {
                   console.log('events:', events);
@@ -260,18 +262,7 @@ const ClientCalendar = () => {
         </Grid>
         {/* utils ↓ */}
         {/* defalutValueを動的にしないためにレンダリング少なくしている */}
-        {selectInfo && addDialogOpen && (
-          <AddScheduleDialog
-            selectInfo={selectInfo}
-            operator={operator}
-            location={resources}
-            open={addDialogOpen}
-            handleClose={() => {
-              setAddDialogOpen(false);
-            }}
-            addSchedule={addSchedule}
-          />
-        )}
+
         {eventInfo && editDialogOpen && (
           <EditScheduleDialog
             open={editDialogOpen}

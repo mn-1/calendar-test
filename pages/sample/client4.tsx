@@ -300,8 +300,7 @@ const ClientCalendar = () => {
                 eventDragStart={(arg) => {
                   console.log(arg);
                   const calApi = calendarRef.current?.getApi();
-                  if (!calApi || calApi.view.type != 'resourceTimeGridDay')
-                    arg.jsEvent.preventDefault;
+                  if (!calApi || !editMode) arg.jsEvent.preventDefault();
                 }}
                 eventReceive={handleEventReceive}
                 eventClick={handleEventClick}

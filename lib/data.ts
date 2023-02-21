@@ -3,18 +3,10 @@ export const resources = [
   {
     id: '1', // ここstring
     title: '盛岡本社',
-    // businessHours: [
-    //   {
-    //     endTime: '18:00:00',
-    //     startTime: '9:00:00',
-    //     daysOfWeek: [1, 2, 3, 4, 5],
-    //   },
-    // ],
   },
   {
     id: '2',
     title: '川崎支社',
-    businessHours: [],
   },
   {
     id: '3',
@@ -34,8 +26,8 @@ export const events = [
     id: '1',
     title: '90 Minute Massage',
     resourceId: '1', // 拠点ID
-    start: new Date().setHours(date.getHours() - 4),
-    end: new Date().setHours(date.getHours() - 2),
+    start: new Date('2023/2/11 15:00').getTime(),
+    end: new Date('2023/2/11 20:00').getTime(),
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターAさん',
@@ -47,25 +39,21 @@ export const events = [
     id: '2',
     title: 'Haircut',
     resourceId: '2',
-    start: new Date().setHours(date.getHours() - 1),
-    end: new Date().setHours(date.getHours() + 1),
+    start: new Date('2023/3/21 15:00').getTime(),
+    end: new Date('2023/3/21 20:00').getTime(),
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターBさん',
       avatar: 'アバターE',
     },
     color: '',
-    // editable: true,
-    // durationEditable: true,
-    // resourceEditable: true,
-    // startEditable: true,
   },
   {
     id: '3',
     title: 'Pedicure',
     resourceId: '3',
-    start: new Date().setHours(date.getHours() + 2),
-    end: new Date().setHours(date.getHours() + 4),
+    start: new Date('2023/2/21 11:00').getTime(),
+    end: new Date('2023/2/21 20:00').getTime(),
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターCさん',
@@ -155,7 +143,7 @@ export const events = [
     title: '',
     resourceId: '2',
     start: new Date('2023/2/27 16:00').getTime(),
-    end: new Date('2023/2/27 22:00').getTime(),
+    end: new Date('2023/2/27 22:30').getTime(),
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターMさん',

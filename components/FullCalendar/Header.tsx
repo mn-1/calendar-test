@@ -39,6 +39,8 @@ export const CalendarHeader = (props: Props): ReactElement => {
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
     if (!calApi) return;
 
+    console.log(calApi.getDate(), new Date());
+
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
@@ -84,9 +86,24 @@ export const CalendarHeader = (props: Props): ReactElement => {
         <Grid item xs={4}>
           <Stack justifyContent='end' direction='row'>
             <ButtonGroup disabled={editMode}>
-              <Button onClick={() => handleViewChange('month')}>月</Button>
-              <Button onClick={() => handleViewChange('week')}>週</Button>
-              <Button onClick={() => handleViewChange('day')}>日</Button>
+              <Button
+                onClick={() => handleViewChange('month')}
+                variant={today === 'month' ? 'contained' : 'outlined'}
+              >
+                月
+              </Button>
+              <Button
+                onClick={() => handleViewChange('week')}
+                variant={today === 'week' ? 'contained' : 'outlined'}
+              >
+                週
+              </Button>
+              <Button
+                onClick={() => handleViewChange('day')}
+                variant={today === 'day' ? 'contained' : 'outlined'}
+              >
+                日
+              </Button>
             </ButtonGroup>
           </Stack>
         </Grid>

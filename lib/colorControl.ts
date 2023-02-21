@@ -18,3 +18,21 @@ export const divideColor = (start: number, end: number) => {
 
   return { color };
 };
+
+export const divideColor2 = (start: Date, end: Date) => {
+  let color: string = '';
+
+  const startNum = start.getTime();
+  const endNum = end.getTime();
+
+  const now = new Date().getTime();
+
+  // 予定
+  if (startNum > now) color = '#2E8B57';
+  // 稼働中
+  if (startNum <= now && now <= endNum) color = '#4169E1';
+  // 古い
+  if (endNum < now) color = '#A9A9A9';
+
+  return { color };
+};

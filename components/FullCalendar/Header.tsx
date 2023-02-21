@@ -4,50 +4,68 @@ import { Button, Stack, Typography, Grid } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { CalendarApi } from '@fullcalendar/core';
 
 export type Props = {
   calendarRef: RefObject<FullCalendar>;
   editMode: boolean;
+  setEditMode: Function;
 };
 
-export const CalendarHeader = ({
-  calendarRef,
-  editMode,
-}: Props): ReactElement => {
-  const [date, setDate] = useState<Date>(new Date());
+export const CalendarHeader = (props: Props): ReactElement => {
+  const { calendarRef, editMode, setEditMode } = props;
+
   const [title, setTitle] = useState<string>();
+  const [calApi, setCalApi] = useState<CalendarApi>();
+  const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
 
   useEffect(() => {
-    const calApi = calendarRef.current?.getApi();
-    if (calApi) setTitle(calApi.view.title);
+    if (calendarRef.current) {
+      const calApi = calendarRef.current.getApi();
+      setTitle(calApi.view.title);
+      setCalApi(calApi);
+    }
   }, [calendarRef]);
 
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
-    const calApi = calendarRef.current?.getApi();
-
     if (!calApi) return;
 
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
-
-    setDate(new Date(calApi.getDate()));
   };
 
   const handleViewChange = (direction: 'month' | 'week' | 'day'): void => {
-    const calApi = calendarRef.current?.getApi();
-
     if (!calApi) return;
 
     if (direction === 'month') {
       calApi.changeView('dayGridMonth');
+      setEditButtonDisable(true);
     }
-    if (direction === 'week') calApi.changeView('timeGridWeek');
-    if (direction === 'day') calApi.changeView('resourceTimeGridDay');
+    if (direction === 'week') {
+      calApi.changeView('timeGridWeek');
+      setEditButtonDisable(true);
+    }
+    if (direction === 'day') {
+      calApi.changeView('resourceTimeGridDay');
+      setEditButtonDisable(false);
+    }
   };
 
   return (
     <header>
+      <Button
+        variant='contained'
+        disabled={editButtonDisable}
+        sx={{ mb: '1rem' }}
+        onClick={() => {
+          if (!calApi) return console.log('nai');
+          if (calApi.view.type != 'resourceTimeGridDay') return;
+          setEditMode(!editMode);
+        }}
+      >
+        {editMode ? '終了' : '予定を追加する'}
+      </Button>
       <Grid container direction='row' sx={{ mb: '1rem' }}>
         <Grid item xs={4}>
           <ButtonGroup>

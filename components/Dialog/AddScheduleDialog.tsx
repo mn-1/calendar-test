@@ -41,8 +41,6 @@ export default function AddScheduleDialog(props: Props) {
   const defaultValues: scheduleDataInfo = {
     title: '',
     memo: '',
-    locationName: '',
-    operatorName: '',
     avatar: '',
   };
 
@@ -96,14 +94,14 @@ export default function AddScheduleDialog(props: Props) {
               autoComplete='off'
               onSubmit={handleSubmit(onAdd)}
             >
-              <AddFormSelect
+              {/* <AddFormSelect
                 operator={operator}
                 location={location}
                 control={control}
                 errors={errors}
                 locationDefaultValue={selectInfo.resourceTitle ?? ''}
                 operatorDefaultValue=''
-              />
+              /> */}
 
               <Typography color='secondary'>タイトル</Typography>
               <FormInput

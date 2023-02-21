@@ -3,8 +3,6 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 import CloseIcon from '@mui/icons-material/Close';
 import {
-  Button,
-  Typography,
   Box,
   DialogActions,
   Dialog,
@@ -13,7 +11,6 @@ import {
   Grid,
   IconButton,
   Tooltip,
-  DialogTitle,
 } from '@mui/material';
 import { EventClickArg } from '@fullcalendar/core';
 import { formatDate } from '../../lib/dateControl';

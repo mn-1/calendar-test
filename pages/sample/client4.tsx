@@ -18,6 +18,7 @@ import {
   EventClickArg,
   EventContentArg,
   EventDropArg,
+  CalendarApi,
 } from '@fullcalendar/core';
 import interactionPlugin, {
   DropArg,
@@ -40,7 +41,6 @@ import { CalendarHeader } from '../../components/FullCalendar/Header';
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
 
-  // ダイアログ
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -48,34 +48,45 @@ const ClientCalendar = () => {
   const {
     countId,
     myEvents,
-    addDialogOpen,
     eventInfo,
     editDialogOpen,
-
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
     getEvents,
     setCountId,
     setMyEvents,
-
-    setAddDialogOpen,
   } = EventControl();
 
   useEffect(() => {
     getEvents();
-    if (calendarRef.current) console.log(calendarRef.current.getApi().view);
+    console.log(
+      'これは表示してからgetできるのか',
+      calendarRef.current?.getApi()
+    );
   }, []);
 
   // イベント詳細表示ダイアログ開く
   const handleEventClick = (arg: EventClickArg) => {
     setInfoDialogOpen(true);
     setEventInfo(arg);
+    console.log('イベント詳細：', arg);
+  };
+
+  // 予定を削除
+  const deleteEvent = () => {
+    const calApi = calendarRef.current?.getApi();
+    if (!eventInfo || !calApi) return;
+
+    eventInfo.event.remove();
+    setInfoDialogOpen(false);
+    setDeleteSnackbarOpen(true);
   };
 
   // 予定を削除したのを取り消す
   const undoDelete = () => {
-    if (!eventInfo || !calendarRef.current) return;
+    const calApi = calendarRef.current?.getApi();
+    if (!eventInfo || !calApi) return;
     const {
       id,
       borderColor,
@@ -83,21 +94,20 @@ const ClientCalendar = () => {
       title,
       startStr,
       endStr,
-      extendedProps,
+      extendedProps: { memo, operatorName, avatar },
     } = eventInfo.event;
 
-    calendarRef.current.getApi().addEvent({
+    calApi.addEvent({
       id,
       title,
       start: startStr,
       end: endStr,
       resourceId: eventInfo.event.getResources()[0]._resource.id,
       extendedProps: {
-        memo: extendedProps.memo ?? '',
-        operatorName: extendedProps.operatorName ?? '',
-        avatar: extendedProps.avatar ?? '',
+        memo: memo ?? '',
+        operatorName: operatorName ?? '',
+        avatar: avatar ?? '',
       },
-      allDay: false,
       backgroundColor,
       borderColor,
     });
@@ -113,10 +123,7 @@ const ClientCalendar = () => {
 
     // startとendを取得できなかったら戻す
     if (!start || !end) return arg.revert();
-    const { color } = divideColor(
-      new Date(start).getTime(),
-      new Date(end).getTime()
-    );
+    const { color } = divideColor(start.getTime(), end.getTime());
 
     arg.event.setProp('color', color);
   };
@@ -138,7 +145,7 @@ const ClientCalendar = () => {
    * 外部のイベント追加
    */
   const drop = (arg: DropArg) => {
-    console.log(arg);
+    console.log('drop info', arg);
   };
 
   /**
@@ -175,20 +182,6 @@ const ClientCalendar = () => {
           mt: '4rem',
         }}
       >
-        <Button
-          variant='contained'
-          sx={{ mb: '1rem', mx: '1rem' }}
-          onClick={() => {
-            if (!calendarRef.current) return;
-            console.log(calendarRef.current.getApi().view.type);
-            if (calendarRef.current.getApi().view.type != 'resourceTimeGridDay')
-              return;
-            setEditMode(!editMode);
-          }}
-        >
-          {editMode ? '編集終了' : '編集する'}
-        </Button>
-
         <Grid
           container
           direction='row'
@@ -211,7 +204,11 @@ const ClientCalendar = () => {
           )}
 
           <Grid item sm={calendarSize} sx={{ px: '1rem' }}>
-            <CalendarHeader calendarRef={calendarRef} editMode={editMode} />
+            <CalendarHeader
+              calendarRef={calendarRef}
+              editMode={editMode}
+              setEditMode={setEditMode}
+            />
             {myEvents.length != 0 && (
               <FullCalendar
                 initialEvents={myEvents}
@@ -246,16 +243,22 @@ const ClientCalendar = () => {
                 nowIndicator={true}
                 allDaySlot={false}
                 slotEventOverlap={true}
+                navLinks={true}
                 //
-                eventReceive={handleEventReceive}
                 drop={drop}
+                eventReceive={handleEventReceive}
                 eventClick={handleEventClick}
+                eventResize={handleEventResize}
+                eventDrop={handleInnerEventDrop}
                 eventsSet={(events: EventApi[]) => {
                   console.log('events:', events);
                   setMyEvents(events);
                 }}
-                eventResize={handleEventResize}
-                eventDrop={handleInnerEventDrop}
+                navLinkDayClick={(date) => {
+                  const calApi = calendarRef.current?.getApi();
+                  if (!calApi) return console.log('nai');
+                  calApi.changeView('resourceTimeGridDay', date);
+                }}
               />
             )}
           </Grid>
@@ -267,8 +270,6 @@ const ClientCalendar = () => {
           <EditScheduleDialog
             open={editDialogOpen}
             eventInfo={eventInfo}
-            operator={operator}
-            location={resources}
             handleClose={() => setEditDialogOpen(false)}
             editSchedule={editSchedule}
           />
@@ -276,11 +277,7 @@ const ClientCalendar = () => {
         <ScheduleInfoDialog
           eventInfo={eventInfo}
           open={infoDialogOpen}
-          delete={() => {
-            if (eventInfo) eventInfo.event.remove();
-            setInfoDialogOpen(false);
-            setDeleteSnackbarOpen(true);
-          }}
+          delete={deleteEvent}
           edit={() => {
             setEditDialogOpen(true);
             setInfoDialogOpen(false);

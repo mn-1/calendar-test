@@ -40,8 +40,7 @@ export default function EventControl() {
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * 予定編集
-   * @param values 
-   * @returns 
+   * 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const editSchedule = async (values: scheduleDataInfo) => {
     const event = eventInfo?.event;
@@ -50,7 +49,6 @@ export default function EventControl() {
 
     event.setProp('title', values.title);
     event.setExtendedProp('memo', values.memo);
-    event.setExtendedProp('operatorName', values.operatorName);
     event.setExtendedProp('avatar', values.avatar);
 
     setEditDialogOpen(false);

@@ -1,4 +1,3 @@
-import dayjs, { Dayjs } from 'dayjs';
 // MUI
 import {
   Box,
@@ -14,62 +13,49 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 // components
 import EditFormInput from '../FormControl/EditFormInput';
-import DatePickerForm from '../FormControl/DatePicker';
 import FailedDialog from './FailedDialog';
-import FormSelect from '../FormControl/FormSelect';
 // validate
 import { scheduleSchema } from '../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
 import { scheduleDataInfo } from '../../lib/inputDataControl';
-import { DateSelectArg, EventClickArg } from '@fullcalendar/core';
-import { SelectInfoType } from '../../lib/eventControl-2';
+import { EventClickArg } from '@fullcalendar/core';
 
 type Props = {
   open: boolean;
-  operator: any;
-  location: any;
   handleClose: VoidFunction;
   editSchedule: Function;
   eventInfo: EventClickArg;
 };
 
-export default function EditScheduleDialog(props: Props) {
-  const { open, eventInfo, handleClose, editSchedule, operator, location } =
-    props;
+const resetValues: scheduleDataInfo = {
+  title: '',
+  memo: '',
+  avatar: '',
+};
 
-  const defaultValues: scheduleDataInfo = {
-    title: '',
-    memo: '',
-    locationName: '',
-    operatorName: '',
-    avatar: '',
-  };
+export default function EditScheduleDialog(props: Props) {
+  const { open, eventInfo, handleClose, editSchedule } = props;
 
   const useFormMethods = useForm<scheduleDataInfo>({
     resolver: yupResolver(scheduleSchema),
   });
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useFormMethods;
+  const { handleSubmit, reset } = useFormMethods;
 
   // 登録ボタンアクション
   const onAdd: SubmitHandler<scheduleDataInfo> = async (
     values: scheduleDataInfo
   ) => {
     editSchedule(values);
-    reset(defaultValues);
+    reset(resetValues);
   };
 
   // キャンセルボタンアクション
   const handleCancelButton = () => {
     handleClose();
-    reset(defaultValues);
+    reset(resetValues);
   };
 
   const locationDefaultValue =
@@ -77,7 +63,7 @@ export default function EditScheduleDialog(props: Props) {
 
   if (eventInfo)
     return (
-      <Dialog open={open} fullScreen>
+      <Dialog open={open} fullWidth>
         <DialogActions>
           <Tooltip title='閉じる'>
             <IconButton onClick={handleCancelButton}>
@@ -92,7 +78,7 @@ export default function EditScheduleDialog(props: Props) {
               予定を編集
             </Typography>
           </Grid>
-          <DatePickerForm date={dayjs(eventInfo.event.startStr)} />
+
           <FormProvider {...useFormMethods}>
             <Box
               component='form'
@@ -100,17 +86,6 @@ export default function EditScheduleDialog(props: Props) {
               autoComplete='off'
               onSubmit={handleSubmit(onAdd)}
             >
-              {/* <FormSelect
-                operator={operator}
-                location={location}
-                control={control}
-                errors={errors}
-                locationDefaultValue={locationDefaultValue ?? ''}
-                operatorDefaultValue={
-                  eventInfo.event.extendedProps.operatorName ?? ''
-                }
-              /> */}
-
               <Typography color='secondary'>タイトル</Typography>
               <EditFormInput
                 name='title'
@@ -126,7 +101,7 @@ export default function EditScheduleDialog(props: Props) {
                 defaultValue={eventInfo.event.extendedProps.avatar}
                 autoComplete='off'
                 focused
-                placeholder='タイトル'
+                placeholder='アバター'
                 fullWidth
               />
               <Typography color='secondary'>メモ</Typography>

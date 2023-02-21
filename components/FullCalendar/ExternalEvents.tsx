@@ -26,7 +26,7 @@ export const ExternalEvent = ({ event }: any) => {
       sx={{
         fontWeight: 'bold',
         cursor: 'grab',
-        mt: '0.6rem',
+        mb: '0.6rem',
       }}
     >
       {event.extendedProps.operatorName}

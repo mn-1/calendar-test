@@ -44,6 +44,7 @@ const ClientCalendar = () => {
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
 
   const {
     countId,
@@ -168,6 +169,27 @@ const ClientCalendar = () => {
     arg.event.setEnd(end);
   };
 
+  /**
+   * カレンダーの表示変更
+   */
+  const handleViewChange = (direction: 'month' | 'week' | 'day'): void => {
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return;
+
+    if (direction === 'month') {
+      calApi.changeView('dayGridMonth');
+      setEditButtonDisable(true);
+    }
+    if (direction === 'week') {
+      calApi.changeView('timeGridWeek');
+      setEditButtonDisable(true);
+    }
+    if (direction === 'day') {
+      calApi.changeView('resourceTimeGridDay');
+      setEditButtonDisable(false);
+    }
+  };
+
   let calendarSize: any = 12;
   if (editMode) calendarSize = 9;
 
@@ -178,9 +200,10 @@ const ClientCalendar = () => {
         説明
         <br />
         ・日表示の時だけ予定の追加ができる <br />
-        ・月、週表示の時も予定の編集、削除はできる <br />
+        ・月、週表示の時も予定の編集、削除はできる：これできない方がいいのか
+        <br />
         ・予想した動線：月（または週）表示に切り替える →
-        予定を追加したい日を選択 → 日表示になる <br />
+        予定を追加したい日を選択 → 日表示になる → 予定を追加する → 終了 <br />
       </Typography>
       <Container
         maxWidth={false}
@@ -213,6 +236,8 @@ const ClientCalendar = () => {
 
           <Grid item sm={calendarSize} sx={{ px: '1rem' }}>
             <CalendarHeader
+              handleViewChange={handleViewChange}
+              editButtonDisable={editButtonDisable}
               calendarRef={calendarRef}
               editMode={editMode}
               setEditMode={setEditMode}
@@ -264,8 +289,9 @@ const ClientCalendar = () => {
                 }}
                 navLinkDayClick={(date) => {
                   const calApi = calendarRef.current?.getApi();
-                  if (!calApi) return console.log('nai');
+                  if (!calApi) return console.log('calApi none');
                   calApi.changeView('resourceTimeGridDay', date);
+                  setEditButtonDisable(false);
                 }}
               />
             )}

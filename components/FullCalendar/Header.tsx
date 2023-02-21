@@ -10,14 +10,21 @@ export type Props = {
   calendarRef: RefObject<FullCalendar>;
   editMode: boolean;
   setEditMode: Function;
+  editButtonDisable: boolean;
+  handleViewChange: Function;
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
-  const { calendarRef, editMode, setEditMode } = props;
+  const {
+    calendarRef,
+    editMode,
+    setEditMode,
+    editButtonDisable,
+    handleViewChange,
+  } = props;
 
   const [title, setTitle] = useState<string>();
   const [calApi, setCalApi] = useState<CalendarApi>();
-  const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
 
   useEffect(() => {
     if (calendarRef.current) {
@@ -33,23 +40,6 @@ export const CalendarHeader = (props: Props): ReactElement => {
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
-  };
-
-  const handleViewChange = (direction: 'month' | 'week' | 'day'): void => {
-    if (!calApi) return;
-
-    if (direction === 'month') {
-      calApi.changeView('dayGridMonth');
-      setEditButtonDisable(true);
-    }
-    if (direction === 'week') {
-      calApi.changeView('timeGridWeek');
-      setEditButtonDisable(true);
-    }
-    if (direction === 'day') {
-      calApi.changeView('resourceTimeGridDay');
-      setEditButtonDisable(false);
-    }
   };
 
   return (

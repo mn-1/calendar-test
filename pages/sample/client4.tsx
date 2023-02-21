@@ -174,6 +174,14 @@ const ClientCalendar = () => {
   return (
     <>
       <Header userType='client' />
+      <Typography>
+        説明
+        <br />
+        ・日表示の時だけ予定の追加ができる <br />
+        ・月、週表示の時も予定の編集、削除はできる <br />
+        ・予想した動線：月（または週）表示に切り替える →
+        予定を追加したい日を選択 → 日表示になる <br />
+      </Typography>
       <Container
         maxWidth={false}
         sx={{

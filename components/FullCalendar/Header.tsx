@@ -54,7 +54,7 @@ export const CalendarHeader = (props: Props): ReactElement => {
           setEditMode(!editMode);
         }}
       >
-        {editMode ? '終了' : '予定を追加する'}
+        {editMode ? '編集終了' : '編集する'}
       </Button>
       <Grid container direction='row' sx={{ mb: '1rem' }}>
         <Grid item xs={4}>

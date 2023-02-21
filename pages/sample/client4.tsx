@@ -1,5 +1,3 @@
-/** */
-
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
@@ -27,7 +25,7 @@ import interactionPlugin, {
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, externalEvents, operator } from '../../lib/data';
+import { resources, externalEvents } from '../../lib/data';
 import EventControl from '../../lib/eventControl-3';
 import { divideColor } from '../../lib/colorControl';
 // components
@@ -37,6 +35,7 @@ import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
 import { ExternalEvent } from '../../components/FullCalendar/ExternalEvents';
 import { CalendarHeader } from '../../components/FullCalendar/Header';
+import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
@@ -61,20 +60,20 @@ const ClientCalendar = () => {
 
   useEffect(() => {
     getEvents();
-    // console.log(
-    //   'これは表示してからgetできるのか',
-    //   calendarRef.current?.getApi()
-    // );
-  }, [myEvents]);
+    // console.log('これは表示してからgetできるのか',calendarRef.current?.getApi());
+  }, []);
 
-  // イベント詳細表示ダイアログ開く
+  /**
+   * イベント詳細表示ダイアログ開く
+   */
   const handleEventClick = (arg: EventClickArg) => {
     setInfoDialogOpen(true);
     setEventInfo(arg);
-    console.log('イベント詳細：', arg);
   };
 
-  // 予定を削除
+  /**
+   * イベントを削除
+   */
   const deleteEvent = () => {
     const calApi = calendarRef.current?.getApi();
     if (!eventInfo || !calApi) return;
@@ -84,10 +83,13 @@ const ClientCalendar = () => {
     setDeleteSnackbarOpen(true);
   };
 
-  // 予定を削除したのを取り消す
+  /**
+   * イベントを削除したのを取り消す
+   */
   const undoDelete = () => {
     const calApi = calendarRef.current?.getApi();
     if (!eventInfo || !calApi) return;
+
     const {
       id,
       borderColor,
@@ -117,26 +119,33 @@ const ClientCalendar = () => {
   };
 
   /**
-   * イベント移動
+   * イベント移動した時に色変える
+   * 日表示以外だったら戻す
    */
   const handleInnerEventDrop = (arg: EventDropArg) => {
+    const calApi = calendarRef.current?.getApi();
     const { start, end } = arg.event;
 
-    // startとendを取得できなかったら戻す
-    if (!start || !end) return arg.revert();
+    // 取得できない,日表示でなかったら戻す
+    if (!calApi || !start || !end || calApi.view.type != 'resourceTimeGridDay')
+      return arg.revert();
+
     const { color } = divideColor(start.getTime(), end.getTime());
 
     arg.event.setProp('color', color);
   };
 
   /**
-   * 予定のサイズ変更
+   * イベントのサイズ変更した時に色変える
    */
   const handleEventResize = (arg: EventResizeDoneArg) => {
+    const calApi = calendarRef.current?.getApi();
     const { start, end } = arg.event;
 
-    // startとendを取得できなかったら戻す
-    if (!start || !end) return arg.revert();
+    // 取得できない,日表示でなかったら戻す
+    if (!calApi || !start || !end || calApi.view.type != 'resourceTimeGridDay')
+      return arg.revert();
+
     const { color } = divideColor(start.getTime(), end.getTime());
 
     arg.event.setProp('color', color);
@@ -197,13 +206,17 @@ const ClientCalendar = () => {
     <>
       <Header userType='client' />
       <Typography>
-        説明
-        <br />
-        ・日表示の時だけ予定の追加ができる <br />
-        ・月、週表示の時も予定の編集、削除はできる：これできない方がいいのか
+        ・シフトをクリックしたときはダイアログが出るが、このときも参照だけにして削除と編集は無効にする
         <br />
         ・予想した動線：月（または週）表示に切り替える →
         予定を追加したい日を選択 → 日表示になる → 予定を追加する → 終了 <br />
+        ・編集するボタン押した後(日表示) <br />
+        　　・既存のシフトの位置変更
+        <br />
+        　　・既存のシフトをクリックでダイアログ開き、内容を編集できる
+        <br />
+        　　・新しくシフトを登録できる、シフトをクリックで追加情報を登録できる
+        <br />
       </Typography>
       <Container
         maxWidth={false}
@@ -266,9 +279,11 @@ const ClientCalendar = () => {
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
                 //
-                headerToolbar={false}
                 droppable={true}
                 editable={true}
+                //
+                eventOverlap={false}
+                headerToolbar={false}
                 selectable={false}
                 selectMirror={true}
                 weekends={true}
@@ -285,6 +300,7 @@ const ClientCalendar = () => {
                 eventDrop={handleInnerEventDrop}
                 eventsSet={(events: EventApi[]) => {
                   console.log('events:', events);
+
                   setMyEvents(events);
                 }}
                 navLinkDayClick={(date) => {
@@ -309,6 +325,7 @@ const ClientCalendar = () => {
           />
         )}
         <ScheduleInfoDialog
+          editMode={editButtonDisable}
           eventInfo={eventInfo}
           open={infoDialogOpen}
           delete={deleteEvent}

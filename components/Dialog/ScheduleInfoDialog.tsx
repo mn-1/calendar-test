@@ -22,6 +22,7 @@ type Props = {
   handleClose: VoidFunction;
   delete: VoidFunction;
   edit: VoidFunction;
+  editMode: boolean;
 };
 
 export default function ScheduleInfoDialog(props: Props) {
@@ -33,14 +34,18 @@ export default function ScheduleInfoDialog(props: Props) {
         <DialogActions>
           <Grid container justifyContent='end' alignItems='center'>
             <Tooltip title='予定を削除'>
-              <IconButton onClick={props.delete}>
-                <DeleteTwoToneIcon fontSize='medium' />
-              </IconButton>
+              <span>
+                <IconButton onClick={props.delete} disabled={props.editMode}>
+                  <DeleteTwoToneIcon fontSize='medium' />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title='編集'>
-              <IconButton onClick={props.edit}>
-                <ModeEditOutlineTwoToneIcon fontSize='medium' />
-              </IconButton>
+              <span>
+                <IconButton onClick={props.edit} disabled={props.editMode}>
+                  <ModeEditOutlineTwoToneIcon fontSize='medium' />
+                </IconButton>
+              </span>
             </Tooltip>
             <Box sx={{ px: 1 }} />
             <Tooltip title='閉じる'>

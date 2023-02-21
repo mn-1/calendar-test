@@ -44,6 +44,7 @@ const ClientCalendar = () => {
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
+  const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
 
   const {
     countId,
@@ -127,8 +128,7 @@ const ClientCalendar = () => {
     const { start, end } = arg.event;
 
     // 取得できない,日表示でなかったら戻す
-    if (!calApi || !start || !end || calApi.view.type != 'resourceTimeGridDay')
-      return arg.revert();
+    if (!calApi || !start || !end || !editMode) return arg.revert();
 
     const { color } = divideColor(start.getTime(), end.getTime());
 
@@ -143,8 +143,7 @@ const ClientCalendar = () => {
     const { start, end } = arg.event;
 
     // 取得できない,日表示でなかったら戻す
-    if (!calApi || !start || !end || calApi.view.type != 'resourceTimeGridDay')
-      return arg.revert();
+    if (!calApi || !start || !end || !editMode) return arg.revert();
 
     const { color } = divideColor(start.getTime(), end.getTime());
 
@@ -188,14 +187,17 @@ const ClientCalendar = () => {
     if (direction === 'month') {
       calApi.changeView('dayGridMonth');
       setEditButtonDisable(true);
+      setToday('month');
     }
     if (direction === 'week') {
       calApi.changeView('timeGridWeek');
       setEditButtonDisable(true);
+      setToday('week');
     }
     if (direction === 'day') {
       calApi.changeView('resourceTimeGridDay');
       setEditButtonDisable(false);
+      setToday('day');
     }
   };
 
@@ -249,6 +251,7 @@ const ClientCalendar = () => {
 
           <Grid item sm={calendarSize} sx={{ px: '1rem' }}>
             <CalendarHeader
+              today={today}
               handleViewChange={handleViewChange}
               editButtonDisable={editButtonDisable}
               calendarRef={calendarRef}
@@ -294,6 +297,12 @@ const ClientCalendar = () => {
                 navLinks={true}
                 //
                 drop={drop}
+                eventDragStart={(arg) => {
+                  console.log(arg);
+                  const calApi = calendarRef.current?.getApi();
+                  if (!calApi || calApi.view.type != 'resourceTimeGridDay')
+                    arg.jsEvent.preventDefault;
+                }}
                 eventReceive={handleEventReceive}
                 eventClick={handleEventClick}
                 eventResize={handleEventResize}
@@ -325,7 +334,7 @@ const ClientCalendar = () => {
           />
         )}
         <ScheduleInfoDialog
-          editMode={editButtonDisable}
+          editMode={!editMode}
           eventInfo={eventInfo}
           open={infoDialogOpen}
           delete={deleteEvent}

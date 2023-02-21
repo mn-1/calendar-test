@@ -3,51 +3,26 @@ export const resources = [
   {
     id: '1', // ここstring
     title: '盛岡本社',
-    businessHours: [
-      {
-        endTime: '18:00:00',
-        startTime: '9:00:00',
-        daysOfWeek: [1, 2, 3, 4, 5],
-      },
-    ],
+    // businessHours: [
+    //   {
+    //     endTime: '18:00:00',
+    //     startTime: '9:00:00',
+    //     daysOfWeek: [1, 2, 3, 4, 5],
+    //   },
+    // ],
   },
   {
     id: '2',
     title: '川崎支社',
-    businessHours: [
-      {
-        endTime: '16:00:00',
-        startTime: '10:00:00',
-        daysOfWeek: [4],
-      },
-      {
-        endTime: '',
-        startTime: '',
-        daysOfWeek: [],
-      },
-    ],
+    businessHours: [],
   },
   {
     id: '3',
     title: '高松支社',
-    businessHours: [
-      {
-        endTime: '16:00:00',
-        startTime: '8:00:00',
-        daysOfWeek: [1, 2, 3, 4, 5],
-      },
-    ],
   },
   {
     id: '4',
     title: '美唄支社',
-    businessHours: [
-      {
-        endTime: '18:00:00',
-        startTime: '9:00:00',
-        daysOfWeek: [1, 2, 3, 4, 5],
-      },
-    ],
   },
 ];
 

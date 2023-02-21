@@ -12,6 +12,7 @@ export type Props = {
   setEditMode: Function;
   editButtonDisable: boolean;
   handleViewChange: Function;
+  today: 'month' | 'week' | 'day';
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
@@ -21,6 +22,7 @@ export const CalendarHeader = (props: Props): ReactElement => {
     setEditMode,
     editButtonDisable,
     handleViewChange,
+    today,
   } = props;
 
   const [title, setTitle] = useState<string>();
@@ -63,7 +65,9 @@ export const CalendarHeader = (props: Props): ReactElement => {
               <ChevronLeftIcon />
             </Button>
             <Button onClick={(): void => handleDateChange('today')}>
-              Today
+              {today === 'day' && '今日'}
+              {today === 'week' && '今週'}
+              {today === 'month' && '今月'}
             </Button>
             <Button onClick={(): void => handleDateChange('next')}>
               <ChevronRightIcon />

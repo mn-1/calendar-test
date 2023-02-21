@@ -46,13 +46,13 @@ const SampleCalendar: React.FC = (props) => {
     editDialogOpen,
     selectInfo,
     setEditDialogOpen,
-    editSchedule,
+
     setEventInfo,
     getEvents,
     setCountId,
     setMyEvents,
     setSelectInfo,
-    addSchedule,
+
     setAddDialogOpen,
   } = EventControl();
 

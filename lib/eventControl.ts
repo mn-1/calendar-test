@@ -5,7 +5,6 @@ import React, { useState, useRef, createRef, useEffect } from 'react';
 // lib
 import { resources, events } from './data';
 import { divideColor } from './colorControl';
-import { RegisterScheduleDataInfo } from './inputDataControl';
 // validate
 import { SubmitHandler } from 'react-hook-form';
 
@@ -18,11 +17,13 @@ export const getEvents = () => {
   for (let i = 0; i < events.length; i++) {
     const item = events[i];
 
-    const { backgroundColor, borderColor } = divideColor(item.start, item.end);
-    item.backgroundColor = backgroundColor;
-    item.borderColor = borderColor;
+    const { color } = divideColor(item.start, item.end);
+    item.color = color;
   }
-  return events;
+
+  const countId = events.length;
+
+  return { events, countId };
 };
 
 // export const registerSchedule: SubmitHandler<RegisterScheduleDataInfo> = async (

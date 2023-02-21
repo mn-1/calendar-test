@@ -47,7 +47,7 @@ const SampleCalendar = () => {
     // イベントリスト収納
     setMyEvents(events);
     // IDの初期値設定
-    setCountId(events.length + 1);
+    // setCountId(events.length + 1);
 
     if (calendarRef.current) console.log(calendarRef.current);
 

@@ -1,5 +1,3 @@
-import moment from 'moment-timezone';
-
 const Test = () => {
   //
 
@@ -24,8 +22,6 @@ const Test = () => {
   const a = {
     date: date.toString(),
     一ヶ月加算: new Date(addMonth).toString(),
-    moment: moment.tz('Asia/Tokyo').toISOString(),
-    moment2: moment.utc().add('90', 'minutes').toISOString(),
     '2時間前': new Date(b).toISOString(),
     '2時間前string': new Date(b).toString(),
     UNIXタイム: new Date().getTime(),

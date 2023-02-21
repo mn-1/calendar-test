@@ -60,11 +60,11 @@ const ClientCalendar = () => {
 
   useEffect(() => {
     getEvents();
-    console.log(
-      'これは表示してからgetできるのか',
-      calendarRef.current?.getApi()
-    );
-  }, []);
+    // console.log(
+    //   'これは表示してからgetできるのか',
+    //   calendarRef.current?.getApi()
+    // );
+  }, [myEvents]);
 
   // イベント詳細表示ダイアログ開く
   const handleEventClick = (arg: EventClickArg) => {

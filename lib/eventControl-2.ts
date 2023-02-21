@@ -50,54 +50,54 @@ export default function EventControl() {
    * 予定登録
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const addSchedule = async (values: scheduleDataInfo) => {
-    if (!selectInfo) return console.log('selectInfo none');
+  // const addSchedule = async (values: scheduleDataInfo) => {
+  //   if (!selectInfo) return console.log('selectInfo none');
 
-    const start = new Date(selectInfo.startStr).getTime();
-    const end = new Date(selectInfo.endStr).getTime();
-    const { color } = divideColor(start, end);
+  //   const start = new Date(selectInfo.startStr).getTime();
+  //   const end = new Date(selectInfo.endStr).getTime();
+  //   const { color } = divideColor(start, end);
 
-    const resource = resources.find((item) => {
-      if (item.title === values.locationName) return item;
-    });
+  //   const resource = resources.find((item) => {
+  //     if (item.title === values.locationName) return item;
+  //   });
 
-    if (!resource) return console.log('resorce none');
+  //   if (!resource) return console.log('resorce none');
 
-    selectInfo.calendar.addEvent({
-      id: `${countId}`,
-      title: values.title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      resourceId: `${resource.id}`,
-      extendedProps: {
-        memo: values.memo,
-        operatorName: values.operatorName,
-        avatar: values.avatar,
-      },
-      allDay: false,
-      color,
-    });
+  //   selectInfo.calendar.addEvent({
+  //     id: `${countId}`,
+  //     title: values.title,
+  //     start: selectInfo.startStr,
+  //     end: selectInfo.endStr,
+  //     resourceId: `${resource.id}`,
+  //     extendedProps: {
+  //       memo: values.memo,
+  //       operatorName: values.operatorName,
+  //       avatar: values.avatar,
+  //     },
+  //     allDay: false,
+  //     color,
+  //   });
 
-    setAddDialogOpen(false);
-  };
+  //   setAddDialogOpen(false);
+  // };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * 予定編集
    * @param values 
    * @returns 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const editSchedule = async (values: scheduleDataInfo) => {
-    const event = eventInfo?.event;
+  // const editSchedule = async (values: scheduleDataInfo) => {
+  //   const event = eventInfo?.event;
 
-    if (!event) return console.log('event none');
+  //   if (!event) return console.log('event none');
 
-    event.setProp('title', values.title);
-    event.setExtendedProp('memo', values.memo);
-    event.setExtendedProp('operatorName', values.operatorName);
-    event.setExtendedProp('avatar', values.avatar);
+  //   event.setProp('title', values.title);
+  //   event.setExtendedProp('memo', values.memo);
+  //   event.setExtendedProp('operatorName', values.operatorName);
+  //   event.setExtendedProp('avatar', values.avatar);
 
-    setEditDialogOpen(false);
-  };
+  //   setEditDialogOpen(false);
+  // };
 
   return {
     countId,
@@ -107,13 +107,13 @@ export default function EventControl() {
     editDialogOpen,
     selectInfo,
     setEditDialogOpen,
-    editSchedule,
+    // editSchedule,
     setEventInfo,
     setSelectInfo,
     getEvents,
     setCountId,
     setMyEvents,
-    addSchedule,
+    // addSchedule,
     setAddDialogOpen,
   };
 }

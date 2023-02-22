@@ -175,6 +175,7 @@ const SampleCalendar: React.FC = (props) => {
           />
         )}
         <ScheduleInfoDialog
+          editMemo={() => {}}
           eventInfo={eventInfo}
           open={infoDialogOpen}
           edit={() => {

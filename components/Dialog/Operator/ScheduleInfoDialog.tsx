@@ -44,13 +44,11 @@ export default function ScheduleInfoDialog(props: Props) {
   // キャンセルボタンアクション
   const handleCancelButton = () => {
     // handleClose();
-    reset({ memo: '' });
   };
 
   // 登録ボタンアクション
   const onSave: SubmitHandler<addMemoInfo> = async (values: addMemoInfo) => {
     editMemo(values);
-    reset(resetValues);
   };
 
   if (event && event.start && event.end)

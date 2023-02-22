@@ -6,6 +6,6 @@ export const scheduleSchema = yup.object().shape({
   avatar: yup.string(),
 });
 
-export const addMemoSchema = yup.object().shape({
+export const editMemoSchema = yup.object().shape({
   memo: yup.string(),
 });

@@ -17,21 +17,18 @@ import {
   EventContentArg,
   EventDropArg,
 } from '@fullcalendar/core';
-import interactionPlugin, {
-  EventResizeDoneArg,
-} from '@fullcalendar/interaction';
+import interactionPlugin from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
+import { DateClickArg } from '@fullcalendar/interaction';
 // lib
 import { resources, operator } from '../../lib/data';
 import EventControl from '../../lib/operatorEventControl';
-import { divideColor } from '../../lib/colorControl';
 // components
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
-import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
+import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
 import Month from '../../components/FullCalendar/Operator/Month';
-import { DateClickArg } from '@fullcalendar/interaction';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 
 const SampleCalendar: React.FC = (props) => {
@@ -39,17 +36,16 @@ const SampleCalendar: React.FC = (props) => {
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
+  const [edit, setEdit] = useState<boolean>(false);
 
   const {
-    countId,
     myEvents,
     eventInfo,
     editDialogOpen,
     setEditDialogOpen,
-    editSchedule,
+    editMemo,
     setEventInfo,
     getEvents,
-    setCountId,
     setMyEvents,
   } = EventControl();
 
@@ -58,11 +54,11 @@ const SampleCalendar: React.FC = (props) => {
   }, []);
 
   /**
-   * イベント詳細表示ダイアログ開く
+   * メモ編集ダイアログ開く
    */
-  const handleEventClick = (arg: EventClickArg) => {
-    setInfoDialogOpen(true);
+  const handleEventClick = async (arg: EventClickArg) => {
     setEventInfo(arg);
+    setEditDialogOpen(true);
   };
 
   /**
@@ -165,25 +161,23 @@ const SampleCalendar: React.FC = (props) => {
         </Grid>
         {/* utils ↓ */}
         {/* defalutValueを動的にしないためにレンダリング少なくしている */}
-
         {eventInfo && editDialogOpen && (
           <EditScheduleDialog
-            open={editDialogOpen}
+            editMemo={editMemo}
             eventInfo={eventInfo}
+            open={editDialogOpen}
             handleClose={() => setEditDialogOpen(false)}
-            editSchedule={editSchedule}
           />
         )}
-        <ScheduleInfoDialog
-          editMemo={() => {}}
-          eventInfo={eventInfo}
-          open={infoDialogOpen}
-          edit={() => {
-            setEditDialogOpen(true);
+
+        {/* <ScheduleInfoDialog
+          editMemo={() => {
             setInfoDialogOpen(false);
           }}
+          eventInfo={eventInfo}
+          open={infoDialogOpen}
           handleClose={() => setInfoDialogOpen(false)}
-        />
+        /> */}
 
         {/* utils ↑ */}
       </Container>
@@ -195,10 +189,22 @@ export default SampleCalendar;
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {
+  const {
+    timeText,
+    event: {
+      extendedProps: { avatar, memo },
+      title,
+    },
+  } = eventContent;
   return (
     <Typography>
-      {eventContent.timeText}
-      {eventContent.event.extendedProps.operatorName}
+      {timeText}
+      <br />
+      タイトル：{title}
+      <br />
+      アバター：{avatar}
+      <br />
+      メモ：{memo}
     </Typography>
   );
 }

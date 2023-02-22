@@ -1,7 +1,7 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
-import { Box, Container, Grid, Typography, Button } from '@mui/material';
+import { Box, Container, Grid, Typography, Button, Stack } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -165,7 +165,7 @@ const ClientCalendar = () => {
     let end = start;
 
     if (!start || !end) return arg.event.remove();
-    end = new Date(end.setHours(start.getHours() + 2));
+    end = new Date(end.setMinutes(start.getMinutes() + 30));
 
     const { color } = divideColor(start.getTime(), end.getTime());
 
@@ -203,6 +203,9 @@ const ClientCalendar = () => {
 
   let calendarSize: any = 12;
   if (editMode) calendarSize = 9;
+
+  let calendarBorderColor: string = '#DCDCDC';
+  // if (editMode) calendarBorderColor = '#4169E1';
 
   return (
     <>
@@ -259,66 +262,75 @@ const ClientCalendar = () => {
               setEditMode={setEditMode}
             />
             {myEvents.length != 0 && (
-              <FullCalendar
-                initialEvents={myEvents}
-                ref={calendarRef}
-                locales={[jaLocale]}
-                locale='ja'
-                eventColor='#6A5ACD'
-                contentHeight='auto'
-                resources={resources}
-                slotDuration='00:30:00'
-                slotMinTime='05:00:00'
-                slotMaxTime='23:00:00'
-                plugins={[
-                  resourceTimeGridPlugin,
-                  resourceTimelinePlugIn,
-                  interactionPlugin,
-                  scrollGridPlugin,
-                  dayGridPlugin,
-                  timeGridPlugin,
-                  multiMonthPlugin,
-                ]}
-                initialView='resourceTimeGridDay'
-                eventContent={renderEventContent}
-                //
-                droppable={true}
-                editable={true}
-                //
-                eventOverlap={false}
-                headerToolbar={false}
-                selectable={false}
-                selectMirror={true}
-                weekends={true}
-                eventResizableFromStart={true}
-                nowIndicator={true}
-                allDaySlot={false}
-                slotEventOverlap={true}
-                navLinks={true}
-                //
-                drop={drop}
-                eventDragStart={(arg) => {
-                  console.log(arg);
-                  const calApi = calendarRef.current?.getApi();
-                  if (!calApi || !editMode) arg.jsEvent.preventDefault();
+              <Stack
+                sx={{
+                  border: 1,
+                  borderColor: calendarBorderColor,
+                  borderWidth: 3,
                 }}
-                eventReceive={handleEventReceive}
-                eventClick={handleEventClick}
-                eventResize={handleEventResize}
-                eventDrop={handleInnerEventDrop}
-                eventsSet={(events: EventApi[]) => {
-                  console.log('events:', events);
+              >
+                <FullCalendar
+                  initialEvents={myEvents}
+                  ref={calendarRef}
+                  locales={[jaLocale]}
+                  locale='ja'
+                  eventColor='#6A5ACD'
+                  contentHeight='100vh'
+                  resources={resources}
+                  slotDuration='00:30:00'
+                  slotMinTime='05:00:00'
+                  slotMaxTime='23:00:00'
+                  plugins={[
+                    resourceTimeGridPlugin,
+                    resourceTimelinePlugIn,
+                    interactionPlugin,
+                    scrollGridPlugin,
+                    dayGridPlugin,
+                    timeGridPlugin,
+                    multiMonthPlugin,
+                  ]}
+                  initialView='resourceTimeGridDay'
+                  eventContent={renderEventContent}
+                  //
+                  droppable={true}
+                  editable={true}
+                  //
+                  eventOverlap={false}
+                  headerToolbar={false}
+                  selectable={false}
+                  selectMirror={true}
+                  weekends={true}
+                  eventResizableFromStart={true}
+                  nowIndicator={true}
+                  allDaySlot={false}
+                  slotEventOverlap={true}
+                  navLinks={true}
+                  //
+                  drop={drop}
+                  eventDragStart={(arg) => {
+                    console.log('ドラッグスタート');
+                    calendarBorderColor = '#4169E1';
+                    const calApi = calendarRef.current?.getApi();
+                    if (!calApi || !editMode) arg.jsEvent.preventDefault();
+                  }}
+                  eventReceive={handleEventReceive}
+                  eventClick={handleEventClick}
+                  eventResize={handleEventResize}
+                  eventDrop={handleInnerEventDrop}
+                  eventsSet={(events: EventApi[]) => {
+                    console.log('events:', events);
 
-                  setMyEvents(events);
-                }}
-                navLinkDayClick={(date) => {
-                  const calApi = calendarRef.current?.getApi();
-                  if (!calApi) return console.log('calApi none');
-                  calApi.changeView('resourceTimeGridDay', date);
-                  setEditButtonDisable(false);
-                  setToday('day');
-                }}
-              />
+                    setMyEvents(events);
+                  }}
+                  navLinkDayClick={(date) => {
+                    const calApi = calendarRef.current?.getApi();
+                    if (!calApi) return console.log('calApi none');
+                    calApi.changeView('resourceTimeGridDay', date);
+                    setEditButtonDisable(false);
+                    setToday('day');
+                  }}
+                />
+              </Stack>
             )}
           </Grid>
         </Grid>

@@ -4,6 +4,6 @@ export type scheduleDataInfo = {
   avatar: string;
 };
 
-export type addMemoInfo = {
+export type editMemoInfo = {
   memo: string;
 };

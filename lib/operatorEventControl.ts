@@ -3,7 +3,7 @@ import { useState } from 'react';
 // lib
 import { resources, events } from './data';
 import { divideColor } from './colorControl';
-import { scheduleDataInfo } from './inputDataControl';
+import { editMemoInfo } from './inputDataControl';
 // Fullcalendar
 import { CalendarApi, EventClickArg } from '@fullcalendar/core';
 
@@ -14,8 +14,6 @@ export default function EventControl() {
   const [myEvents, setMyEvents] = useState<any>([]);
   // 予定情報
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
-  // 予定登録ダイアログopen
-  const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   // 予定編集ダイアログopen
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
@@ -42,14 +40,12 @@ export default function EventControl() {
    * 予定編集
    * 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const editSchedule = async (values: scheduleDataInfo) => {
+  const editMemo = async (values: editMemoInfo) => {
     const event = eventInfo?.event;
-
+    console.log(values);
     if (!event) return console.log('event none');
 
-    event.setProp('title', values.title);
     event.setExtendedProp('memo', values.memo);
-    event.setExtendedProp('avatar', values.avatar);
 
     setEditDialogOpen(false);
   };
@@ -57,17 +53,13 @@ export default function EventControl() {
   return {
     countId,
     myEvents,
-    addDialogOpen,
     eventInfo,
     editDialogOpen,
-    // selectInfo,
     setEditDialogOpen,
-    editSchedule,
+    editMemo,
     setEventInfo,
-    // setSelectInfo,
     getEvents,
     setCountId,
     setMyEvents,
-    setAddDialogOpen,
   };
 }

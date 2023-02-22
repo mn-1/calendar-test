@@ -34,6 +34,7 @@ import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
 import Month from '../../components/FullCalendar/Month';
 import { DateClickArg } from '@fullcalendar/interaction';
+import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 
 const SampleCalendar: React.FC = (props) => {
   const calendarRef = createRef<FullCalendar>();
@@ -41,19 +42,10 @@ const SampleCalendar: React.FC = (props) => {
   const {
     countId,
     myEvents,
-    addDialogOpen,
-    eventInfo,
-    editDialogOpen,
-    selectInfo,
-    setEditDialogOpen,
 
-    setEventInfo,
     getEvents,
     setCountId,
     setMyEvents,
-    setSelectInfo,
-
-    setAddDialogOpen,
   } = EventControl();
 
   useEffect(() => {
@@ -64,30 +56,6 @@ const SampleCalendar: React.FC = (props) => {
   const handleEventClick = (arg: EventClickArg) => {
     if (confirm(`${arg.event.title}の予定を削除してよろしいでしょうか。`))
       arg.event.remove();
-  };
-
-  const handleDateSelect = (arg: DateSelectArg) => {
-    console.log(arg);
-    const title = prompt('Please enter a new title for your event');
-    const calendarApi = arg.view.calendar;
-
-    // https://fullcalendar.io/docs/unselect-callback
-    calendarApi.unselect();
-
-    const add = countId + 1;
-    setCountId(add);
-
-    if (!title) return;
-    calendarApi.addEvent({
-      id: String(countId),
-      title,
-      start: arg.startStr,
-      resourceId: arg.resource?.id,
-      // end: selectInfo.endStr,
-      slotDuration: '01:00:00',
-      allDay: false,
-      color: '#3CB371',
-    });
   };
 
   return (
@@ -121,8 +89,9 @@ const SampleCalendar: React.FC = (props) => {
                 ref={calendarRef}
                 locales={[jaLocale]}
                 locale='ja'
+                eventColor='#6A5ACD'
                 contentHeight='auto'
-                initialView='timeGridWeek'
+                resources={resources}
                 slotDuration='00:30:00'
                 slotMinTime='05:00:00'
                 slotMaxTime='23:00:00'
@@ -131,27 +100,31 @@ const SampleCalendar: React.FC = (props) => {
                   dayGridPlugin,
                   interactionPlugin,
                   listPlugin,
+                  resourceTimeGridPlugin,
+                  resourceTimelinePlugIn,
+                  interactionPlugin,
+                  scrollGridPlugin,
+                  dayGridPlugin,
+                  timeGridPlugin,
+                  multiMonthPlugin,
                 ]}
-                headerToolbar={{
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'timeGridWeek,timeGridDay listMonth',
-                }}
-                businessHours={{
-                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6], // 0:日曜 〜 6:土曜
-                  startTime: '8:00:00',
-                  endTime: '20:00:00',
-                }}
+                initialView='timeGridWeek'
+                eventContent={renderEventContent}
                 //
-                selectable={true}
-                weekends={true}
-                editable={true}
+                droppable={false}
+                editable={false}
+                //
+                eventOverlap={false}
+                headerToolbar={false}
+                selectable={false}
                 selectMirror={true}
+                weekends={true}
+                eventResizableFromStart={true}
                 nowIndicator={true}
                 allDaySlot={false}
                 slotEventOverlap={true}
+                navLinks={true}
                 //
-                select={handleDateSelect}
                 eventClick={handleEventClick}
                 eventsSet={(events: EventApi[]) => {
                   console.log('events:', events);
@@ -167,3 +140,13 @@ const SampleCalendar: React.FC = (props) => {
 };
 
 export default SampleCalendar;
+
+// カレンダーに表示する内容
+function renderEventContent(eventContent: EventContentArg) {
+  return (
+    <Typography>
+      {eventContent.timeText}
+      {eventContent.event.extendedProps.operatorName}
+    </Typography>
+  );
+}

@@ -14,10 +14,10 @@ type Props = {
 const Header = ({ userType, ...otherProps }: Props) => {
   let title: string = '';
   if (userType === 'client') {
-    title = 'NARiKiRÜ 顧客システム';
+    title = 'Sample Client System';
   }
   if (userType === 'operator') {
-    title = 'NARiKiRÜ オペレーターシステム';
+    title = 'Sample Operator System';
   }
 
   return (

@@ -33,8 +33,8 @@ import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
-import { ExternalEvent } from '../../components/FullCalendar/ExternalEvents';
-import { CalendarHeader } from '../../components/FullCalendar/Header';
+import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
+import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
 
 const ClientCalendar = () => {

@@ -13,8 +13,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import { EventClickArg } from '@fullcalendar/core';
-import { formatDate } from '../../lib/dateControl';
-import FailedDialog from './FailedDialog';
+import { formatDate } from '../../../lib/dateControl';
+import FailedDialog from '../FailedDialog';
 
 type Props = {
   open: boolean;

@@ -8,22 +8,13 @@ import { CalendarApi } from '@fullcalendar/core';
 
 export type Props = {
   calendarRef: RefObject<FullCalendar>;
-  editMode: boolean;
-  setEditMode: Function;
-  editButtonDisable: boolean;
+
   handleViewChange: Function;
   today: 'month' | 'week' | 'day';
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
-  const {
-    calendarRef,
-    editMode,
-    setEditMode,
-    editButtonDisable,
-    handleViewChange,
-    today,
-  } = props;
+  const { calendarRef, handleViewChange, today } = props;
 
   const [title, setTitle] = useState<string>();
   const [calApi, setCalApi] = useState<CalendarApi>();
@@ -48,53 +39,42 @@ export const CalendarHeader = (props: Props): ReactElement => {
 
   return (
     <header>
-      <Grid container direction='row' sx={{ mb: '1rem' }}>
-        <Grid item xs={4}>
-          <ButtonGroup>
-            <Button onClick={(): void => handleDateChange('prev')}>
-              <ChevronLeftIcon />
-            </Button>
-            <Button onClick={(): void => handleDateChange('today')}>
-              {today === 'day' && '今日'}
-              {today === 'week' && '今週'}
-              {today === 'month' && '今月'}
-            </Button>
-            <Button onClick={(): void => handleDateChange('next')}>
-              <ChevronRightIcon />
-            </Button>
-          </ButtonGroup>
-        </Grid>
-        <Grid item xs={4}>
-          <Stack justifyContent='center' direction='row'>
-            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-              {title}
-            </Typography>
-          </Stack>
-        </Grid>
-        <Grid item xs={4}>
-          <Stack justifyContent='end' direction='row'>
-            <ButtonGroup disabled={editMode}>
-              <Button
-                onClick={() => handleViewChange('month')}
-                variant={today === 'month' ? 'contained' : 'outlined'}
-              >
-                月
-              </Button>
-              <Button
-                onClick={() => handleViewChange('week')}
-                variant={today === 'week' ? 'contained' : 'outlined'}
-              >
-                週
-              </Button>
-              <Button
-                onClick={() => handleViewChange('day')}
-                variant={today === 'day' ? 'contained' : 'outlined'}
-              >
-                日
-              </Button>
-            </ButtonGroup>
-          </Stack>
-        </Grid>
+      <Grid
+        container
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+        sx={{ mb: '1rem' }}
+      >
+        <ButtonGroup>
+          <Button onClick={(): void => handleDateChange('prev')}>
+            <ChevronLeftIcon />
+          </Button>
+          <Button onClick={(): void => handleDateChange('today')}>
+            {today === 'day' && '今日'}
+            {today === 'week' && '今週'}
+          </Button>
+          <Button onClick={(): void => handleDateChange('next')}>
+            <ChevronRightIcon />
+          </Button>
+        </ButtonGroup>
+        <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+          {title}
+        </Typography>
+        <ButtonGroup>
+          <Button
+            onClick={() => handleViewChange('week')}
+            variant={today === 'week' ? 'contained' : 'outlined'}
+          >
+            週
+          </Button>
+          <Button
+            onClick={() => handleViewChange('day')}
+            variant={today === 'day' ? 'contained' : 'outlined'}
+          >
+            日
+          </Button>
+        </ButtonGroup>
       </Grid>
     </header>
   );

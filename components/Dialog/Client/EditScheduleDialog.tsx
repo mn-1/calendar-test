@@ -12,14 +12,14 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 // components
-import EditFormInput from '../FormControl/EditFormInput';
-import FailedDialog from './FailedDialog';
+import EditFormInput from '../../FormControl/EditFormInput';
+import FailedDialog from '../FailedDialog';
 // validate
-import { scheduleSchema } from '../../schema/inputSchedule';
+import { scheduleSchema } from '../../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
-import { scheduleDataInfo } from '../../lib/inputDataControl';
+import { scheduleDataInfo } from '../../../lib/inputDataControl';
 import { EventClickArg } from '@fullcalendar/core';
 
 type Props = {

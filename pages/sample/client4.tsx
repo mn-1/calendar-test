@@ -30,9 +30,9 @@ import EventControl from '../../lib/eventControl-3';
 import { divideColor } from '../../lib/colorControl';
 // components
 import Header from '../../components/Header/Header';
-import ScheduleInfoDialog from '../../components/Dialog/ScheduleInfoDialog';
+import ScheduleInfoDialog from '../../components/Dialog/Client/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
-import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
+import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
 import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
 import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
@@ -316,6 +316,7 @@ const ClientCalendar = () => {
                   if (!calApi) return console.log('calApi none');
                   calApi.changeView('resourceTimeGridDay', date);
                   setEditButtonDisable(false);
+                  setToday('day');
                 }}
               />
             )}

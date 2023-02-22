@@ -24,25 +24,30 @@ import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
 // lib
 import { resources, operator } from '../../lib/data';
-import EventControl from '../../lib/eventControl-2';
+import EventControl from '../../lib/operatorEventControl';
 import { divideColor } from '../../lib/colorControl';
 // components
 import Header from '../../components/Header/Header';
-import AddScheduleDialog from '../../components/Dialog/AddScheduleDialog';
-import ScheduleInfoDialog from '../../components/Dialog/ScheduleInfoDialog';
-import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
-import EditScheduleDialog from '../../components/Dialog/EditScheduleDialog';
-import Month from '../../components/FullCalendar/Month';
+import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
+import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
+import Month from '../../components/FullCalendar/Operator/Month';
 import { DateClickArg } from '@fullcalendar/interaction';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 
 const SampleCalendar: React.FC = (props) => {
   const calendarRef = createRef<FullCalendar>();
 
+  const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
+  const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
+
   const {
     countId,
     myEvents,
-
+    eventInfo,
+    editDialogOpen,
+    setEditDialogOpen,
+    editSchedule,
+    setEventInfo,
     getEvents,
     setCountId,
     setMyEvents,
@@ -52,10 +57,29 @@ const SampleCalendar: React.FC = (props) => {
     getEvents();
   }, []);
 
-  // イベント削除
+  /**
+   * イベント詳細表示ダイアログ開く
+   */
   const handleEventClick = (arg: EventClickArg) => {
-    if (confirm(`${arg.event.title}の予定を削除してよろしいでしょうか。`))
-      arg.event.remove();
+    setInfoDialogOpen(true);
+    setEventInfo(arg);
+  };
+
+  /**
+   * カレンダーの表示変更
+   */
+  const handleViewChange = (direction: 'week' | 'day'): void => {
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return;
+
+    if (direction === 'week') {
+      calApi.changeView('timeGridWeek');
+      setToday('week');
+    }
+    if (direction === 'day') {
+      calApi.changeView('resourceTimeGridDay');
+      setToday('day');
+    }
   };
 
   return (
@@ -83,6 +107,11 @@ const SampleCalendar: React.FC = (props) => {
             </Grid>
           )}
           <Grid item sm={9}>
+            <CalendarHeader
+              calendarRef={calendarRef}
+              handleViewChange={handleViewChange}
+              today={today}
+            />
             {myEvents.length != 0 && (
               <FullCalendar
                 initialEvents={myEvents}
@@ -134,6 +163,28 @@ const SampleCalendar: React.FC = (props) => {
             )}
           </Grid>
         </Grid>
+        {/* utils ↓ */}
+        {/* defalutValueを動的にしないためにレンダリング少なくしている */}
+
+        {eventInfo && editDialogOpen && (
+          <EditScheduleDialog
+            open={editDialogOpen}
+            eventInfo={eventInfo}
+            handleClose={() => setEditDialogOpen(false)}
+            editSchedule={editSchedule}
+          />
+        )}
+        <ScheduleInfoDialog
+          eventInfo={eventInfo}
+          open={infoDialogOpen}
+          edit={() => {
+            setEditDialogOpen(true);
+            setInfoDialogOpen(false);
+          }}
+          handleClose={() => setInfoDialogOpen(false)}
+        />
+
+        {/* utils ↑ */}
       </Container>
     </>
   );

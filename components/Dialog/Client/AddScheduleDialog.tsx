@@ -13,17 +13,17 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 // components
-import FormInput from '../FormControl/FormInput';
-import DatePickerForm from '../FormControl/DatePicker';
-import FailedDialog from './FailedDialog';
-import AddFormSelect from '../FormControl/FormSelect';
+import EditFormInput from '../../FormControl/EditFormInput';
+import DatePickerForm from '../../FormControl/DatePicker';
+import FailedDialog from '../FailedDialog';
+import AddFormSelect from '../../FormControl/FormSelect';
 // validate
-import { scheduleSchema } from '../../schema/inputSchedule';
+import { scheduleSchema } from '../../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
-import { scheduleDataInfo } from '../../lib/inputDataControl';
-import { SelectInfoType } from '../../lib/eventControl-2';
+import { scheduleDataInfo } from '../../../lib/inputDataControl';
+import { SelectInfoType } from '../../../lib/eventControl-2';
 
 type Props = {
   open: boolean;
@@ -104,7 +104,8 @@ export default function AddScheduleDialog(props: Props) {
               /> */}
 
               <Typography color='secondary'>タイトル</Typography>
-              <FormInput
+              <EditFormInput
+                defaultValue=''
                 name='title'
                 autoComplete='off'
                 focused
@@ -112,7 +113,8 @@ export default function AddScheduleDialog(props: Props) {
                 fullWidth
               />
               <Typography color='secondary'>アバター名</Typography>
-              <FormInput
+              <EditFormInput
+                defaultValue=''
                 name='avatar'
                 autoComplete='off'
                 focused
@@ -120,7 +122,8 @@ export default function AddScheduleDialog(props: Props) {
                 fullWidth
               />
               <Typography color='secondary'>メモ</Typography>
-              <FormInput
+              <EditFormInput
+                defaultValue=''
                 name='memo'
                 autoComplete='off'
                 focused

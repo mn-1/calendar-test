@@ -3,3 +3,7 @@ export type scheduleDataInfo = {
   memo: string;
   avatar: string;
 };
+
+export type addMemoInfo = {
+  memo: string;
+};

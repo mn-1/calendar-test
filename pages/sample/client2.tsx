@@ -1,7 +1,18 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
-import { Box, Container, Grid, Typography, Button, Stack } from '@mui/material';
+import CircleIcon from '@mui/icons-material/Circle';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleTwoToneIcon from '@mui/icons-material/AddCircleTwoTone';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Button,
+  Stack,
+  GridSize,
+} from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -22,7 +33,7 @@ import interactionPlugin, {
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, externalEvents } from '../../lib/data';
+import { resources, externalEvents, operator } from '../../lib/data';
 import EventControl from '../../lib/eventControl-3';
 import { divideColor } from '../../lib/colorControl';
 // components
@@ -35,12 +46,14 @@ import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
 import { SubCalendar } from '../../components/FullCalendar/Client/SubCalendar';
 import { MobileHeader } from '../../components/FullCalendar/Client/MobileHeader';
+import AddScheduleDialog from '../../components/Dialog/Client/AddScheduleDialog';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
   const subCalendarRef = createRef<FullCalendar>();
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
+  const [addScheduleDialogOpen, setAddScheduleDialogOpen] = useState(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
@@ -214,169 +227,185 @@ const ClientCalendar = () => {
     setToday('day');
   };
 
-  let calendarSize: any = 12;
+  // カレンダーに表示する内容
+  function renderEventContent(eventContent: EventContentArg) {
+    const mainCalApi = calendarRef.current?.getApi();
+    if (mainCalApi)
+      return (
+        <Grid container direction='column' alignItems='center'>
+          {mainCalApi.view.type === 'dayGridMonth' ? (
+            <CircleIcon sx={{ fontSize: '1rem' }} />
+          ) : (
+            <Typography></Typography>
+          )}
+        </Grid>
+      );
+  }
+
+  let calendarSize: GridSize = 12;
   if (editMode) calendarSize = 9;
 
   return (
     <>
       <Header userType='client' />
-      <Container
-        maxWidth={false}
-        sx={{
-          width: '100%',
-          height: '100%',
-          mt: '4rem',
-        }}
-      >
-        <Grid container direction='row' sx={{ width: '100%', height: '100%' }}>
-          {editMode && (
-            <Grid item sm={3} sx={{ px: '1rem', mt: '3rem' }}>
-              <Grid container direction='column'>
-                <SubCalendar
-                  subCalendarRef={subCalendarRef}
-                  handleNavLinkDayClick={handleNavLinkDayClick}
-                />
-                {externalEvents.map((event) => (
-                  <ExternalEvent
-                    event={event}
-                    key={event.extendedProps.Username}
-                  />
-                ))}
-              </Grid>
-            </Grid>
-          )}
-
-          <Grid item md={calendarSize} sx={{ px: { md: '1rem' } }}>
-            <CalendarHeader
-              today={today}
-              handleViewChange={handleViewChange}
-              editButtonDisable={editButtonDisable}
-              calendarRef={calendarRef}
-              editMode={editMode}
-              setEditMode={setEditMode}
-            />
-
-            {myEvents.length != 0 && (
-              <Stack
-                sx={{
-                  border: 1,
-                  borderWidth: 3,
-                  borderColor: borderColor,
-                }}
-              >
-                <FullCalendar
-                  initialEvents={myEvents}
-                  ref={calendarRef}
-                  locales={[jaLocale]}
-                  locale='ja'
-                  eventColor='#6A5ACD'
-                  contentHeight='100vh'
-                  resources={resources}
-                  slotMinTime='05:00:00'
-                  slotMaxTime='23:00:00'
-                  slotDuration='00:30:00'
-                  snapDuration='00:05:00'
-                  plugins={[
-                    resourceTimeGridPlugin,
-                    resourceTimelinePlugIn,
-                    interactionPlugin,
-                    scrollGridPlugin,
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    multiMonthPlugin,
-                  ]}
-                  initialView='resourceTimeGridDay'
-                  eventContent={renderEventContent}
-                  //
-                  droppable={true}
-                  editable={true}
-                  //
-                  eventOverlap={false}
-                  headerToolbar={false}
-                  selectable={false}
-                  selectMirror={true}
-                  weekends={true}
-                  eventResizableFromStart={true}
-                  nowIndicator={true}
-                  allDaySlot={false}
-                  slotEventOverlap={true}
-                  navLinks={true}
-                  //
-                  eventResizeStart={() => {
-                    if (editMode) setBorderColor('#0000FF');
-                  }}
-                  eventResizeStop={() => {
-                    if (editMode) setBorderColor('#DCDCDC');
-                  }}
-                  eventDragStart={() => {
-                    if (editMode) setBorderColor('#0000FF');
-                  }}
-                  eventDragStop={() => {
-                    if (editMode) setBorderColor('#DCDCDC');
-                  }}
-                  //
-                  drop={drop}
-                  eventReceive={handleEventReceive}
-                  eventClick={handleEventClick}
-                  eventResize={handleEventResize}
-                  eventDrop={handleInnerEventDrop}
-                  eventsSet={(events) => {
-                    console.log('events:', events);
-                    setMyEvents(events);
-                  }}
-                  navLinkDayClick={(date) => {
-                    const calApi = calendarRef.current?.getApi();
-                    if (!calApi) return console.log('calApi none');
-                    calApi.changeView('resourceTimeGridDay', date);
-                    setEditButtonDisable(false);
-                    setToday('day');
-                  }}
-                />
-              </Stack>
-            )}
-          </Grid>
-        </Grid>
-        {/* utils ↓ */}
-        {/* defalutValueを動的にしないためにレンダリング少なくしている */}
-
-        {eventInfo && editDialogOpen && (
-          <EditScheduleDialog
-            open={editDialogOpen}
-            eventInfo={eventInfo}
-            handleClose={() => setEditDialogOpen(false)}
-            editSchedule={editSchedule}
-          />
-        )}
-        <ScheduleInfoDialog
-          editMode={!editMode}
-          eventInfo={eventInfo}
-          open={infoDialogOpen}
-          delete={deleteEvent}
-          edit={() => {
-            setEditDialogOpen(true);
-            setInfoDialogOpen(false);
+      <Grid container direction={'row'} sx={{ width: '100%', height: '100%' }}>
+        <Grid
+          item
+          md={calendarSize}
+          sx={{
+            px: { md: '1rem' },
           }}
-          handleClose={() => setInfoDialogOpen(false)}
+        >
+          <MobileHeader
+            today={today}
+            handleViewChange={handleViewChange}
+            editButtonDisable={editButtonDisable}
+            calendarRef={calendarRef}
+            editMode={editMode}
+            setEditMode={setEditMode}
+          />
+          {myEvents.length != 0 && (
+            <Stack
+              sx={{
+                border: 1,
+                borderWidth: 3,
+                borderColor: borderColor,
+              }}
+            >
+              <FullCalendar
+                initialEvents={myEvents}
+                ref={calendarRef}
+                locales={[jaLocale]}
+                locale='ja'
+                eventColor='#6A5ACD'
+                contentHeight='100vh'
+                resources={resources}
+                slotMinTime='05:00:00'
+                slotMaxTime='23:00:00'
+                slotDuration='00:30:00'
+                snapDuration='00:05:00'
+                plugins={[
+                  resourceTimeGridPlugin,
+                  resourceTimelinePlugIn,
+                  interactionPlugin,
+                  scrollGridPlugin,
+                  dayGridPlugin,
+                  timeGridPlugin,
+                  multiMonthPlugin,
+                ]}
+                initialView='resourceTimeGridDay'
+                eventContent={renderEventContent}
+                dayHeaderFormat={{ weekday: 'short' }}
+                //
+                droppable={true}
+                editable={true}
+                //
+                eventOverlap={false}
+                headerToolbar={false}
+                selectable={false}
+                selectMirror={true}
+                weekends={true}
+                eventResizableFromStart={true}
+                nowIndicator={true}
+                allDaySlot={false}
+                slotEventOverlap={true}
+                navLinks={true}
+                //
+                eventResizeStart={() => {
+                  if (editMode) setBorderColor('#0000FF');
+                }}
+                eventResizeStop={() => {
+                  if (editMode) setBorderColor('#DCDCDC');
+                }}
+                eventDragStart={() => {
+                  if (editMode) setBorderColor('#0000FF');
+                }}
+                eventDragStop={() => {
+                  if (editMode) setBorderColor('#DCDCDC');
+                }}
+                //
+                drop={drop}
+                eventReceive={handleEventReceive}
+                eventClick={handleEventClick}
+                eventResize={handleEventResize}
+                eventDrop={handleInnerEventDrop}
+                eventsSet={(events) => {
+                  console.log('events:', events);
+                  setMyEvents(events);
+                }}
+                navLinkDayClick={(date) => {
+                  const calApi = calendarRef.current?.getApi();
+                  if (!calApi) return console.log('calApi none');
+                  calApi.changeView('resourceTimeGridDay', date);
+                  setEditButtonDisable(false);
+                  setToday('day');
+                }}
+              />
+            </Stack>
+          )}
+          {editMode && (
+            <Button
+              onClick={() => setAddScheduleDialogOpen(true)}
+              fullWidth
+              variant='contained'
+              sx={{ mt: '1rem' }}
+            >
+              <AddCircleTwoToneIcon />
+            </Button>
+          )}
+          <Button
+            fullWidth
+            variant='contained'
+            disabled={editButtonDisable}
+            sx={{ my: '1rem' }}
+            onClick={() => {
+              const calApi = calendarRef.current?.getApi();
+              if (!calApi) return;
+              if (calApi.view.type != 'resourceTimeGridDay') return;
+              setEditMode(!editMode);
+            }}
+          >
+            {editMode ? '編集終了' : '編集する'}
+          </Button>
+        </Grid>
+      </Grid>
+      {/* utils ↓ */}
+      {/* defalutValueを動的にしないためにレンダリング少なくしている */}
+
+      {eventInfo && editDialogOpen && (
+        <EditScheduleDialog
+          open={editDialogOpen}
+          eventInfo={eventInfo}
+          handleClose={() => setEditDialogOpen(false)}
+          editSchedule={editSchedule}
         />
-        <DeleteSnackbar
-          open={deleteSnackbarOpen}
-          undoDelete={undoDelete}
-          handleClose={() => setDeleteSnackbarOpen(false)}
-        />
-        {/* utils ↑ */}
-      </Container>
+      )}
+      <ScheduleInfoDialog
+        editMode={!editMode}
+        eventInfo={eventInfo}
+        open={infoDialogOpen}
+        delete={deleteEvent}
+        edit={() => {
+          setEditDialogOpen(true);
+          setInfoDialogOpen(false);
+        }}
+        handleClose={() => setInfoDialogOpen(false)}
+      />
+      <DeleteSnackbar
+        open={deleteSnackbarOpen}
+        undoDelete={undoDelete}
+        handleClose={() => setDeleteSnackbarOpen(false)}
+      />
+      <AddScheduleDialog
+        open={addScheduleDialogOpen}
+        handleClose={() => setAddScheduleDialogOpen(false)}
+        operator={operator}
+        location={[]}
+        addSchedule={() => {}}
+      />
+      {/* utils ↑ */}
     </>
   );
 };
 
 export default ClientCalendar;
-
-// カレンダーに表示する内容
-function renderEventContent(eventContent: EventContentArg) {
-  return (
-    <Typography>
-      {eventContent.timeText}
-      {eventContent.event.extendedProps.operatorName}
-    </Typography>
-  );
-}

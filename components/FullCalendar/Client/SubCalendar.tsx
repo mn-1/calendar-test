@@ -72,12 +72,12 @@ export const SubCalendar = ({
           </Grid>
         </Grid>
       </header>
-      <Stack sx={{ border: 1, borderColor: '' }}>
+      <Stack sx={{ border: 1, borderColor: '', width: '40vh', height: '40vh' }}>
         <FullCalendar
           ref={subCalendarRef}
           locales={[jaLocale]}
           locale='ja'
-          contentHeight='50vh'
+          contentHeight='40vh'
           plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
           initialView='dayGridMonth'
           eventContent={renderEventContent}
@@ -86,6 +86,7 @@ export const SubCalendar = ({
           weekends={true}
           headerToolbar={false}
           navLinks={true}
+          expandRows={true}
           //
           navLinkDayClick={(date) => handleNavLinkDayClick(date)}
         />

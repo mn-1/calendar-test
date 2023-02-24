@@ -12,7 +12,6 @@ import listPlugin from '@fullcalendar/list';
 import { EventSourceInput } from '@fullcalendar/core';
 import { EventContentArg } from '@fullcalendar/core';
 import { CalendarApi } from '@fullcalendar/core';
-import multiMonthPlugin from '@fullcalendar/multimonth';
 
 type Props = {
   initialEvents: EventSourceInput;

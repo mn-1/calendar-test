@@ -6,7 +6,6 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import { EventApi, DateSelectArg, EventClickArg } from '@fullcalendar/core';
 // lib
-import { resources, operator } from '../../lib/data';
 import EventControl from '../../lib/operatorEventControl';
 // components
 import Header from '../../components/Header/Header';

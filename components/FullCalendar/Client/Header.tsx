@@ -53,7 +53,7 @@ export const CalendarHeader = (props: Props): ReactElement => {
         disabled={editButtonDisable}
         sx={{ mb: '1rem' }}
         onClick={() => {
-          if (!calApi) return console.log('nai');
+          if (!calApi) return;
           if (calApi.view.type != 'resourceTimeGridDay') return;
           setEditMode(!editMode);
         }}
@@ -80,9 +80,11 @@ export const CalendarHeader = (props: Props): ReactElement => {
             <ChevronRightIcon />
           </Button>
         </ButtonGroup>
-        <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+
+        <Typography sx={{ fontWeight: 'bold', fontSize: '2rem' }}>
           {title}
         </Typography>
+
         <ButtonGroup disabled={editMode}>
           <Button
             onClick={() => handleViewChange('month')}

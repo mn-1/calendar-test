@@ -31,12 +31,10 @@ type Props = {
   location: any;
   handleClose: VoidFunction;
   addSchedule: Function;
-  selectInfo: SelectInfoType;
 };
 
 export default function AddScheduleDialog(props: Props) {
-  const { open, selectInfo, handleClose, addSchedule, operator, location } =
-    props;
+  const { open, handleClose, addSchedule, operator, location } = props;
 
   const defaultValues: scheduleDataInfo = {
     title: '',
@@ -69,32 +67,31 @@ export default function AddScheduleDialog(props: Props) {
     reset(defaultValues);
   };
 
-  if (selectInfo)
-    return (
-      <Dialog open={open} fullScreen>
-        <DialogActions>
-          <Tooltip title='閉じる'>
-            <IconButton onClick={handleCancelButton}>
-              <CloseIcon fontSize='large' />
-            </IconButton>
-          </Tooltip>
-        </DialogActions>
+  return (
+    <Dialog open={open} fullScreen>
+      <DialogActions>
+        <Tooltip title='閉じる'>
+          <IconButton onClick={handleCancelButton}>
+            <CloseIcon fontSize='large' />
+          </IconButton>
+        </Tooltip>
+      </DialogActions>
 
-        <DialogContent>
-          <Grid container justifyContent='center'>
-            <Typography variant='h4' color='secondary'>
-              予定を追加
-            </Typography>
-          </Grid>
-          <DatePickerForm date={dayjs(selectInfo.startStr)} />
-          <FormProvider {...useFormMethods}>
-            <Box
-              component='form'
-              noValidate
-              autoComplete='off'
-              onSubmit={handleSubmit(onAdd)}
-            >
-              {/* <AddFormSelect
+      <DialogContent>
+        <Grid container justifyContent='center'>
+          <Typography variant='h4' color='secondary'>
+            予定を追加
+          </Typography>
+        </Grid>
+        <DatePickerForm date={dayjs(new Date())} />
+        <FormProvider {...useFormMethods}>
+          <Box
+            component='form'
+            noValidate
+            autoComplete='off'
+            onSubmit={handleSubmit(onAdd)}
+          >
+            {/* <AddFormSelect
                 operator={operator}
                 location={location}
                 control={control}
@@ -103,48 +100,47 @@ export default function AddScheduleDialog(props: Props) {
                 operatorDefaultValue=''
               /> */}
 
-              <Typography color='secondary'>タイトル</Typography>
-              <EditFormInput
-                defaultValue=''
-                name='title'
-                autoComplete='off'
-                focused
-                placeholder='タイトル'
-                fullWidth
-              />
-              <Typography color='secondary'>アバター名</Typography>
-              <EditFormInput
-                defaultValue=''
-                name='avatar'
-                autoComplete='off'
-                focused
-                placeholder='タイトル'
-                fullWidth
-              />
-              <Typography color='secondary'>メモ</Typography>
-              <EditFormInput
-                defaultValue=''
-                name='memo'
-                autoComplete='off'
-                focused
-                placeholder='メモ'
-                fullWidth
-                multiline
-                minRows={3}
-                maxRows={10}
-              />
-              <Button
-                fullWidth
-                variant='contained'
-                type='submit'
-                sx={{ fontWeight: 'bold', my: '0.5rem' }}
-              >
-                登録する
-              </Button>
-            </Box>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
-    );
-  else return <FailedDialog open={open} handleClose={handleClose} />;
+            <Typography color='secondary'>タイトル</Typography>
+            <EditFormInput
+              defaultValue=''
+              name='title'
+              autoComplete='off'
+              focused
+              placeholder='タイトル'
+              fullWidth
+            />
+            <Typography color='secondary'>アバター名</Typography>
+            <EditFormInput
+              defaultValue=''
+              name='avatar'
+              autoComplete='off'
+              focused
+              placeholder='タイトル'
+              fullWidth
+            />
+            <Typography color='secondary'>メモ</Typography>
+            <EditFormInput
+              defaultValue=''
+              name='memo'
+              autoComplete='off'
+              focused
+              placeholder='メモ'
+              fullWidth
+              multiline
+              minRows={3}
+              maxRows={10}
+            />
+            <Button
+              fullWidth
+              variant='contained'
+              type='submit'
+              sx={{ fontWeight: 'bold', my: '0.5rem' }}
+            >
+              登録する
+            </Button>
+          </Box>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  );
 }

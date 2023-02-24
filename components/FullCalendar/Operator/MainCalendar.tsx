@@ -12,8 +12,6 @@ import { EventContentArg, EventDropArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
-import { DateClickArg } from '@fullcalendar/interaction';
-import { CalendarApi } from '@fullcalendar/core';
 // lib
 import { resources, operator } from '../../../lib/data';
 

@@ -22,7 +22,7 @@ const Header = ({ userType, ...otherProps }: Props) => {
 
   return (
     <AppBar position='static'>
-      <Container maxWidth='xl'>
+      <Container>
         <Toolbar disableGutters>
           <Typography variant='h5' fontWeight='bold'>
             {title}

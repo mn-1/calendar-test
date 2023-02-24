@@ -46,9 +46,9 @@ const Home: NextPage = () => {
           <Link href='/sample/client1' passHref>
             <Button sx={{ mx: 1 }}>顧客ページver2</Button>
           </Link>
-          モバイル用サンプル
+          モバイル用サンプル(PCでは崩れます)
           <Link href='/sample/client2' passHref>
-            <Button sx={{ mx: 1 }}>顧客ページver2</Button>
+            <Button sx={{ mx: 1 }}>顧客ページver3</Button>
           </Link>
           <p>・メモだけ編集できる</p>
           <Link href='/sample/operator2' passHref>

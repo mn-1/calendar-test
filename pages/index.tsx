@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Grid } from '@mui/material';
 
 const Home: NextPage = () => {
   return (
@@ -13,9 +13,22 @@ const Home: NextPage = () => {
           mt: '4rem',
         }}
       >
-        <Link href='/sample/client4' passHref>
-          <Button variant='outlined'>顧客ページ</Button>
-        </Link>
+        <Grid
+          container
+          direction='column'
+          justifyContent='flex-start'
+          alignItems='flex-start'
+        >
+          <Link href='/sample/client4' passHref>
+            <Button variant='outlined'>顧客ページver1</Button>
+          </Link>
+          <Link href='/sample/client1' passHref>
+            <Button variant='outlined'>顧客ページver2</Button>
+          </Link>
+          <Link href='/sample/operator2' passHref>
+            <Button variant='outlined'>オペレーターページver1</Button>
+          </Link>
+        </Grid>
       </Container>
     </>
   );

@@ -5,11 +5,13 @@
  * dragover：
  * dragenter：
  */
+import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 const UserTable = () => {
   const [users, setUsers] = useState<String[]>([]);
   const [dragIndex, setDragIndex] = useState(null);
+  const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
 
   useEffect(() => {
     (async () => {
@@ -25,9 +27,10 @@ const UserTable = () => {
   const dragStart = (index: any) => {
     console.log('drag start', index);
     setDragIndex(index);
+    setBorderColor('#0000FF');
   };
 
-  // dragEnterはドラッグしている要素が別の要素に被った時
+  // dragEnterはドラッグしている要素が別の要素に被った時e
   const dragEnter = (index: any) => {
     console.log('dragIndex', dragIndex); // ドラッグしている要素のindex
     console.log('dragEnter', index); // 被った要素のindex
@@ -53,10 +56,15 @@ const UserTable = () => {
     console.log('drop');
     // 並び替え後のusers配列をサーバに送信する処理を追加する
     setDragIndex(null);
+    setBorderColor('#DCDCDC');
   };
 
   return (
-    <div style={{ margin: '2em' }}>
+    <Stack
+      border={1}
+      borderColor={borderColor}
+      sx={{ borderWidth: '4px', m: '2em' }}
+    >
       <table>
         <thead>
           <tr>
@@ -87,7 +95,7 @@ const UserTable = () => {
           ))}
         </tbody>
       </table>
-    </div>
+    </Stack>
   );
 };
 

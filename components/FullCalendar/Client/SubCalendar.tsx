@@ -1,33 +1,37 @@
-import { useEffect, useState, createRef } from 'react';
+import { useEffect, useState, createRef, RefObject } from 'react';
 // MUI
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Grid, Container, Typography, Button } from '@mui/material';
+import { Grid, Container, Typography, Button, Stack } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid'; // 月表示を可能にする
-import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が[ 選択 ]きるようになる
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
-import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
+import listPlugin from '@fullcalendar/list';
 import { EventSourceInput } from '@fullcalendar/core';
 import { EventContentArg } from '@fullcalendar/core';
 import { CalendarApi } from '@fullcalendar/core';
 
 type Props = {
-  initialEvents: EventSourceInput;
+  subCalendarRef: RefObject<FullCalendar>;
+  handleNavLinkDayClick: Function;
 };
 
-export default function Month({ initialEvents }: Props) {
-  const calendarRef = createRef<FullCalendar>();
+export const SubCalendar = ({
+  subCalendarRef,
+  handleNavLinkDayClick,
+}: Props) => {
   const [calApi, setCalApi] = useState<CalendarApi>();
+  const [title, setTitle] = useState<string | undefined>();
 
   useEffect(() => {
-    if (calendarRef.current) {
-      const calApi = calendarRef.current.getApi();
-
+    if (subCalendarRef.current) {
+      const calApi = subCalendarRef.current.getApi();
+      setTitle(calApi.view.title);
       setCalApi(calApi);
     }
-  }, [calendarRef]);
+  }, [subCalendarRef]);
 
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
     if (!calApi) return;
@@ -37,6 +41,8 @@ export default function Month({ initialEvents }: Props) {
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
+
+    setTitle(calApi.view.title);
   };
 
   return (
@@ -45,7 +51,7 @@ export default function Month({ initialEvents }: Props) {
       sx={{
         width: '100%',
         height: '100%',
-        mt: '4rem',
+        my: '2rem',
       }}
     >
       <header>
@@ -55,7 +61,7 @@ export default function Month({ initialEvents }: Props) {
           justifyContent='space-between'
           alignItems='center'
         >
-          <Typography variant='h6'>{calApi?.view.title}</Typography>
+          <Typography variant='h6'>{title}</Typography>
           <Grid item>
             <Button onClick={(): void => handleDateChange('prev')}>
               <ChevronLeftIcon />
@@ -66,23 +72,27 @@ export default function Month({ initialEvents }: Props) {
           </Grid>
         </Grid>
       </header>
-      <FullCalendar
-        ref={calendarRef}
-        initialEvents={initialEvents}
-        locales={[jaLocale]}
-        locale='ja'
-        contentHeight='50vh'
-        plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
-        initialView='dayGridMonth'
-        eventContent={renderEventContent}
-        //
-        selectable={true}
-        weekends={true}
-        headerToolbar={false}
-      />
+      <Stack sx={{ border: 1, borderColor: '' }}>
+        <FullCalendar
+          ref={subCalendarRef}
+          locales={[jaLocale]}
+          locale='ja'
+          contentHeight='50vh'
+          plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
+          initialView='dayGridMonth'
+          eventContent={renderEventContent}
+          //
+          selectable={true}
+          weekends={true}
+          headerToolbar={false}
+          navLinks={true}
+          //
+          navLinkDayClick={(date) => handleNavLinkDayClick(date)}
+        />
+      </Stack>
     </Container>
   );
-}
+};
 
 // カレンダーに表示する内容
 function renderEventContent() {

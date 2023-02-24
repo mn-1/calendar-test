@@ -1,18 +1,27 @@
-import React, { useEffect, useRef } from 'react';
+import React, { MutableRefObject, useEffect, useRef } from 'react';
 import { Draggable } from '@fullcalendar/interaction';
 import Button from '@mui/material/Button';
+import { Box } from '@mui/material';
 
-export const ExternalEvent = ({ event }: any) => {
-  const elRef = useRef(null);
+type Props = {
+  event: any;
+};
+
+export const ExternalEvent = ({ event }: Props) => {
+  const elRef = useRef<any>(null);
 
   useEffect(() => {
     if (!elRef.current) return;
+
     const draggable = new Draggable(elRef.current, {
-      eventData: function () {
+      eventData: function (e) {
         console.log('external Event', event);
         return { ...event, create: true };
       },
     });
+    elRef.current.onDragStart = () => {
+      console.log('drag start');
+    };
 
     // a cleanup function
     return () => draggable.destroy();

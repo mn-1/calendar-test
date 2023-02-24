@@ -9,6 +9,8 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { events, eventConstraints, resources } from '../lib/data';
+import { Container, Grid } from '@mui/material';
+import Header from '../components/Header/Header';
 
 export default function App() {
   const calendarRef = createRef<FullCalendar>();
@@ -84,48 +86,49 @@ export default function App() {
     }
   };
 
-  const businessHours = {
-    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-    startTime: '8:00:00',
-    endTime: '18:00:00',
-  };
-
   return (
-    <div className='App'>
-      <FullCalendar
-        events={events}
-        businessHours={businessHours}
-        plugins={[
-          resourceTimeGridPlugin,
-          interactionPlugin,
-          //   momentTimezonePlugin,
-          scrollGridPlugin,
-        ]}
-        headerToolbar={{
-          start: 'title',
-          center: 'futureDay',
-          end: 'today prev,next',
-        }}
-        initialView='resourceTimeGridDay'
-        //
-        allDaySlot={false}
-        editable={true}
-        eventResizableFromStart={true}
-        expandRows={true}
-        nowIndicator={true}
-        selectable={true}
-        slotEventOverlap={false}
-        //
-        dateClick={handleDateClick}
-        eventClick={handleEventClick}
-        // eventConstraint={businessHours}
-        // eventResizeStart={handleResizeStart}
-        // eventResizeStop={handleResizeStop}
-        ref={calendarRef}
-        resources={resources}
-        slotLabelInterval={{ hour: 1 }}
-        slotDuration={{ minute: 30 }}
-      />
-    </div>
+    <>
+      {/* <Header userType='client' /> */}
+      <Container
+      // maxWidth='xl'
+      // sx={{
+      //   width: '100%',
+      //   height: '100%',
+      // }}
+      >
+        <FullCalendar
+          events={events}
+          plugins={[
+            resourceTimeGridPlugin,
+            interactionPlugin,
+            scrollGridPlugin,
+          ]}
+          headerToolbar={{
+            start: 'title',
+            center: 'futureDay',
+            end: 'today prev,next',
+          }}
+          initialView='resourceTimeGridDay'
+          //
+          allDaySlot={false}
+          editable={true}
+          eventResizableFromStart={true}
+          expandRows={true}
+          nowIndicator={true}
+          selectable={true}
+          slotEventOverlap={false}
+          //
+          dateClick={handleDateClick}
+          eventClick={handleEventClick}
+          // eventConstraint={businessHours}
+          // eventResizeStart={handleResizeStart}
+          // eventResizeStop={handleResizeStop}
+          ref={calendarRef}
+          resources={resources}
+          slotLabelInterval={{ hour: 1 }}
+          slotDuration={{ minute: 30 }}
+        />
+      </Container>
+    </>
   );
 }

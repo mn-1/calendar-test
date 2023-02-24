@@ -6,11 +6,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { CalendarApi } from '@fullcalendar/core';
 
-export type Props = {
+type Props = {
   calendarRef: RefObject<FullCalendar>;
-
   handleViewChange: Function;
-  today: 'month' | 'week' | 'day';
+  today: 'week' | 'day' | 'day2' | 'list';
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
@@ -52,7 +51,9 @@ export const CalendarHeader = (props: Props): ReactElement => {
           </Button>
           <Button onClick={(): void => handleDateChange('today')}>
             {today === 'day' && '今日'}
+            {today === 'day2' && '今日'}
             {today === 'week' && '今週'}
+            {today === 'list' && '今月'}
           </Button>
           <Button onClick={(): void => handleDateChange('next')}>
             <ChevronRightIcon />
@@ -73,6 +74,18 @@ export const CalendarHeader = (props: Props): ReactElement => {
             variant={today === 'day' ? 'contained' : 'outlined'}
           >
             日
+          </Button>
+          <Button
+            onClick={() => handleViewChange('day2')}
+            variant={today === 'day2' ? 'contained' : 'outlined'}
+          >
+            日
+          </Button>
+          <Button
+            onClick={() => handleViewChange('list')}
+            variant={today === 'list' ? 'contained' : 'outlined'}
+          >
+            リスト
           </Button>
         </ButtonGroup>
       </Grid>

@@ -25,17 +25,17 @@ import interactionPlugin, {
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, externalEvents } from '../../lib/data';
-import EventControl from '../../lib/eventControl-3';
-import { divideColor } from '../../lib/colorControl';
+import { resources, externalEvents } from '../../../lib/data';
+import EventControl from '../../../lib/eventControl-3';
+import { divideColor } from '../../../lib/colorControl';
 // components
-import Header from '../../components/Header/Header';
-import ScheduleInfoDialog from '../../components/Dialog/Client/ScheduleInfoDialog';
-import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
-import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
-import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
-import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
-import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
+import Header from '../../Header/Header';
+import ScheduleInfoDialog from '../../Dialog/Client/ScheduleInfoDialog';
+import DeleteSnackbar from '../../Snackbar/DeleteSnackbar';
+import EditScheduleDialog from '../../Dialog/Client/EditScheduleDialog';
+import { ExternalEvent } from '../../FullCalendar/Client/ExternalEvents';
+import { CalendarHeader } from '../../FullCalendar/Client/Header';
+import FailedSnackbar from '../../Snackbar/FailedSnackbar';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
@@ -45,19 +45,6 @@ const ClientCalendar = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
   const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
-
-  const {
-    countId,
-    myEvents,
-    eventInfo,
-    editDialogOpen,
-    setEditDialogOpen,
-    editSchedule,
-    setEventInfo,
-    getEvents,
-    setCountId,
-    setMyEvents,
-  } = EventControl();
 
   useEffect(() => {
     getEvents();
@@ -82,41 +69,6 @@ const ClientCalendar = () => {
     eventInfo.event.remove();
     setInfoDialogOpen(false);
     setDeleteSnackbarOpen(true);
-  };
-
-  /**
-   * イベントを削除したのを取り消す
-   */
-  const undoDelete = () => {
-    const calApi = calendarRef.current?.getApi();
-    if (!eventInfo || !calApi) return;
-
-    const {
-      id,
-      borderColor,
-      backgroundColor,
-      title,
-      startStr,
-      endStr,
-      extendedProps: { memo, operatorName, avatar },
-    } = eventInfo.event;
-
-    calApi.addEvent({
-      id,
-      title,
-      start: startStr,
-      end: endStr,
-      resourceId: eventInfo.event.getResources()[0]._resource.id,
-      extendedProps: {
-        memo: memo ?? '',
-        operatorName: operatorName ?? '',
-        avatar: avatar ?? '',
-      },
-      backgroundColor,
-      borderColor,
-    });
-
-    setDeleteSnackbarOpen(false);
   };
 
   /**
@@ -204,9 +156,6 @@ const ClientCalendar = () => {
   let calendarSize: any = 12;
   if (editMode) calendarSize = 9;
 
-  let calendarBorderColor: string = '#DCDCDC';
-  // if (editMode) calendarBorderColor = '#4169E1';
-
   return (
     <>
       <Header userType='client' />
@@ -265,7 +214,6 @@ const ClientCalendar = () => {
               <Stack
                 sx={{
                   border: 1,
-                  borderColor: calendarBorderColor,
                   borderWidth: 3,
                 }}
               >
@@ -309,7 +257,7 @@ const ClientCalendar = () => {
                   drop={drop}
                   eventDragStart={(arg) => {
                     console.log('ドラッグスタート');
-                    calendarBorderColor = '#4169E1';
+
                     const calApi = calendarRef.current?.getApi();
                     if (!calApi || !editMode) arg.jsEvent.preventDefault();
                   }}
@@ -335,32 +283,6 @@ const ClientCalendar = () => {
         </Grid>
         {/* utils ↓ */}
         {/* defalutValueを動的にしないためにレンダリング少なくしている */}
-
-        {eventInfo && editDialogOpen && (
-          <EditScheduleDialog
-            open={editDialogOpen}
-            eventInfo={eventInfo}
-            handleClose={() => setEditDialogOpen(false)}
-            editSchedule={editSchedule}
-          />
-        )}
-        <ScheduleInfoDialog
-          editMode={!editMode}
-          eventInfo={eventInfo}
-          open={infoDialogOpen}
-          delete={deleteEvent}
-          edit={() => {
-            setEditDialogOpen(true);
-            setInfoDialogOpen(false);
-          }}
-          handleClose={() => setInfoDialogOpen(false)}
-        />
-        <DeleteSnackbar
-          open={deleteSnackbarOpen}
-          undoDelete={undoDelete}
-          handleClose={() => setDeleteSnackbarOpen(false)}
-        />
-        {/* utils ↑ */}
       </Container>
     </>
   );

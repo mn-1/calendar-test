@@ -2,6 +2,9 @@
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
 import { Box, Container, Grid, Typography } from '@mui/material';
+import TitleIcon from '@mui/icons-material/Title';
+import FaceOutlinedIcon from '@mui/icons-material/FaceOutlined';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -28,15 +31,13 @@ import EventControl from '../../lib/operatorEventControl';
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
 import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
-import Month from '../../components/FullCalendar/Operator/Month';
+import Month from '../../components/FullCalendar/Operator/SubCalendar';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 
 const SampleCalendar: React.FC = (props) => {
   const calendarRef = createRef<FullCalendar>();
 
-  const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
-  const [edit, setEdit] = useState<boolean>(false);
 
   const {
     myEvents,
@@ -99,7 +100,7 @@ const SampleCalendar: React.FC = (props) => {
         >
           {myEvents.length != 0 && (
             <Grid item sm={3}>
-              <Month initialEvents={myEvents} />
+              {/* <Month initialEvents={myEvents} /> */}
             </Grid>
           )}
           <Grid item sm={9}>
@@ -126,14 +127,13 @@ const SampleCalendar: React.FC = (props) => {
                   interactionPlugin,
                   listPlugin,
                   resourceTimeGridPlugin,
-                  resourceTimelinePlugIn,
                   interactionPlugin,
                   scrollGridPlugin,
                   dayGridPlugin,
                   timeGridPlugin,
                   multiMonthPlugin,
                 ]}
-                initialView='timeGridWeek'
+                initialView='resourceTimeGrid'
                 eventContent={renderEventContent}
                 //
                 droppable={false}
@@ -197,14 +197,30 @@ function renderEventContent(eventContent: EventContentArg) {
     },
   } = eventContent;
   return (
-    <Typography>
-      {timeText}
-      <br />
-      タイトル：{title}
-      <br />
-      アバター：{avatar}
-      <br />
-      メモ：{memo}
-    </Typography>
+    <>
+      <Typography>{timeText}</Typography>
+
+      {title && (
+        <>
+          タイトル
+          <br />
+          <Typography>{title}</Typography>
+        </>
+      )}
+      {avatar && (
+        <>
+          アバター
+          <br />
+          <Typography>{avatar}</Typography>
+        </>
+      )}
+      {memo && (
+        <>
+          メモ
+          <br />
+          <Typography>{memo}</Typography>
+        </>
+      )}
+    </>
   );
 }

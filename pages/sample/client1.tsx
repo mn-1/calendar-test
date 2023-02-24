@@ -11,12 +11,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import resourceTimelinePlugIn from '@fullcalendar/resource-timeline';
 import {
-  EventApi,
-  DateSelectArg,
   EventClickArg,
   EventContentArg,
   EventDropArg,
-  CalendarApi,
 } from '@fullcalendar/core';
 import interactionPlugin, {
   DropArg,
@@ -36,15 +33,18 @@ import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialo
 import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
 import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
+import { SubCalendar } from '../../components/FullCalendar/Client/SubCalendar';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
+  const subCalendarRef = createRef<FullCalendar>();
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
   const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
+  const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
 
   const {
     countId,
@@ -155,12 +155,14 @@ const ClientCalendar = () => {
    */
   const drop = (arg: DropArg) => {
     console.log('drop info', arg);
+    setBorderColor('#DCDCDC');
   };
 
   /**
    * 外部のイベント受付
    */
   const handleEventReceive = (arg: EventReceiveArg) => {
+    console.log('event receive');
     const start = arg.event.start;
     let end = start;
 
@@ -201,11 +203,18 @@ const ClientCalendar = () => {
     }
   };
 
+  /**
+   * サブカレンダーの日付選択
+   */
+  const handleNavLinkDayClick = (date: Date) => {
+    const mainCalApi = calendarRef.current?.getApi();
+    if (!mainCalApi) return console.log('calApi none');
+    mainCalApi.changeView('resourceTimeGridDay', date);
+    setToday('day');
+  };
+
   let calendarSize: any = 12;
   if (editMode) calendarSize = 9;
-
-  let calendarBorderColor: string = '#DCDCDC';
-  // if (editMode) calendarBorderColor = '#4169E1';
 
   return (
     <>
@@ -213,8 +222,6 @@ const ClientCalendar = () => {
       <Typography>
         ・シフトをクリックしたときはダイアログが出るが、このときも参照だけにして削除と編集は無効にする
         <br />
-        ・予想した動線：月（または週）表示に切り替える →
-        予定を追加したい日を選択 → 日表示になる → 予定を追加する → 終了 <br />
         ・編集するボタン押した後(日表示) <br />
         　　・既存のシフトの位置変更
         <br />
@@ -222,6 +229,9 @@ const ClientCalendar = () => {
         <br />
         　　・新しくシフトを登録できる、シフトをクリックで追加情報を登録できる
         <br />
+        　　・30分ごとの表示で5分単位の選択が可能
+        <br />
+        　　・内部のイベントをドラッグ、リサイズ中に外枠をブルー（外部イベントドラッグ中は実装途中）
       </Typography>
       <Container
         maxWidth={false}
@@ -242,10 +252,14 @@ const ClientCalendar = () => {
           {editMode && (
             <Grid item sm={3} sx={{ px: '1rem' }}>
               <Grid container direction='column'>
+                <SubCalendar
+                  subCalendarRef={subCalendarRef}
+                  handleNavLinkDayClick={handleNavLinkDayClick}
+                />
                 {externalEvents.map((event) => (
                   <ExternalEvent
-                    key={event.extendedProps.Username}
                     event={event}
+                    key={event.extendedProps.Username}
                   />
                 ))}
               </Grid>
@@ -265,8 +279,8 @@ const ClientCalendar = () => {
               <Stack
                 sx={{
                   border: 1,
-                  borderColor: calendarBorderColor,
                   borderWidth: 3,
+                  borderColor: borderColor,
                 }}
               >
                 <FullCalendar
@@ -277,9 +291,10 @@ const ClientCalendar = () => {
                   eventColor='#6A5ACD'
                   contentHeight='100vh'
                   resources={resources}
-                  slotDuration='00:30:00'
                   slotMinTime='05:00:00'
                   slotMaxTime='23:00:00'
+                  slotDuration='00:30:00'
+                  snapDuration='00:05:00'
                   plugins={[
                     resourceTimeGridPlugin,
                     resourceTimelinePlugIn,
@@ -306,13 +321,12 @@ const ClientCalendar = () => {
                   slotEventOverlap={true}
                   navLinks={true}
                   //
+                  eventResizeStart={() => setBorderColor('#0000FF')}
+                  eventResizeStop={() => setBorderColor('#DCDCDC')}
+                  eventDragStart={() => setBorderColor('#0000FF')}
+                  eventDragStop={() => setBorderColor('#DCDCDC')}
+                  //
                   drop={drop}
-                  eventDragStart={(arg) => {
-                    console.log('ドラッグスタート');
-                    calendarBorderColor = '#4169E1';
-                    const calApi = calendarRef.current?.getApi();
-                    if (!calApi || !editMode) arg.jsEvent.preventDefault();
-                  }}
                   eventReceive={handleEventReceive}
                   eventClick={handleEventClick}
                   eventResize={handleEventResize}

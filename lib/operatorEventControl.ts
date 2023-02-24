@@ -1,7 +1,7 @@
 // react
 import { useState } from 'react';
 // lib
-import { resources, events } from './data';
+import { resources, eventsOperator } from './data';
 import { divideColor } from './colorControl';
 import { editMemoInfo } from './inputDataControl';
 // Fullcalendar
@@ -23,17 +23,17 @@ export default function EventControl() {
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const getEvents = () => {
     // 背景色を変更してから収納
-    for (let i = 0; i < events.length; i++) {
-      const item = events[i];
+    for (let i = 0; i < eventsOperator.length; i++) {
+      const item = eventsOperator[i];
 
       const { color } = divideColor(item.start, item.end);
       item.color = color;
     }
 
-    const add = events.length;
+    const add = eventsOperator.length;
     setCountId(add);
 
-    setMyEvents(events);
+    setMyEvents(eventsOperator);
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー

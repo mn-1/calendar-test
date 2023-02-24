@@ -20,7 +20,7 @@ export const resources = [
 
 const date = new Date();
 
-// Eイベント一覧
+// イベント一覧
 export const events = [
   {
     id: '1',
@@ -248,5 +248,86 @@ export const externalEvents = [
     },
     color: '',
     id: '',
+  },
+];
+
+export const eventsOperator = [
+  {
+    id: '1',
+    title: '90 Minute Massage',
+    resourceId: '1',
+    start: new Date('2023/2/11 15:00').getTime(),
+    end: new Date('2023/2/11 20:00').getTime(),
+    extendedProps: {
+      memo: '遅れるかも',
+      operatorName: 'オペレーターAさん',
+      avatar: 'アバターE',
+    },
+    color: '',
+  },
+  {
+    id: '2',
+    title: 'Haircut',
+    resourceId: '2',
+    start: new Date('2023/3/21 15:00').getTime(),
+    end: new Date('2023/3/21 20:00').getTime(),
+    extendedProps: {
+      memo: '',
+      operatorName: 'オペレーターAさん',
+      avatar: 'アバターE',
+    },
+    color: '',
+  },
+  {
+    id: '3',
+    title: 'タイトル',
+    resourceId: '3',
+    start: new Date('2023/2/16 15:00').getTime(),
+    end: new Date('2023/2/16 20:00').getTime(),
+    extendedProps: {
+      memo: '遅れるかも',
+      operatorName: 'オペレーターAさん',
+      avatar: 'アバターE',
+    },
+    color: '',
+  },
+  {
+    id: '4',
+    title: '緊急',
+    resourceId: '2',
+    start: new Date('2023/2/21 15:00').getTime(),
+    end: new Date('2023/2/21 20:00').getTime(),
+    extendedProps: {
+      memo: '遅れるかも',
+      operatorName: 'オペレーターAさん',
+      avatar: 'アバターK',
+    },
+    color: '',
+  },
+  {
+    id: '5',
+    title: '緊急',
+    resourceId: '2',
+    start: new Date('2023/2/25 10:00').getTime(),
+    end: new Date('2023/2/25 20:00').getTime(),
+    extendedProps: {
+      memo: '遅れるかも',
+      operatorName: 'オペレーターAさん',
+      avatar: 'アバターL',
+    },
+    color: '',
+  },
+  {
+    id: '6',
+    title: '延期２回目',
+    resourceId: '3',
+    start: new Date('2023/3/01 10:00').getTime(),
+    end: new Date('2023/3/01 20:00').getTime(),
+    extendedProps: {
+      memo: '遅れるかも',
+      operatorName: 'オペレーターAさん',
+      avatar: 'アバターX',
+    },
+    color: '',
   },
 ];

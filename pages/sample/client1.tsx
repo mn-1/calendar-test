@@ -250,18 +250,18 @@ const ClientCalendar = () => {
           }}
         >
           {editMode && (
-            <Grid item sm={3} sx={{ px: '1rem' }}>
+            <Grid item sm={3} sx={{ px: '1rem', mt: '16vh' }}>
               <Grid container direction='column'>
-                <SubCalendar
-                  subCalendarRef={subCalendarRef}
-                  handleNavLinkDayClick={handleNavLinkDayClick}
-                />
                 {externalEvents.map((event) => (
                   <ExternalEvent
                     event={event}
                     key={event.extendedProps.Username}
                   />
                 ))}
+                <SubCalendar
+                  subCalendarRef={subCalendarRef}
+                  handleNavLinkDayClick={handleNavLinkDayClick}
+                />
               </Grid>
             </Grid>
           )}
@@ -321,10 +321,18 @@ const ClientCalendar = () => {
                   slotEventOverlap={true}
                   navLinks={true}
                   //
-                  eventResizeStart={() => setBorderColor('#0000FF')}
-                  eventResizeStop={() => setBorderColor('#DCDCDC')}
-                  eventDragStart={() => setBorderColor('#0000FF')}
-                  eventDragStop={() => setBorderColor('#DCDCDC')}
+                  eventResizeStart={() => {
+                    if (editMode) setBorderColor('#0000FF');
+                  }}
+                  eventResizeStop={() => {
+                    if (editMode) setBorderColor('#DCDCDC');
+                  }}
+                  eventDragStart={() => {
+                    if (editMode) setBorderColor('#0000FF');
+                  }}
+                  eventDragStop={() => {
+                    if (editMode) setBorderColor('#DCDCDC');
+                  }}
                   //
                   drop={drop}
                   eventReceive={handleEventReceive}

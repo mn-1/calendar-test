@@ -29,7 +29,7 @@ type Props = {
   eventInfo: EventClickArg;
 };
 
-const resetValues: scheduleDataInfo = {
+const resetValues = {
   title: '',
   memo: '',
   avatar: '',

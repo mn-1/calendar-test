@@ -255,7 +255,7 @@ const ClientCalendar = () => {
             variant='contained'
             sx={{ mb: '1rem', mx: '0.5rem' }}
           >
-            シフトを追加
+            予定を追加
           </Button>
         )}
         <Grid

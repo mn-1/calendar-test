@@ -9,21 +9,13 @@ import { CalendarApi } from '@fullcalendar/core';
 export type Props = {
   calendarRef: RefObject<FullCalendar>;
   editMode: boolean;
-  setEditMode: Function;
-  editButtonDisable: boolean;
   handleViewChange: Function;
   today: 'month' | 'week' | 'day';
+  setToday: Function;
 };
 
 export const MobileHeader = (props: Props): ReactElement => {
-  const {
-    calendarRef,
-    editMode,
-    setEditMode,
-    editButtonDisable,
-    handleViewChange,
-    today,
-  } = props;
+  const { calendarRef, editMode, handleViewChange, today, setToday } = props;
 
   const [title, setTitle] = useState<string>();
   const [calApi, setCalApi] = useState<CalendarApi>();
@@ -39,11 +31,11 @@ export const MobileHeader = (props: Props): ReactElement => {
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
     if (!calApi) return;
 
-    console.log(calApi.getDate(), new Date());
-
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
+
+    setToday({ type: today, date: calApi.getDate() });
   };
 
   return (
@@ -52,15 +44,14 @@ export const MobileHeader = (props: Props): ReactElement => {
       direction='column'
       justifyContent='center'
       alignItems='center'
-      sx={{ width: { xs: '100vw' } }}
+      sx={{ my: '1.2rem', width: '100%' }}
     >
-      <Typography sx={{ fontSize: '1.2rem' }}>{title}</Typography>
+      <Typography sx={{ fontSize: '1rem' }}>{title}</Typography>
       <Grid
         container
         direction='row'
         justifyContent='space-between'
         alignItems='center'
-        sx={{ mb: '1rem', width: '100%' }}
       >
         <Grid item xs={6}>
           <ButtonGroup variant='text'>

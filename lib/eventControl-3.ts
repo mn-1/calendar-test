@@ -18,6 +18,8 @@ export default function EventControl() {
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   // 予定編集ダイアログopen
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+  // カレンダー
+  // const [calApi, setCalApi] = useState<CalendarApi | null>(null);
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
@@ -54,21 +56,57 @@ export default function EventControl() {
     setEditDialogOpen(false);
   };
 
+  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+   * 予定登録
+   * @param values 
+   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+  const addSchedule = async (values: scheduleDataInfo, calApi: CalendarApi) => {
+    let start = values.date;
+    start = new Date(start.setHours(0));
+    let end = new Date(start);
+    end = new Date(end.setHours(end.getHours() + 2));
+
+    const { color } = divideColor(start.getTime(), end.getTime());
+
+    const resource = resources.find((item) => {
+      if (item.title === values.locationName) return item;
+    });
+
+    if (!resource) return console.log('resorce none');
+    if (!calApi) return console.log('api none');
+
+    calApi.addEvent({
+      id: `${countId}`,
+      title: values.title,
+      start,
+      end,
+      resourceId: `${resource.id}`,
+      extendedProps: {
+        memo: values.memo,
+        operatorName: values.operatorName,
+        avatar: values.avatar,
+      },
+      allDay: false,
+      editable: true,
+      color,
+    });
+
+    setAddDialogOpen(false);
+  };
+
   return {
     countId,
     myEvents,
     addDialogOpen,
     eventInfo,
     editDialogOpen,
-    // selectInfo,
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
-    // setSelectInfo,
+    addSchedule,
     getEvents,
     setCountId,
     setMyEvents,
-
     setAddDialogOpen,
   };
 }

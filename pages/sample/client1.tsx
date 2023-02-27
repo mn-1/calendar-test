@@ -374,8 +374,9 @@ export default ClientCalendar;
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {
   return (
-    <Typography>
+    <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
       {eventContent.timeText}
+      <br />
       {eventContent.event.extendedProps.operatorName}
     </Typography>
   );

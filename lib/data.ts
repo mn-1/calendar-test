@@ -3,18 +3,27 @@ export const resources = [
   {
     id: '1', // ここstring
     title: '盛岡本社',
+    width: '200rem',
   },
   {
     id: '2',
     title: '川崎支社',
+    width: '200rem',
   },
   {
     id: '3',
     title: '高松支社',
+    width: '200rem',
   },
   {
     id: '4',
     title: '美唄支社',
+    width: '200px',
+  },
+  {
+    id: '5',
+    title: '仙台支社',
+    width: '200px',
   },
 ];
 

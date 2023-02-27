@@ -1,26 +1,47 @@
 import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
-import TextField from '@mui/material/TextField';
+import { TextField, TextFieldProps } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { styled } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useFormContext, Controller, Control } from 'react-hook-form';
+import { scheduleDataInfo } from '../../lib/inputDataControl';
 
 type Props = {
-  date: Dayjs;
-};
+  defaultValue: Date;
+  control: Control<scheduleDataInfo>;
+} & TextFieldProps;
 
-export default function DatePickerForm({ date }: Props) {
-  const [value, setValue] = useState<Dayjs | null>(dayjs(date));
+export default function DatePickerForm({ defaultValue, control }: Props) {
+  const {
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-        inputFormat='YYYY/MM/DD'
-        value={value}
-        onChange={(newValue) => setValue(newValue)}
-        renderInput={(params) => (
-          <CssTextField {...params} sx={{ mb: '0.5rem' }} />
+      <Controller
+        defaultValue={defaultValue}
+        control={control}
+        name='date'
+        render={({ field: { onChange, value } }) => (
+          <DatePicker
+            inputFormat='YYYY/MM/DD'
+            value={value}
+            onChange={onChange}
+            renderInput={(params) => (
+              <CssTextField
+                {...params}
+                sx={{ mb: '0.5rem' }}
+                error={!!errors['date']}
+                helperText={
+                  errors['date']
+                    ? (errors['date']?.message as unknown as string)
+                    : ''
+                }
+              />
+            )}
+          />
         )}
       />
     </LocalizationProvider>

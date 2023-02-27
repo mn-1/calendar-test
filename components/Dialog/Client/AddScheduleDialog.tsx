@@ -23,7 +23,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
 import { scheduleDataInfo } from '../../../lib/inputDataControl';
-import { SelectInfoType } from '../../../lib/eventControl-2';
 
 type Props = {
   open: boolean;
@@ -31,12 +30,15 @@ type Props = {
   location: any;
   handleClose: VoidFunction;
   addSchedule: Function;
+  date: Date;
 };
 
 export default function AddScheduleDialog(props: Props) {
-  const { open, handleClose, addSchedule, operator, location } = props;
+  const { open, handleClose, addSchedule, operator, location, date } = props;
 
-  const defaultValues: scheduleDataInfo = {
+  const resetValues = {
+    locationName: '',
+    operatorName: '',
     title: '',
     memo: '',
     avatar: '',
@@ -57,14 +59,16 @@ export default function AddScheduleDialog(props: Props) {
   const onAdd: SubmitHandler<scheduleDataInfo> = async (
     values: scheduleDataInfo
   ) => {
+    console.log('add values', values);
+
     addSchedule(values);
-    reset(defaultValues);
+    reset(resetValues);
   };
 
   // キャンセルボタンアクション
   const handleCancelButton = () => {
     handleClose();
-    reset(defaultValues);
+    reset(resetValues);
   };
 
   return (
@@ -83,7 +87,7 @@ export default function AddScheduleDialog(props: Props) {
             予定を追加
           </Typography>
         </Grid>
-        <DatePickerForm date={dayjs(new Date())} />
+
         <FormProvider {...useFormMethods}>
           <Box
             component='form'
@@ -91,15 +95,16 @@ export default function AddScheduleDialog(props: Props) {
             autoComplete='off'
             onSubmit={handleSubmit(onAdd)}
           >
-            {/* <AddFormSelect
-                operator={operator}
-                location={location}
-                control={control}
-                errors={errors}
-                locationDefaultValue={selectInfo.resourceTitle ?? ''}
-                operatorDefaultValue=''
-              /> */}
+            {date && <DatePickerForm defaultValue={date} control={control} />}
 
+            <AddFormSelect
+              operator={operator}
+              location={location}
+              control={control}
+              errors={errors}
+              locationDefaultValue=''
+              operatorDefaultValue=''
+            />
             <Typography color='secondary'>タイトル</Typography>
             <EditFormInput
               defaultValue=''

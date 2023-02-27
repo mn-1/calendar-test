@@ -47,24 +47,30 @@ import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
 import { SubCalendar } from '../../components/FullCalendar/Client/SubCalendar';
 import { MobileHeader } from '../../components/FullCalendar/Client/MobileHeader';
 import AddScheduleDialog from '../../components/Dialog/Client/AddScheduleDialog';
+import { scheduleDataInfo } from '../../lib/inputDataControl';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
   const subCalendarRef = createRef<FullCalendar>();
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
-  const [addScheduleDialogOpen, setAddScheduleDialogOpen] = useState(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
-  const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
   const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
+  const [today, setToday] = useState<{
+    type: 'month' | 'week' | 'day';
+    date: Date;
+  }>({ type: 'day', date: new Date(new Date().toLocaleDateString()) });
 
   const {
     countId,
     myEvents,
     eventInfo,
     editDialogOpen,
+    addDialogOpen,
+    addSchedule,
+    setAddDialogOpen,
     setEditDialogOpen,
     editSchedule,
     setEventInfo,
@@ -75,6 +81,10 @@ const ClientCalendar = () => {
 
   useEffect(() => {
     getEvents();
+
+    if (calendarRef.current) {
+      const calApi = calendarRef.current.getApi();
+    }
     // console.log('これは表示してからgetできるのか',calendarRef.current?.getApi());
   }, []);
 
@@ -203,17 +213,17 @@ const ClientCalendar = () => {
     if (direction === 'month') {
       calApi.changeView('dayGridMonth');
       setEditButtonDisable(true);
-      setToday('month');
+      setToday({ ...today, type: 'month' });
     }
     if (direction === 'week') {
       calApi.changeView('timeGridWeek');
       setEditButtonDisable(true);
-      setToday('week');
+      setToday({ ...today, type: 'week' });
     }
     if (direction === 'day') {
       calApi.changeView('resourceTimeGridDay');
       setEditButtonDisable(false);
-      setToday('day');
+      setToday({ ...today, type: 'day' });
     }
   };
 
@@ -224,49 +234,53 @@ const ClientCalendar = () => {
     const mainCalApi = calendarRef.current?.getApi();
     if (!mainCalApi) return console.log('calApi none');
     mainCalApi.changeView('resourceTimeGridDay', date);
-    setToday('day');
+    setToday({ ...today, type: 'day' });
   };
-
-  // カレンダーに表示する内容
-  function renderEventContent(eventContent: EventContentArg) {
-    const mainCalApi = calendarRef.current?.getApi();
-    if (mainCalApi)
-      return (
-        <Grid container direction='column' alignItems='center'>
-          {mainCalApi.view.type === 'dayGridMonth' ? (
-            <CircleIcon sx={{ fontSize: '1rem' }} />
-          ) : (
-            <Typography></Typography>
-          )}
-        </Grid>
-      );
-  }
-
-  let calendarSize: GridSize = 12;
-  if (editMode) calendarSize = 9;
 
   return (
     <>
       <Header userType='client' />
-      <Grid container direction={'row'} sx={{ width: '100%', height: '100%' }}>
-        <Grid
-          item
-          md={calendarSize}
-          sx={{
-            px: { md: '1rem' },
+      <Grid container direction='row' sx={{ width: '100%', height: '100%' }}>
+        <MobileHeader
+          today={today.type}
+          setToday={setToday}
+          handleViewChange={handleViewChange}
+          calendarRef={calendarRef}
+          editMode={editMode}
+        />
+        <Button
+          fullWidth
+          variant='contained'
+          disabled={editButtonDisable}
+          sx={{ mb: '1rem', mx: '0.5rem' }}
+          onClick={() => {
+            const calApi = calendarRef.current?.getApi();
+            if (!calApi) return;
+            if (calApi.view.type != 'resourceTimeGridDay') return;
+            setEditMode(!editMode);
           }}
         >
-          <MobileHeader
-            today={today}
-            handleViewChange={handleViewChange}
-            editButtonDisable={editButtonDisable}
-            calendarRef={calendarRef}
-            editMode={editMode}
-            setEditMode={setEditMode}
-          />
+          {editMode ? '編集終了' : '編集する'}
+        </Button>
+        {editMode && (
+          <Button
+            onClick={() => setAddDialogOpen(true)}
+            fullWidth
+            variant='contained'
+            sx={{ mb: '1rem', mx: '0.5rem' }}
+          >
+            <AddCircleTwoToneIcon />
+          </Button>
+        )}
+        <Grid
+          item
+          xs={12}
+          sx={{ mx: { md: '1rem', xs: '0.5rem' }, overflow: 'scroll' }}
+        >
           {myEvents.length != 0 && (
             <Stack
               sx={{
+                minWidth: '800px',
                 border: 1,
                 borderWidth: 3,
                 borderColor: borderColor,
@@ -279,9 +293,10 @@ const ClientCalendar = () => {
                 locale='ja'
                 eventColor='#6A5ACD'
                 contentHeight='100vh'
+                // resourceAreaWidth='300px'
                 resources={resources}
-                slotMinTime='05:00:00'
-                slotMaxTime='23:00:00'
+                slotMinTime='00:00:00'
+                slotMaxTime='24:00:00'
                 slotDuration='00:30:00'
                 snapDuration='00:05:00'
                 plugins={[
@@ -295,7 +310,6 @@ const ClientCalendar = () => {
                 ]}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
-                dayHeaderFormat={{ weekday: 'short' }}
                 //
                 droppable={true}
                 editable={true}
@@ -310,6 +324,8 @@ const ClientCalendar = () => {
                 allDaySlot={false}
                 slotEventOverlap={true}
                 navLinks={true}
+                expandRows={true}
+                stickyHeaderDates={true}
                 //
                 eventResizeStart={() => {
                   if (editMode) setBorderColor('#0000FF');
@@ -338,35 +354,11 @@ const ClientCalendar = () => {
                   if (!calApi) return console.log('calApi none');
                   calApi.changeView('resourceTimeGridDay', date);
                   setEditButtonDisable(false);
-                  setToday('day');
+                  setToday({ type: 'day', date: calApi.getDate() });
                 }}
               />
             </Stack>
           )}
-          {editMode && (
-            <Button
-              onClick={() => setAddScheduleDialogOpen(true)}
-              fullWidth
-              variant='contained'
-              sx={{ mt: '1rem' }}
-            >
-              <AddCircleTwoToneIcon />
-            </Button>
-          )}
-          <Button
-            fullWidth
-            variant='contained'
-            disabled={editButtonDisable}
-            sx={{ my: '1rem' }}
-            onClick={() => {
-              const calApi = calendarRef.current?.getApi();
-              if (!calApi) return;
-              if (calApi.view.type != 'resourceTimeGridDay') return;
-              setEditMode(!editMode);
-            }}
-          >
-            {editMode ? '編集終了' : '編集する'}
-          </Button>
         </Grid>
       </Grid>
       {/* utils ↓ */}
@@ -396,16 +388,37 @@ const ClientCalendar = () => {
         undoDelete={undoDelete}
         handleClose={() => setDeleteSnackbarOpen(false)}
       />
-      <AddScheduleDialog
-        open={addScheduleDialogOpen}
-        handleClose={() => setAddScheduleDialogOpen(false)}
-        operator={operator}
-        location={[]}
-        addSchedule={() => {}}
-      />
+      {today.date && addDialogOpen && (
+        <AddScheduleDialog
+          date={today.date}
+          open={addDialogOpen}
+          handleClose={() => setAddDialogOpen(false)}
+          operator={operator}
+          location={resources}
+          addSchedule={(values: scheduleDataInfo) => {
+            if (calendarRef.current) {
+              const calApi = calendarRef.current.getApi();
+
+              addSchedule(values, calApi);
+            }
+          }}
+        />
+      )}
+
       {/* utils ↑ */}
     </>
   );
 };
 
 export default ClientCalendar;
+
+// カレンダーに表示する内容
+function renderEventContent(eventContent: EventContentArg) {
+  return (
+    <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+      {eventContent.timeText}
+      <br />
+      {eventContent.event.extendedProps.operatorName}
+    </Typography>
+  );
+}

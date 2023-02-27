@@ -96,3 +96,9 @@ https://fullcalendar.io/docs/event-dragging-resizing
 - selectable
   - Allows a user to highlight multiple days or timeslots by clicking and dragging.
   - https://fullcalendar.io/docs/selectable
+- expandRows
+  - If the rows of a given view don’t take up the entire height, they will expand to fit.
+  - https://fullcalendar.io/docs/expandRows
+- stickyHeaderDates
+  - Whether to fix the date-headers at the top of the calendar to the viewport while scrolling
+  - https://fullcalendar.io/docs/stickyHeaderDates

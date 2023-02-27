@@ -15,11 +15,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditFormInput from '../../FormControl/EditFormInput';
 import FailedDialog from '../FailedDialog';
 // validate
-import { scheduleSchema } from '../../../schema/inputSchedule';
+import { editScheduleSchema } from '../../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
-import { scheduleDataInfo } from '../../../lib/inputDataControl';
+import { editScheduleDataInfo } from '../../../lib/inputDataControl';
 import { EventClickArg } from '@fullcalendar/core';
 
 type Props = {
@@ -38,15 +38,15 @@ const resetValues = {
 export default function EditScheduleDialog(props: Props) {
   const { open, eventInfo, handleClose, editSchedule } = props;
 
-  const useFormMethods = useForm<scheduleDataInfo>({
-    resolver: yupResolver(scheduleSchema),
+  const useFormMethods = useForm<editScheduleDataInfo>({
+    resolver: yupResolver(editScheduleSchema),
   });
 
   const { handleSubmit, reset } = useFormMethods;
 
   // 登録ボタンアクション
-  const onAdd: SubmitHandler<scheduleDataInfo> = async (
-    values: scheduleDataInfo
+  const onAdd: SubmitHandler<editScheduleDataInfo> = async (
+    values: editScheduleDataInfo
   ) => {
     editSchedule(values);
     reset(resetValues);

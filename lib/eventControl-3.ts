@@ -46,6 +46,7 @@ export default function EventControl() {
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const editSchedule = async (values: scheduleDataInfo) => {
     const event = eventInfo?.event;
+    console.log(values);
 
     if (!event) return console.log('event none');
 

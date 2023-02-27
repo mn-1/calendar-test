@@ -7,6 +7,12 @@ export type scheduleDataInfo = {
   avatar: string;
 };
 
+export type editScheduleDataInfo = {
+  title: string;
+  memo: string;
+  avatar: string;
+};
+
 export type editMemoInfo = {
   memo: string;
 };

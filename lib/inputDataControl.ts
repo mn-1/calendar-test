@@ -1,5 +1,7 @@
 export type scheduleDataInfo = {
   date: Date;
+  start: Date;
+  end: Date;
   locationName: string;
   operatorName: string;
   title: string;

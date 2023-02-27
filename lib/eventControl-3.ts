@@ -62,10 +62,15 @@ export default function EventControl() {
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const addSchedule = async (values: scheduleDataInfo, calApi: CalendarApi) => {
-    let start = values.date;
-    start = new Date(start.setHours(0));
-    let end = new Date(start);
-    end = new Date(end.setHours(end.getHours() + 2));
+    const start = new Date(
+      `${values.date.toDateString()} ${values.start.toTimeString()}`
+    );
+
+    const end = new Date(
+      `${values.date.toDateString()} ${values.end.toTimeString()}`
+    );
+
+    console.log(start, end);
 
     const { color } = divideColor(start.getTime(), end.getTime());
 

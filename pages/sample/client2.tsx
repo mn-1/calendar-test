@@ -1,18 +1,8 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
-import CircleIcon from '@mui/icons-material/Circle';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddCircleTwoToneIcon from '@mui/icons-material/AddCircleTwoTone';
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Button,
-  Stack,
-  GridSize,
-} from '@mui/material';
+import { Grid, Typography, Button, Stack } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -41,10 +31,6 @@ import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Client/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
 import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
-import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
-import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
-import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
-import { SubCalendar } from '../../components/FullCalendar/Client/SubCalendar';
 import { MobileHeader } from '../../components/FullCalendar/Client/MobileHeader';
 import AddScheduleDialog from '../../components/Dialog/Client/AddScheduleDialog';
 import { scheduleDataInfo } from '../../lib/inputDataControl';
@@ -269,7 +255,7 @@ const ClientCalendar = () => {
             variant='contained'
             sx={{ mb: '1rem', mx: '0.5rem' }}
           >
-            <AddCircleTwoToneIcon />
+            シフトを追加
           </Button>
         )}
         <Grid

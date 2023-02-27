@@ -1,4 +1,3 @@
-import dayjs, { Dayjs } from 'dayjs';
 // MUI
 import {
   Box,
@@ -17,6 +16,7 @@ import EditFormInput from '../../FormControl/EditFormInput';
 import DatePickerForm from '../../FormControl/DatePicker';
 import FailedDialog from '../FailedDialog';
 import AddFormSelect from '../../FormControl/FormSelect';
+import TimeFormInput from '../../FormControl/TimeFormInput';
 // validate
 import { scheduleSchema } from '../../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -95,8 +95,10 @@ export default function AddScheduleDialog(props: Props) {
             autoComplete='off'
             onSubmit={handleSubmit(onAdd)}
           >
-            {date && <DatePickerForm defaultValue={date} control={control} />}
-
+            <Typography color='secondary'>日程</Typography>
+            <DatePickerForm defaultValue={date} control={control} />
+            <br />
+            <TimeFormInput control={control} errors={errors} />
             <AddFormSelect
               operator={operator}
               location={location}

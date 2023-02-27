@@ -93,7 +93,7 @@ export default function MobileEditScheduleDialog(props: Props) {
         <DialogContent>
           <Grid container justifyContent='center'>
             <Typography variant='h4' color='secondary'>
-              予定を追加
+              予定を編集
             </Typography>
           </Grid>
 

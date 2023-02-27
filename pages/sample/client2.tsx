@@ -34,6 +34,7 @@ import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialo
 import { MobileHeader } from '../../components/FullCalendar/Client/MobileHeader';
 import AddScheduleDialog from '../../components/Dialog/Client/AddScheduleDialog';
 import { scheduleDataInfo } from '../../lib/inputDataControl';
+import MobileEditScheduleDialog from '../../components/Dialog/Client/MobileEditDialog';
 
 const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
@@ -55,6 +56,7 @@ const ClientCalendar = () => {
     eventInfo,
     editDialogOpen,
     addDialogOpen,
+    mobileEditSchedule,
     addSchedule,
     setAddDialogOpen,
     setEditDialogOpen,
@@ -297,12 +299,12 @@ const ClientCalendar = () => {
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
                 //
-                droppable={true}
-                editable={true}
+                droppable={false}
+                editable={false}
+                selectable={false}
                 //
                 eventOverlap={false}
                 headerToolbar={false}
-                selectable={false}
                 selectMirror={true}
                 weekends={true}
                 eventResizableFromStart={true}
@@ -351,13 +353,16 @@ const ClientCalendar = () => {
       {/* defalutValueを動的にしないためにレンダリング少なくしている */}
 
       {eventInfo && editDialogOpen && (
-        <EditScheduleDialog
+        <MobileEditScheduleDialog
           open={editDialogOpen}
-          eventInfo={eventInfo}
+          operator={operator}
+          location={resources}
           handleClose={() => setEditDialogOpen(false)}
-          editSchedule={editSchedule}
+          editSchedule={mobileEditSchedule}
+          eventInfo={eventInfo}
         />
       )}
+
       <ScheduleInfoDialog
         editMode={!editMode}
         eventInfo={eventInfo}

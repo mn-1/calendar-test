@@ -14,8 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // components
 import EditFormInput from '../../FormControl/EditFormInput';
 import DatePickerForm from '../../FormControl/DatePicker';
-import FailedDialog from '../FailedDialog';
-import AddFormSelect from '../../FormControl/FormSelect';
+import AddFormSelect from '../../FormControl/AddFormSelect';
 import TimeFormInput from '../../FormControl/TimeFormInput';
 // validate
 import { scheduleSchema } from '../../../schema/inputSchedule';
@@ -98,7 +97,12 @@ export default function AddScheduleDialog(props: Props) {
             <Typography color='secondary'>日程</Typography>
             <DatePickerForm defaultValue={date} control={control} />
             <br />
-            <TimeFormInput control={control} errors={errors} />
+            <TimeFormInput
+              control={control}
+              errors={errors}
+              startDefaultValue={new Date('2018-01-01T01:00:00.000Z')}
+              endDefaultValue={new Date('2018-01-01T02:00:00.000Z')}
+            />
             <AddFormSelect
               operator={operator}
               location={location}

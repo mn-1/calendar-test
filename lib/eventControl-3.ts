@@ -58,6 +58,40 @@ export default function EventControl() {
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+   * スマホで予定編集
+   * 
+   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+  const mobileEditSchedule = async (values: scheduleDataInfo) => {
+    const event = eventInfo?.event;
+    const start = new Date(
+      `${values.date.toDateString()} ${values.start.toTimeString()}`
+    );
+    const end = new Date(
+      `${values.date.toDateString()} ${values.end.toTimeString()}`
+    );
+    const { color } = divideColor(start.getTime(), end.getTime());
+
+    const resource = resources.find((item) => {
+      if (item.title === values.locationName) return item;
+    });
+
+    if (!resource) return console.log('resorce none');
+
+    if (!event) return console.log('event none');
+
+    event.setStart(start);
+    event.setEnd(end);
+    event.setProp('color', color);
+    event.setProp('title', values.title);
+    event.setResources([resource.id]);
+    event.setExtendedProp('operatorName', values.operatorName);
+    event.setExtendedProp('memo', values.memo);
+    event.setExtendedProp('avatar', values.avatar);
+
+    setEditDialogOpen(false);
+  };
+
+  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * 予定登録
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
@@ -65,12 +99,9 @@ export default function EventControl() {
     const start = new Date(
       `${values.date.toDateString()} ${values.start.toTimeString()}`
     );
-
     const end = new Date(
       `${values.date.toDateString()} ${values.end.toTimeString()}`
     );
-
-    console.log(start, end);
 
     const { color } = divideColor(start.getTime(), end.getTime());
 
@@ -93,7 +124,6 @@ export default function EventControl() {
         avatar: values.avatar,
       },
       allDay: false,
-      editable: true,
       color,
     });
 
@@ -106,6 +136,7 @@ export default function EventControl() {
     addDialogOpen,
     eventInfo,
     editDialogOpen,
+    mobileEditSchedule,
     setEditDialogOpen,
     editSchedule,
     setEventInfo,

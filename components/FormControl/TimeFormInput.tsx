@@ -18,9 +18,16 @@ import { Controller, Control, FieldErrors } from 'react-hook-form';
 type Props = {
   control: Control<scheduleDataInfo>;
   errors: FieldErrors<scheduleDataInfo>;
+  startDefaultValue: Date;
+  endDefaultValue: Date;
 } & TextFieldProps;
 
-const TimeFormInput = ({ control, errors }: Props) => {
+const TimeFormInput = ({
+  control,
+  errors,
+  startDefaultValue,
+  endDefaultValue,
+}: Props) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Grid
@@ -30,7 +37,7 @@ const TimeFormInput = ({ control, errors }: Props) => {
         alignItems='center'
       >
         <Controller
-          defaultValue={new Date('2018-01-01T01:00:00.000Z')}
+          defaultValue={startDefaultValue}
           control={control}
           name='start'
           render={({ field: { onChange, value } }) => (
@@ -49,7 +56,7 @@ const TimeFormInput = ({ control, errors }: Props) => {
         />
         <Typography> 〜 </Typography>
         <Controller
-          defaultValue={new Date('2018-01-01T02:00:00.000Z')}
+          defaultValue={endDefaultValue}
           control={control}
           name='end'
           render={({ field: { onChange, value } }) => (

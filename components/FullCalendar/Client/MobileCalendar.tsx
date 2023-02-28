@@ -25,8 +25,6 @@ import {
   EventDropArg,
 } from '@fullcalendar/core';
 import interactionPlugin, {
-  DropArg,
-  EventReceiveArg,
   EventResizeDoneArg,
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';

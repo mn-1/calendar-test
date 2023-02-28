@@ -1,7 +1,7 @@
 // react
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid, Typography, Stack } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
@@ -38,7 +38,7 @@ const SampleCalendar: React.FC = () => {
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [calendarRef]);
 
   /**
    * メモ編集ダイアログ開く
@@ -132,12 +132,14 @@ const SampleCalendar: React.FC = () => {
                 handleViewChange={handleViewChange}
                 today={today}
               />
-              <MainCalendar
-                calendarRef={calendarRef}
-                myEvents={myEvents}
-                handleEventClick={handleEventClick}
-                handleEventSet={handleEventSet}
-              />
+              <Stack overflow='scroll'>
+                <MainCalendar
+                  calendarRef={calendarRef}
+                  myEvents={myEvents}
+                  handleEventClick={handleEventClick}
+                  handleEventSet={handleEventSet}
+                />
+              </Stack>
             </Grid>
           </Grid>
         )}

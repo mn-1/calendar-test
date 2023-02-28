@@ -102,3 +102,6 @@ https://fullcalendar.io/docs/event-dragging-resizing
 - stickyHeaderDates
   - Whether to fix the date-headers at the top of the calendar to the viewport while scrolling
   - https://fullcalendar.io/docs/stickyHeaderDates
+- fixedWeekCount
+  - 5 行の月は 5 行のままになる
+  - https://fullcalendar.io/docs/fixedWeekCount

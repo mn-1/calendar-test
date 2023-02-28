@@ -91,7 +91,7 @@ const SampleCalendar: React.FC = () => {
 
   return (
     <>
-      <Header userType='operator' />
+      <Header />
       <Container
         maxWidth={false}
         sx={{

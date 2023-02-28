@@ -2,6 +2,7 @@
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
 import { Box, Container, Grid, Typography, Button, Stack } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -40,6 +41,8 @@ const ClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
   const subCalendarRef = createRef<FullCalendar>();
 
+  const matches: boolean = useMediaQuery('(min-width:576px)');
+
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -61,7 +64,7 @@ const ClientCalendar = () => {
   } = EventControl();
 
   useEffect(() => {
-    getEvents();
+    getEvents(matches);
     // console.log('これは表示してからgetできるのか',calendarRef.current?.getApi());
   }, []);
 
@@ -219,7 +222,7 @@ const ClientCalendar = () => {
 
   return (
     <>
-      <Header userType='client' />
+      <Header />
       <Container
         maxWidth={false}
         sx={{
@@ -288,8 +291,8 @@ const ClientCalendar = () => {
                   initialView='resourceTimeGridDay'
                   eventContent={renderEventContent}
                   //
-                  droppable={true}
-                  editable={true}
+                  droppable={editMode}
+                  editable={editMode}
                   //
                   eventOverlap={false}
                   headerToolbar={false}

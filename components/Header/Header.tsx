@@ -7,24 +7,19 @@ import {
   Toolbar,
 } from '@mui/material';
 
-type Props = {
-  userType: 'client' | 'operator';
-};
-
-const Header = ({ userType, ...otherProps }: Props) => {
-  let title: string = '';
-  if (userType === 'client') {
-    title = 'Sample Client System';
-  }
-  if (userType === 'operator') {
-    title = 'Sample Operator System';
-  }
+const Header = () => {
+  let title = 'Sample System';
 
   return (
-    <AppBar position='static'>
+    <AppBar position='static' sx={{ height: { xs: '3rem', md: 'auto' } }}>
       <Container>
         <Toolbar disableGutters>
-          <Typography variant='h5' fontWeight='bold'>
+          <Typography
+            sx={{
+              fontSize: { xs: '1rem', md: '2rem' },
+            }}
+            fontWeight='bold'
+          >
             {title}
           </Typography>
           <Box component='div' display='flex' flexGrow={1}></Box>

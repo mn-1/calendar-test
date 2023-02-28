@@ -7,10 +7,8 @@ import FullCalendar from '@fullcalendar/react';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { events, eventConstraints, resources } from '../lib/data';
 import { Container, Grid } from '@mui/material';
-import Header from '../components/Header/Header';
 
 export default function App() {
   const calendarRef = createRef<FullCalendar>();

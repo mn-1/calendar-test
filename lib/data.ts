@@ -43,6 +43,7 @@ export const events = [
       avatar: 'アバターE',
     },
     color: '',
+    durationEditable: false,
   },
   {
     id: '2',
@@ -56,6 +57,7 @@ export const events = [
       avatar: 'アバターE',
     },
     color: '',
+    durationEditable: false,
   },
   {
     id: '3',
@@ -70,6 +72,7 @@ export const events = [
     },
     // groupId: '',
     color: '',
+    durationEditable: false,
   },
   {
     id: '4',
@@ -83,6 +86,7 @@ export const events = [
       avatar: 'アバターE',
     },
     color: '',
+    durationEditable: false,
     // constraint: 'sample1',
   },
   {
@@ -96,12 +100,7 @@ export const events = [
       operatorName: 'オペレーターEさん',
       avatar: 'アバターE',
     },
-    color: '',
-    // textColor: '#000',
-    // durationEditable: true,
-    // editable: true,
-    // resourceEditable: true,
-    // startEditable: true,
+    durationEditable: false,
   },
   {
     id: '6',
@@ -114,12 +113,7 @@ export const events = [
       operatorName: 'オペレーターLさん',
       avatar: 'アバターE',
     },
-    color: '',
-    // textColor: '#000',
-    // durationEditable: true,
-    // editable: true,
-    // resourceEditable: true,
-    // startEditable: true,
+    durationEditable: false,
   },
   {
     id: '7',
@@ -133,6 +127,7 @@ export const events = [
       avatar: 'アバターE',
     },
     color: '',
+    durationEditable: false,
   },
   {
     id: '8',
@@ -146,6 +141,7 @@ export const events = [
       avatar: 'アバターE',
     },
     color: '',
+    durationEditable: false,
   },
   {
     id: '9',
@@ -159,6 +155,7 @@ export const events = [
       avatar: 'アバターE',
     },
     color: '',
+    durationEditable: false,
   },
   {
     id: '10',
@@ -168,6 +165,7 @@ export const events = [
     extendedProps: {
       operatorName: 'オペレーターEさん',
     },
+    durationEditable: false,
   },
   {
     id: '10',
@@ -177,6 +175,7 @@ export const events = [
     extendedProps: {
       operatorName: 'オペレーターEさん',
     },
+    durationEditable: false,
   },
 ];
 

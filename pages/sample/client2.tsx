@@ -1,3 +1,7 @@
+/**
+ * スマホ用
+ */
+
 // react
 import React, { useState, createRef, useEffect } from 'react';
 // MUI
@@ -5,6 +9,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -38,6 +44,7 @@ import { scheduleDataInfo } from '../../lib/inputDataControl';
 import MobileEditScheduleDialog from '../../components/Dialog/Client/MobileEditDialog';
 
 const ClientCalendar = () => {
+  const matches: boolean = useMediaQuery('(min-width:576px)');
   const calendarRef = createRef<FullCalendar>();
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
@@ -67,11 +74,7 @@ const ClientCalendar = () => {
   } = EventControl();
 
   useEffect(() => {
-    getEvents();
-
-    if (calendarRef.current) {
-      const calApi = calendarRef.current.getApi();
-    }
+    getEvents(matches);
   }, []);
 
   /**
@@ -225,7 +228,7 @@ const ClientCalendar = () => {
 
   return (
     <>
-      <Header userType='client' />
+      <Header />
       <Grid container direction='row' sx={{ width: '100%', height: '100%' }}>
         <MobileHeader
           today={today.type}
@@ -296,23 +299,25 @@ const ClientCalendar = () => {
                 ]}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
-                //
-                eventResourceEditable={true}
+                // edit関連
+                eventResourceEditable={editMode}
+                eventStartEditable={editMode}
                 eventDurationEditable={false}
-                editable={true}
+                editable={false}
                 selectable={false}
+                eventResizableFromStart={false}
                 //
                 eventOverlap={false}
                 headerToolbar={false}
                 selectMirror={true}
                 weekends={true}
-                eventResizableFromStart={true}
                 nowIndicator={true}
                 allDaySlot={false}
                 slotEventOverlap={true}
                 navLinks={true}
                 expandRows={true}
                 stickyHeaderDates={true}
+                fixedWeekCount={false}
                 //
                 eventResizeStart={() => {
                   if (editMode) setBorderColor('#0000FF');
@@ -348,6 +353,7 @@ const ClientCalendar = () => {
           )}
         </Grid>
       </Grid>
+
       {/* utils ↓ */}
       {/* defalutValueを動的にしないためにレンダリング少なくしている */}
 

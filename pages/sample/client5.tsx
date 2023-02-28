@@ -6,6 +6,12 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { ButtonGroup } from '@mui/material';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useTheme } from '@mui/material/styles';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -24,34 +30,37 @@ import interactionPlugin, {
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, operator } from '../../../lib/data';
-import EventControl from '../../../lib/eventControl-3';
-import { divideColor } from '../../../lib/colorControl';
-import { scheduleDataInfo } from '../../../lib/inputDataControl';
+import { resources, operator } from '../../lib/data';
+import EventControl from '../../lib/eventControl-3';
+import { divideColor } from '../../lib/colorControl';
 // components
-import Header from '../../Header/Header';
-import ScheduleInfoDialog from '../../Dialog/Client/ScheduleInfoDialog';
-import DeleteSnackbar from '../../Snackbar/DeleteSnackbar';
-import { MobileHeader } from './MobileHeader';
-import AddScheduleDialog from '../../Dialog/Client/AddScheduleDialog';
+import Header from '../../components/Header/Header';
+import ScheduleInfoDialog from '../../components/Dialog/Client/ScheduleInfoDialog';
+import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
+import { MobileHeader } from '../../components/FullCalendar/Client/MobileHeader-2';
+import AddScheduleDialog from '../../components/Dialog/Client/AddScheduleDialog';
+import { scheduleDataInfo } from '../../lib/inputDataControl';
+import MobileEditScheduleDialog from '../../components/Dialog/Client/MobileEditDialog';
 
-import MobileEditScheduleDialog from '../../Dialog/Client/MobileEditDialog';
+const ClientCalendar = () => {
+  //   const matches: boolean = useMediaQuery('(min-width:576px)');
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('xs'));
 
-const MobileClientCalendar = () => {
   const calendarRef = createRef<FullCalendar>();
-
-  const matches: boolean = useMediaQuery('(min-width:576px)');
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
+  const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
   const [today, setToday] = useState<{
     type: 'month' | 'week' | 'day';
     date: Date;
   }>({ type: 'day', date: new Date(new Date().toLocaleDateString()) });
 
   const {
+    countId,
     myEvents,
     eventInfo,
     editDialogOpen,
@@ -62,16 +71,14 @@ const MobileClientCalendar = () => {
     setEditDialogOpen,
     setEventInfo,
     getEvents,
+    setCountId,
     setMyEvents,
   } = EventControl();
 
   useEffect(() => {
+    console.log(matches);
     getEvents(matches);
-
-    if (calendarRef.current) {
-      const calApi = calendarRef.current.getApi();
-    }
-  }, []);
+  }, [matches]);
 
   /**
    * イベント詳細表示ダイアログ開く
@@ -183,14 +190,15 @@ const MobileClientCalendar = () => {
     }
   };
 
-  /**
-   * サブカレンダーの日付選択
-   */
-  const handleNavLinkDayClick = (date: Date) => {
-    const mainCalApi = calendarRef.current?.getApi();
-    if (!mainCalApi) return console.log('calApi none');
-    mainCalApi.changeView('resourceTimeGridDay', date);
-    setToday({ ...today, type: 'day' });
+  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return;
+
+    if (direction === 'prev') calApi.prev();
+    if (direction === 'next') calApi.next();
+    if (direction === 'today') calApi.today();
+
+    setToday({ ...today, date: calApi.getDate() });
   };
 
   return (
@@ -204,30 +212,7 @@ const MobileClientCalendar = () => {
           calendarRef={calendarRef}
           editMode={editMode}
         />
-        <Button
-          fullWidth
-          variant='contained'
-          disabled={editButtonDisable}
-          sx={{ mb: '1rem', mx: '0.5rem' }}
-          onClick={() => {
-            const calApi = calendarRef.current?.getApi();
-            if (!calApi) return;
-            if (calApi.view.type != 'resourceTimeGridDay') return;
-            setEditMode(!editMode);
-          }}
-        >
-          {editMode ? '編集終了' : '編集する'}
-        </Button>
-        {editMode && (
-          <Button
-            onClick={() => setAddDialogOpen(true)}
-            fullWidth
-            variant='contained'
-            sx={{ mb: '1rem', mx: '0.5rem' }}
-          >
-            予定を追加
-          </Button>
-        )}
+
         <Grid
           item
           xs={12}
@@ -239,7 +224,7 @@ const MobileClientCalendar = () => {
                 minWidth: '800px',
                 border: 1,
                 borderWidth: 3,
-                borderColor: '#dcdcdc',
+                borderColor: borderColor,
               }}
             >
               <FullCalendar
@@ -266,22 +251,38 @@ const MobileClientCalendar = () => {
                 ]}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
-                //
-                droppable={false}
+                // edit関連
+                eventResourceEditable={editMode}
+                eventStartEditable={editMode}
+                eventDurationEditable={editMode}
                 editable={false}
                 selectable={false}
+                eventResizableFromStart={false}
                 //
                 eventOverlap={false}
                 headerToolbar={false}
                 selectMirror={true}
                 weekends={true}
-                eventResizableFromStart={true}
                 nowIndicator={true}
                 allDaySlot={false}
                 slotEventOverlap={true}
                 navLinks={true}
                 expandRows={true}
                 stickyHeaderDates={true}
+                fixedWeekCount={false}
+                //
+                eventResizeStart={() => {
+                  if (editMode) setBorderColor('#0000FF');
+                }}
+                eventResizeStop={() => {
+                  if (editMode) setBorderColor('#DCDCDC');
+                }}
+                eventDragStart={() => {
+                  if (editMode) setBorderColor('#0000FF');
+                }}
+                eventDragStop={() => {
+                  if (editMode) setBorderColor('#DCDCDC');
+                }}
                 //
                 eventClick={handleEventClick}
                 eventResize={handleEventResize}
@@ -302,6 +303,54 @@ const MobileClientCalendar = () => {
           )}
         </Grid>
       </Grid>
+
+      <Stack
+        position='sticky'
+        bottom='0'
+        zIndex={1}
+        sx={{ py: '0.5rem', backgroundColor: '#2E8B57' }}
+      >
+        <Grid container direction='row' justifyContent='space-between'>
+          <Button
+            variant='contained'
+            disabled={editButtonDisable}
+            sx={{ ml: '0.5rem' }}
+            onClick={() => setEditMode(!editMode)}
+          >
+            {editMode ? '編集終了' : '編集する'}
+          </Button>
+          {editMode && (
+            <Button
+              onClick={() => setAddDialogOpen(true)}
+              sx={{ ml: '0.5rem', color: '#ffffff' }}
+            >
+              <AddCircleIcon />
+            </Button>
+          )}
+          <ButtonGroup variant='text' sx={{ color: '#ffffff' }}>
+            <Button
+              color='inherit'
+              onClick={(): void => handleDateChange('prev')}
+            >
+              <ChevronLeftIcon />
+            </Button>
+            <Button
+              color='inherit'
+              onClick={(): void => handleDateChange('today')}
+            >
+              {today.type === 'day' && '今日'}
+              {today.type === 'week' && '今週'}
+              {today.type === 'month' && '今月'}
+            </Button>
+            <Button
+              color='inherit'
+              onClick={(): void => handleDateChange('next')}
+            >
+              <ChevronRightIcon />
+            </Button>
+          </ButtonGroup>
+        </Grid>
+      </Stack>
       {/* utils ↓ */}
       {/* defalutValueを動的にしないためにレンダリング少なくしている */}
 
@@ -354,7 +403,7 @@ const MobileClientCalendar = () => {
   );
 };
 
-export default MobileClientCalendar;
+export default ClientCalendar;
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {

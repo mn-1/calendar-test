@@ -2,6 +2,7 @@
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
 import { Box, Container, Grid, Typography, Button, Stack } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -38,6 +39,7 @@ import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
 
 const ClientCalendar = () => {
+  const matches: boolean = useMediaQuery('(min-width:576px)');
   const calendarRef = createRef<FullCalendar>();
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
@@ -60,7 +62,7 @@ const ClientCalendar = () => {
   } = EventControl();
 
   useEffect(() => {
-    getEvents();
+    getEvents(matches);
     // console.log('これは表示してからgetできるのか',calendarRef.current?.getApi());
   }, []);
 
@@ -209,7 +211,7 @@ const ClientCalendar = () => {
 
   return (
     <>
-      <Header userType='client' />
+      <Header />
       <Typography>
         ・シフトをクリックしたときはダイアログが出るが、このときも参照だけにして削除と編集は無効にする
         <br />

@@ -9,15 +9,9 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // 月表示を可能にす�
 import interactionPlugin from '@fullcalendar/interaction'; // 日付や時間が[ 選択 ]きるようになる
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
-import { Container, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
-export type UpdateFormDataInfo = {
-  title: string;
-  start: Date;
-  end: Date;
-};
-
-const SampleCalendar: React.FC = (props) => {
+const SampleCalendar: React.FC = () => {
   /**
    * 予定を追加する際にCalendarオブジェクトのメソッドを使用する必要がある。
    * (CalendarオブジェクトはRef経由でアクセスする必要がある。)
@@ -29,6 +23,7 @@ const SampleCalendar: React.FC = (props) => {
       {/* <Container maxWidth={false}> */}
       <Grid container direction='column' sx={{ width: '100%' }}>
         <FullCalendar
+          ref={ref}
           // 日本語表記
           locales={[jaLocale]}
           locale='ja'

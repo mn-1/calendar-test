@@ -108,6 +108,11 @@
   margin-left: 0.5rem;
 }
 
+.fc {
+  margin: 0;
+  padding: 0;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

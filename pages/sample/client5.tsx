@@ -1,3 +1,8 @@
+/**
+ * フッターバージョン
+ * 👉没
+ */
+
 // react
 import React, { useState, createRef, useEffect } from 'react';
 // MUI
@@ -6,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Box from '@mui/material/Box';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { ButtonGroup } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';

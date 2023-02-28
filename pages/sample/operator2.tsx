@@ -103,11 +103,20 @@ const SampleCalendar: React.FC = () => {
         {myEvents.length != 0 && (
           <Grid container direction='row'>
             <Grid item sm={3}>
-              <Month
-                initialEvents={myEvents}
-                subCalendarRef={subCalendarRef}
-                handleNavLinkDayClick={handleNavLinkDayClick}
-              />
+              <Grid container direction='column'>
+                <Month
+                  initialEvents={myEvents}
+                  subCalendarRef={subCalendarRef}
+                  handleNavLinkDayClick={handleNavLinkDayClick}
+                  dateRange={new Date().getMonth()}
+                />
+                <Month
+                  initialEvents={myEvents}
+                  subCalendarRef={subCalendarRef}
+                  handleNavLinkDayClick={handleNavLinkDayClick}
+                  dateRange={new Date().getMonth() + 1}
+                />
+              </Grid>
             </Grid>
             <Grid item sm={9}>
               <CalendarHeader

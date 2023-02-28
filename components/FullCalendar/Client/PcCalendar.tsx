@@ -24,27 +24,27 @@ import interactionPlugin, {
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, externalEvents } from '../../lib/data';
-import EventControl from '../../lib/eventControl-3';
-import { divideColor } from '../../lib/colorControl';
+import { resources, externalEvents } from '../../../lib/data';
+import EventControl from '../../../lib/eventControl-3';
+import { divideColor } from '../../../lib/colorControl';
 // components
-import Header from '../../components/Header/Header';
-import ScheduleInfoDialog from '../../components/Dialog/Client/ScheduleInfoDialog';
-import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
-import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
-import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
-import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
-import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
-import { SubCalendar } from '../../components/FullCalendar/Client/SubCalendar';
-import { MobileHeader } from '../../components/FullCalendar/Client/MobileHeader';
+import Header from '../../Header/Header';
+import ScheduleInfoDialog from '../../Dialog/Client/ScheduleInfoDialog';
+import DeleteSnackbar from '../../Snackbar/DeleteSnackbar';
+import EditScheduleDialog from '../../Dialog/Client/EditScheduleDialog';
+import { ExternalEvent } from '../../FullCalendar/Client/ExternalEvents';
+import { CalendarHeader } from './Header';
+import FailedSnackbar from '../..//Snackbar/FailedSnackbar';
+import { SubCalendar } from './SubCalendar';
 
-const ClientCalendar = () => {
+type Props = {
+  matches: boolean;
+};
+
+const PcCalendar = (props: Props) => {
+  const { matches } = props;
   const calendarRef = createRef<FullCalendar>();
   const subCalendarRef = createRef<FullCalendar>();
-
-  // const matches: boolean = useMediaQuery('(min-width:576px)');
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('xs'));
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
@@ -221,7 +221,7 @@ const ClientCalendar = () => {
     setToday('day');
   };
 
-  let calendarSize: any = 12;
+  let calendarSize: number = 12;
   if (editMode) calendarSize = 9;
 
   return (
@@ -354,17 +354,7 @@ const ClientCalendar = () => {
             editSchedule={editSchedule}
           />
         )}
-        <ScheduleInfoDialog
-          editMode={!editMode}
-          eventInfo={eventInfo}
-          open={infoDialogOpen}
-          delete={deleteEvent}
-          edit={() => {
-            setEditDialogOpen(true);
-            setInfoDialogOpen(false);
-          }}
-          handleClose={() => setInfoDialogOpen(false)}
-        />
+
         <DeleteSnackbar
           open={deleteSnackbarOpen}
           undoDelete={undoDelete}
@@ -376,7 +366,7 @@ const ClientCalendar = () => {
   );
 };
 
-export default ClientCalendar;
+export default PcCalendar;
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {

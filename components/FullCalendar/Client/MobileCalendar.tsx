@@ -1,3 +1,7 @@
+/**
+ * スマホ用
+ */
+
 // react
 import React, { useState, createRef, useEffect } from 'react';
 // MUI
@@ -6,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -20,6 +25,8 @@ import {
   EventDropArg,
 } from '@fullcalendar/core';
 import interactionPlugin, {
+  DropArg,
+  EventReceiveArg,
   EventResizeDoneArg,
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
@@ -37,21 +44,27 @@ import AddScheduleDialog from '../../Dialog/Client/AddScheduleDialog';
 
 import MobileEditScheduleDialog from '../../Dialog/Client/MobileEditDialog';
 
-const MobileClientCalendar = () => {
-  const calendarRef = createRef<FullCalendar>();
+type Props = {
+  matches: boolean;
+};
 
-  const matches: boolean = useMediaQuery('(min-width:576px)');
+const ClientCalendar = (props: Props) => {
+  const { matches } = props;
+
+  const calendarRef = createRef<FullCalendar>();
 
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
   const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
+  const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
   const [today, setToday] = useState<{
     type: 'month' | 'week' | 'day';
     date: Date;
   }>({ type: 'day', date: new Date(new Date().toLocaleDateString()) });
 
   const {
+    countId,
     myEvents,
     eventInfo,
     editDialogOpen,
@@ -62,16 +75,13 @@ const MobileClientCalendar = () => {
     setEditDialogOpen,
     setEventInfo,
     getEvents,
+    setCountId,
     setMyEvents,
   } = EventControl();
 
   useEffect(() => {
     getEvents(matches);
-
-    if (calendarRef.current) {
-      const calApi = calendarRef.current.getApi();
-    }
-  }, []);
+  }, [matches]);
 
   /**
    * イベント詳細表示ダイアログ開く
@@ -183,16 +193,6 @@ const MobileClientCalendar = () => {
     }
   };
 
-  /**
-   * サブカレンダーの日付選択
-   */
-  const handleNavLinkDayClick = (date: Date) => {
-    const mainCalApi = calendarRef.current?.getApi();
-    if (!mainCalApi) return console.log('calApi none');
-    mainCalApi.changeView('resourceTimeGridDay', date);
-    setToday({ ...today, type: 'day' });
-  };
-
   return (
     <>
       <Header />
@@ -239,7 +239,7 @@ const MobileClientCalendar = () => {
                 minWidth: '800px',
                 border: 1,
                 borderWidth: 3,
-                borderColor: '#dcdcdc',
+                borderColor: borderColor,
               }}
             >
               <FullCalendar
@@ -266,23 +266,40 @@ const MobileClientCalendar = () => {
                 ]}
                 initialView='resourceTimeGridDay'
                 eventContent={renderEventContent}
-                //
-                droppable={false}
+                // edit関連
+                eventResourceEditable={editMode}
+                eventStartEditable={editMode}
+                eventDurationEditable={editMode}
                 editable={false}
                 selectable={false}
+                eventResizableFromStart={false}
                 //
                 eventOverlap={false}
                 headerToolbar={false}
                 selectMirror={true}
                 weekends={true}
-                eventResizableFromStart={true}
                 nowIndicator={true}
                 allDaySlot={false}
                 slotEventOverlap={true}
                 navLinks={true}
                 expandRows={true}
                 stickyHeaderDates={true}
+                fixedWeekCount={false}
                 //
+                eventResizeStart={() => {
+                  if (editMode) setBorderColor('#0000FF');
+                }}
+                eventResizeStop={() => {
+                  if (editMode) setBorderColor('#DCDCDC');
+                }}
+                eventDragStart={() => {
+                  if (editMode) setBorderColor('#0000FF');
+                }}
+                eventDragStop={() => {
+                  if (editMode) setBorderColor('#DCDCDC');
+                }}
+                //
+
                 eventClick={handleEventClick}
                 eventResize={handleEventResize}
                 eventDrop={handleInnerEventDrop}
@@ -302,6 +319,7 @@ const MobileClientCalendar = () => {
           )}
         </Grid>
       </Grid>
+
       {/* utils ↓ */}
       {/* defalutValueを動的にしないためにレンダリング少なくしている */}
 
@@ -354,7 +372,7 @@ const MobileClientCalendar = () => {
   );
 };
 
-export default MobileClientCalendar;
+export default ClientCalendar;
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {

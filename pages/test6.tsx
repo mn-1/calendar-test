@@ -6,34 +6,48 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list';
-import { Grid, Container } from '@mui/material';
+import { Grid, Container, Box } from '@mui/material';
 
-const SampleCalendar: React.FC = () => {
-  const ref = React.createRef<any>();
-
+const SampleCalendar = () => {
   return (
-    <Container
-      sx={{
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <FullCalendar
-        ref={ref}
-        locales={[jaLocale]}
-        plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin, listPlugin]}
-        initialView='dayGridMonth'
-        slotDuration='00:30:00'
-        headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek listWeek',
-        }}
-        //
-        selectable={true}
-        weekends={true}
-      />
-    </Container>
+    <>
+      <Box
+        position='fixed'
+        top='0'
+        left='0'
+        right='0'
+        bottom='0'
+        overflow='hidden'
+        border='none'
+      >
+        {/* <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView='dayGridMonth'
+          //
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          expandRows={true}
+          fixedWeekCount={false}
+          height='100%'
+        /> */}
+
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView='dayGridMonth'
+          height='100%'
+          expandRows={true}
+          fixedWeekCount={false}
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          // これだっったのか！！！
+          dayMaxEvents={true}
+          //
+        />
+      </Box>
+    </>
   );
 };
 

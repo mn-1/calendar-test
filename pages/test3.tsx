@@ -203,7 +203,7 @@ const SampleCalendar = () => {
                     maxHeight: '-webkit-fill-available',
                   }}
                 ></div>
-                <h2>予約一覧 ( {myEvents.length} )</h2>
+                {/* <h2>予約一覧 ( {myEvents.length} )</h2>
                 <ul>
                   {myEvents.map((event: any) => (
                     <li key={event.id}>
@@ -217,7 +217,7 @@ const SampleCalendar = () => {
                       <i>{event.title}</i>
                     </li>
                   ))}
-                </ul>
+                </ul> */}
               </Grid>
             </Grid>
             <Grid item sm={10}>

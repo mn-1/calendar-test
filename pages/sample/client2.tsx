@@ -75,7 +75,7 @@ const ClientCalendar = () => {
 
   useEffect(() => {
     getEvents(matches);
-  }, []);
+  }, [matches]);
 
   /**
    * イベント詳細表示ダイアログ開く
@@ -302,7 +302,7 @@ const ClientCalendar = () => {
                 // edit関連
                 eventResourceEditable={editMode}
                 eventStartEditable={editMode}
-                eventDurationEditable={false}
+                eventDurationEditable={editMode}
                 editable={false}
                 selectable={false}
                 eventResizableFromStart={false}

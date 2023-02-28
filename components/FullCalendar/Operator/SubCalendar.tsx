@@ -2,7 +2,7 @@ import { useEffect, useState, createRef, RefObject } from 'react';
 // MUI
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Grid, Container, Typography, Button, Stack } from '@mui/material';
+import { Grid, Container, Typography, Button, Stack, Box } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -16,12 +16,14 @@ type Props = {
   initialEvents: EventSourceInput;
   subCalendarRef: RefObject<FullCalendar>;
   handleNavLinkDayClick: Function;
+  dateRange: any;
 };
 
 export default function Month({
   initialEvents,
   subCalendarRef,
   handleNavLinkDayClick,
+  dateRange,
 }: Props) {
   const [calApi, setCalApi] = useState<CalendarApi>();
   const [title, setTitle] = useState<string | undefined>();
@@ -73,33 +75,50 @@ export default function Month({
           </Grid>
         </Grid>
       </header>
-      <Stack
-        sx={{
-          border: 1,
-          borderWidth: 2,
-          borderColor: '#dcdcdc',
-        }}
+
+      <Box
+        position='relative'
+        top='0'
+        left='0'
+        right='0'
+        bottom='0'
+        height={'20rem'}
+        sx={{ m: 0, p: 0, border: 1, borderColor: '#dcdcdc' }}
       >
         <FullCalendar
           ref={subCalendarRef}
-          initialEvents={initialEvents}
+          initialEvents={[
+            {
+              start: '2023-02-10T10:00:00',
+              end: '2023-02-10T16:00:00',
+              display: 'background',
+            },
+          ]}
           locales={[jaLocale]}
           locale='ja'
-          contentHeight='50vh'
+          height='100%'
           plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
           initialView='dayGridMonth'
-          eventContent={renderEventContent}
+          // eventContent={renderEventContent}
+          dayCellContent={(e) => {
+            e.dayNumberText = e.dayNumberText.replace('日', '');
+            return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
+          }}
+          validRange={(now) => {
+            console.log(now, new Date());
+            return { start: dateRange };
+          }}
           //
-          selectable={true}
-          weekends={true}
           headerToolbar={false}
           navLinks={true}
-          eventBackgroundColor='#FFD700'
-          // validRange={{ start: new Date() }}
+          fixedWeekCount={false}
+          expandRows={true}
+          stickyHeaderDates={false}
+          dayMaxEvents={true}
           //
           navLinkDayClick={(date) => handleNavLinkDayClick(date)}
         />
-      </Stack>
+      </Box>
     </Container>
   );
 }

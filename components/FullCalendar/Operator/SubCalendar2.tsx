@@ -14,39 +14,33 @@ import { CalendarApi } from '@fullcalendar/core';
 
 type Props = {
   initialEvents: EventSourceInput;
-  subCalendarRef: RefObject<FullCalendar>;
+
   handleNavLinkDayClick: Function;
   dateRange: any;
 };
 
 export default function Month({
   initialEvents,
-  subCalendarRef,
+
   handleNavLinkDayClick,
   dateRange,
 }: Props) {
-  const [calApi, setCalApi] = useState<CalendarApi>();
-  const [title, setTitle] = useState<string | undefined>();
+  const subCalendarRef1 = createRef<FullCalendar>();
+  const subCalendarRef2 = createRef<FullCalendar>();
+
+  const [title1, setTitle1] = useState<string | undefined>();
+  const [title2, setTitle2] = useState<string | undefined>();
 
   useEffect(() => {
-    if (subCalendarRef.current) {
-      const calApi = subCalendarRef.current.getApi();
-      setTitle(calApi.view.title);
-      setCalApi(calApi);
+    if (subCalendarRef1.current) {
+      const calApi = subCalendarRef1.current.getApi();
+      setTitle1(calApi.view.title);
     }
-  }, [subCalendarRef]);
-
-  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
-    if (!calApi) return;
-
-    console.log(calApi.getDate(), new Date());
-
-    if (direction === 'prev') calApi.prev();
-    if (direction === 'next') calApi.next();
-    if (direction === 'today') calApi.today();
-
-    setTitle(calApi.view.title);
-  };
+    if (subCalendarRef2.current) {
+      const calApi = subCalendarRef2.current.getApi();
+      setTitle2(calApi.view.title);
+    }
+  }, [subCalendarRef1, subCalendarRef2]);
 
   return (
     <Container
@@ -54,27 +48,9 @@ export default function Month({
       sx={{
         width: '100%',
         height: '100%',
-        mt: '4rem',
       }}
     >
-      <header>
-        <Grid
-          container
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
-        >
-          <Typography variant='h6'>{title}</Typography>
-          <Grid item>
-            <Button onClick={(): void => handleDateChange('prev')}>
-              <ChevronLeftIcon />
-            </Button>
-            <Button onClick={(): void => handleDateChange('next')}>
-              <ChevronRightIcon />
-            </Button>
-          </Grid>
-        </Grid>
-      </header>
+      <Typography variant='h6'>{title1}</Typography>
 
       <Box
         position='relative'
@@ -86,7 +62,41 @@ export default function Month({
         sx={{ m: 0, p: 0, border: 1, borderColor: '#dcdcdc' }}
       >
         <FullCalendar
-          ref={subCalendarRef}
+          ref={subCalendarRef1}
+          locales={[jaLocale]}
+          height='100%'
+          plugins={[dayGridPlugin, listPlugin]}
+          initialView='dayGridMonth'
+          // eventContent={renderEventContent}
+          dayCellContent={(e) => {
+            e.dayNumberText = e.dayNumberText.replace('日', '');
+            return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
+          }}
+          //
+          headerToolbar={false}
+          navLinks={true}
+          fixedWeekCount={false}
+          expandRows={true}
+          stickyHeaderDates={false}
+          dayMaxEvents={true}
+          //
+          navLinkDayClick={(date) => handleNavLinkDayClick(date)}
+        />
+      </Box>
+
+      <Typography variant='h6'>{title2}</Typography>
+
+      <Box
+        position='relative'
+        top='0'
+        left='0'
+        right='0'
+        bottom='0'
+        height={'20rem'}
+        sx={{ m: 0, p: 0, border: 1, borderColor: '#dcdcdc' }}
+      >
+        <FullCalendar
+          ref={subCalendarRef2}
           locales={[jaLocale]}
           height='100%'
           plugins={[dayGridPlugin, listPlugin]}
@@ -104,7 +114,6 @@ export default function Month({
           navLinks={true}
           fixedWeekCount={false}
           expandRows={true}
-          stickyHeaderDates={false}
           dayMaxEvents={true}
           //
           navLinkDayClick={(date) => handleNavLinkDayClick(date)}

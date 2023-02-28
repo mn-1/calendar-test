@@ -2,6 +2,7 @@
 import React, { useState, useRef, createRef, useEffect } from 'react';
 // MUI
 import { Box, Container, Grid, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import { EventApi, DateSelectArg, EventClickArg } from '@fullcalendar/core';
@@ -11,15 +12,18 @@ import EventControl from '../../lib/operatorEventControl';
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
 import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
-import Month from '../../components/FullCalendar/Operator/SubCalendar';
+import Month from '../../components/FullCalendar/Operator/SubCalendar2';
 import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 
 const SampleCalendar: React.FC = () => {
+  const matches: boolean = useMediaQuery('(min-width:992px)');
   const calendarRef = createRef<FullCalendar>();
-  const subCalendarRef = createRef<FullCalendar>();
 
-  const [today, setToday] = useState<'week' | 'day' | 'day2' | 'list'>('day');
+  const [today, setToday] = useState<
+    'month' | 'week' | 'day' | 'day2' | 'list'
+  >('day');
+  const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
 
   const {
     myEvents,
@@ -41,7 +45,7 @@ const SampleCalendar: React.FC = () => {
    */
   const handleEventClick = async (arg: EventClickArg) => {
     setEventInfo(arg);
-    setEditDialogOpen(true);
+    setInfoDialogOpen(true);
   };
 
   /**
@@ -66,11 +70,14 @@ const SampleCalendar: React.FC = () => {
    * カレンダーの表示変更
    */
   const handleViewChange = (
-    direction: 'week' | 'day' | 'day2' | 'list'
+    direction: 'week' | 'day' | 'day2' | 'list' | 'month'
   ): void => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return;
-
+    if (direction === 'month') {
+      calApi.changeView('dayGridMonth');
+      setToday('month');
+    }
     if (direction === 'week') {
       calApi.changeView('timeGridWeek');
       setToday('week');
@@ -89,6 +96,11 @@ const SampleCalendar: React.FC = () => {
     }
   };
 
+  const now = new Date();
+
+  let calendarSize = 12;
+  if (matches) calendarSize = 9;
+
   return (
     <>
       <Header />
@@ -102,23 +114,19 @@ const SampleCalendar: React.FC = () => {
       >
         {myEvents.length != 0 && (
           <Grid container direction='row'>
-            <Grid item sm={3}>
-              <Grid container direction='column'>
+            {matches && (
+              <Grid item xs={3}>
                 <Month
                   initialEvents={myEvents}
-                  subCalendarRef={subCalendarRef}
                   handleNavLinkDayClick={handleNavLinkDayClick}
-                  dateRange={new Date().getMonth()}
-                />
-                <Month
-                  initialEvents={myEvents}
-                  subCalendarRef={subCalendarRef}
-                  handleNavLinkDayClick={handleNavLinkDayClick}
-                  dateRange={new Date().getMonth() + 1}
+                  dateRange={
+                    new Date(`${now.getFullYear()}/${now.getMonth() + 2}/1`)
+                  }
                 />
               </Grid>
-            </Grid>
-            <Grid item sm={9}>
+            )}
+
+            <Grid item xs={calendarSize}>
               <CalendarHeader
                 calendarRef={calendarRef}
                 handleViewChange={handleViewChange}
@@ -144,14 +152,15 @@ const SampleCalendar: React.FC = () => {
           />
         )}
 
-        {/* <ScheduleInfoDialog
-          editMemo={() => {
-            setInfoDialogOpen(false);
-          }}
+        <ScheduleInfoDialog
           eventInfo={eventInfo}
           open={infoDialogOpen}
+          edit={() => {
+            setEditDialogOpen(true);
+            setInfoDialogOpen(false);
+          }}
           handleClose={() => setInfoDialogOpen(false)}
-        /> */}
+        />
 
         {/* utils ↑ */}
       </Container>

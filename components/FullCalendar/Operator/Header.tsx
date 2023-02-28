@@ -9,7 +9,7 @@ import { CalendarApi } from '@fullcalendar/core';
 type Props = {
   calendarRef: RefObject<FullCalendar>;
   handleViewChange: Function;
-  today: 'week' | 'day' | 'day2' | 'list';
+  today: 'month' | 'week' | 'day' | 'day2' | 'list';
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
@@ -54,6 +54,7 @@ export const CalendarHeader = (props: Props): ReactElement => {
             {today === 'day2' && '今日'}
             {today === 'week' && '今週'}
             {today === 'list' && '今月'}
+            {today === 'month' && '今月'}
           </Button>
           <Button onClick={(): void => handleDateChange('next')}>
             <ChevronRightIcon />
@@ -63,6 +64,12 @@ export const CalendarHeader = (props: Props): ReactElement => {
           {title}
         </Typography>
         <ButtonGroup>
+          <Button
+            onClick={() => handleViewChange('month')}
+            variant={today === 'month' ? 'contained' : 'outlined'}
+          >
+            月
+          </Button>
           <Button
             onClick={() => handleViewChange('week')}
             variant={today === 'week' ? 'contained' : 'outlined'}

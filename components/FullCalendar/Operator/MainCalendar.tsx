@@ -28,6 +28,54 @@ const MainCalendar = ({
   handleEventClick,
   handleEventSet,
 }: Props) => {
+  // カレンダーに表示する内容
+  function renderEventContent(eventContent: EventContentArg) {
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return <></>;
+    if ((calApi.view.type = 'dayGridMonth'))
+      return (
+        <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+          {eventContent.timeText}
+          <br />
+          {eventContent.event.extendedProps.operatorName}
+        </Typography>
+      );
+    const {
+      timeText,
+      event: {
+        extendedProps: { avatar, memo },
+        title,
+      },
+    } = eventContent;
+    return (
+      <>
+        <Typography>{timeText}</Typography>
+
+        {title && (
+          <>
+            タイトル
+            <br />
+            <Typography>{title}</Typography>
+          </>
+        )}
+        {avatar && (
+          <>
+            アバター
+            <br />
+            <Typography>{avatar}</Typography>
+          </>
+        )}
+        {memo && (
+          <>
+            メモ
+            <br />
+            <Typography>{memo}</Typography>
+          </>
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       <FullCalendar
@@ -76,41 +124,3 @@ const MainCalendar = ({
 };
 
 export default MainCalendar;
-
-// カレンダーに表示する内容
-function renderEventContent(eventContent: EventContentArg) {
-  const {
-    timeText,
-    event: {
-      extendedProps: { avatar, memo },
-      title,
-    },
-  } = eventContent;
-  return (
-    <>
-      <Typography>{timeText}</Typography>
-
-      {title && (
-        <>
-          タイトル
-          <br />
-          <Typography>{title}</Typography>
-        </>
-      )}
-      {avatar && (
-        <>
-          アバター
-          <br />
-          <Typography>{avatar}</Typography>
-        </>
-      )}
-      {memo && (
-        <>
-          メモ
-          <br />
-          <Typography>{memo}</Typography>
-        </>
-      )}
-    </>
-  );
-}

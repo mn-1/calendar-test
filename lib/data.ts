@@ -163,7 +163,9 @@ export const events = [
     start: new Date('2023/2/3 16:00').getTime(),
     end: new Date('2023/2/3 22:00').getTime(),
     extendedProps: {
-      operatorName: 'オペレーターEさん',
+      memo: '',
+      operatorName: 'オペレーターMさん',
+      avatar: 'アバターE',
     },
     durationEditable: false,
   },
@@ -173,7 +175,9 @@ export const events = [
     start: new Date('2023/3/3 9:00').getTime(),
     end: new Date('2023/3/3 18:00').getTime(),
     extendedProps: {
-      operatorName: 'オペレーターEさん',
+      memo: '',
+      operatorName: 'オペレーターMさん',
+      avatar: 'アバターE',
     },
     durationEditable: false,
   },

@@ -1,5 +1,5 @@
 // react
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, createRef, useEffect, RefObject } from 'react';
 // MUI
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -261,7 +261,16 @@ const ClientCalendar = (props: Props) => {
                     borderColor: borderColor,
                   }}
                 >
-                  <FullCalendar
+                  <Calendar
+                    calendarRef={calendarRef}
+                    handleEventClick={handleEventClick}
+                    changeColor={changeColor}
+                    handleEventReceive={handleEventReceive}
+                    handleNavLinkDayClick={handleNavLinkDayClick}
+                    editMode={editMode}
+                    setBorderColor={setBorderColor}
+                  />
+                  {/* <FullCalendar
                     locale='ja'
                     locales={[jaLocale]}
                     dayMinWidth={100}
@@ -326,7 +335,7 @@ const ClientCalendar = (props: Props) => {
                     eventReceive={handleEventReceive}
                     drop={() => setBorderColor('#DCDCDC')}
                     navLinkDayClick={handleNavLinkDayClick}
-                  />
+                  /> */}
                 </Stack>
               )}
             </Grid>
@@ -501,8 +510,110 @@ const ClientCalendar = (props: Props) => {
 
 export default ClientCalendar;
 
-function Calendar() {
-  return;
+type calendarProps = {
+  editMode: boolean;
+  setBorderColor: Function;
+  handleEventClick: Function;
+  changeColor: Function;
+  handleEventReceive: Function;
+  handleNavLinkDayClick: Function;
+  calendarRef: RefObject<FullCalendar>;
+};
+
+function Calendar(props: calendarProps) {
+  const {
+    handleEventClick,
+    changeColor,
+    handleEventReceive,
+    handleNavLinkDayClick,
+    editMode,
+    setBorderColor,
+    calendarRef,
+  } = props;
+
+  const matches: boolean = useMediaQuery('(min-width:992px)');
+
+  const { myEvents, getEvents, setMyEvents } = EventControl();
+
+  useEffect(() => {
+    getEvents();
+  }, [matches]);
+
+  return (
+    <>
+      {' '}
+      {myEvents.length != 0 && (
+        <FullCalendar
+          locale='ja'
+          locales={[jaLocale]}
+          contentHeight='100vh'
+          dayMinWidth={100}
+          initialEvents={myEvents}
+          ref={calendarRef}
+          resources={resources}
+          slotMinTime='00:00:00'
+          slotMaxTime='24:00:00'
+          slotDuration='00:30:00'
+          snapDuration='00:05:00'
+          plugins={[
+            resourceTimeGridPlugin,
+            resourceTimelinePlugIn,
+            interactionPlugin,
+            scrollGridPlugin,
+            dayGridPlugin,
+            timeGridPlugin,
+            multiMonthPlugin,
+          ]}
+          initialView='resourceTimeGridDay'
+          eventContent={renderEventContent}
+          dayCellContent={dayCellContent}
+          // resourceAreaWidth='300px'
+
+          // edit関連
+          droppable={editMode} // ⭐️
+          editable={false}
+          eventResourceEditable={editMode}
+          eventStartEditable={editMode}
+          eventDurationEditable={editMode}
+          eventResizableFromStart={editMode}
+          //
+          fixedWeekCount={false}
+          selectable={false}
+          expandRows={true}
+          stickyHeaderDates={true}
+          selectMirror={true}
+          eventOverlap={false}
+          headerToolbar={false}
+          weekends={true}
+          nowIndicator={true}
+          allDaySlot={false}
+          slotEventOverlap={true}
+          navLinks={true}
+          //
+          eventResizeStart={() => {
+            if (editMode) setBorderColor('#0000FF');
+          }}
+          eventResizeStop={() => {
+            if (editMode) setBorderColor('#DCDCDC');
+          }}
+          eventDragStart={() => {
+            if (editMode) setBorderColor('#0000FF');
+          }}
+          eventDragStop={() => {
+            if (editMode) setBorderColor('#DCDCDC');
+          }}
+          //
+          eventsSet={(events) => setMyEvents(events)}
+          eventClick={(arg) => handleEventClick(arg)}
+          eventResize={(arg) => changeColor(arg)}
+          eventDrop={(arg) => changeColor(arg)}
+          eventReceive={(arg) => handleEventReceive(arg)}
+          drop={() => setBorderColor('#DCDCDC')}
+          navLinkDayClick={(arg) => handleNavLinkDayClick(arg)}
+        />
+      )}
+    </>
+  );
 }
 
 /**ーーーーーーーーーーーーーーーーーー

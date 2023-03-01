@@ -1,6 +1,15 @@
 import * as React from 'react';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+// time
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+// operator
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
+// avatar
+import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
+// memo
+import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
@@ -15,6 +24,7 @@ import {
 import { EventClickArg } from '@fullcalendar/core';
 import { formatDate } from '../../../lib/dateControl';
 import FailedDialog from '../FailedDialog';
+import { Typography } from '@material-ui/core';
 
 type Props = {
   open: boolean;
@@ -28,25 +38,40 @@ type Props = {
 export default function ScheduleInfoDialog(props: Props) {
   const event = props.eventInfo?.event;
 
-  if (event && event.start && event.end)
+  if (!event)
+    return <FailedDialog open={props.open} handleClose={props.handleClose} />;
+
+  console.log(event);
+  const {
+    start,
+    end,
+    title,
+    extendedProps: { avatar, memo, operatorName },
+  } = event;
+
+  if (start && end)
     return (
-      <Dialog open={props.open} fullWidth>
+      <Dialog open={props.open}>
         <DialogActions>
           <Grid container justifyContent='end' alignItems='center'>
-            <Tooltip title='予定を削除'>
-              <span>
-                <IconButton onClick={props.delete} disabled={props.editMode}>
-                  <DeleteTwoToneIcon fontSize='medium' />
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title='編集'>
-              <span>
-                <IconButton onClick={props.edit} disabled={props.editMode}>
-                  <ModeEditOutlineTwoToneIcon fontSize='medium' />
-                </IconButton>
-              </span>
-            </Tooltip>
+            {!props.editMode && (
+              <Tooltip title='予定を削除'>
+                <span>
+                  <IconButton onClick={props.delete}>
+                    <DeleteTwoToneIcon fontSize='medium' />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            )}
+            {!props.editMode && (
+              <Tooltip title='編集'>
+                <span>
+                  <IconButton onClick={props.edit}>
+                    <ModeEditOutlineTwoToneIcon fontSize='medium' />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            )}
             <Box sx={{ px: 1 }} />
             <Tooltip title='閉じる'>
               <IconButton onClick={props.handleClose}>
@@ -55,25 +80,58 @@ export default function ScheduleInfoDialog(props: Props) {
             </Tooltip>
           </Grid>
         </DialogActions>
-        <DialogContent>
-          <Box
-            sx={{
-              boxShadow: { sm: '0 0 5px #ddd' },
-              p: '1rem',
-            }}
-          >
-            <DialogContentText tabIndex={-1}>
-              タイトル: {event.title}
-              <br />
-              オペレーター名: {event.extendedProps.operatorName}
-              <br />
-              時間: {formatDate(event.start)} ~ {formatDate(event.end)}
-              <br />
-              アバター: {event.extendedProps.avatar}
-              <br />
-              メモ: {event.extendedProps.memo}
-            </DialogContentText>
-          </Box>
+
+        <DialogContent sx={{ px: { md: '2rem' } }}>
+          <Grid container direction='row' alignItems='center'>
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }} />
+            <Grid
+              item
+              xs={10}
+              sx={{ mb: '2rem', borderBottom: 'solid', borderColor: '#dddddd' }}
+            >
+              {title != '' ? (
+                <Typography variant='h5'>{title}</Typography>
+              ) : (
+                <Typography variant='h5' color='textSecondary'>
+                  タイトル
+                </Typography>
+              )}
+            </Grid>
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <AccessTimeOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              <Typography variant='h6'>{formatDate(start, end)}</Typography>
+            </Grid>
+
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <PersonOutlineOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              <Typography>{operatorName}</Typography>
+            </Grid>
+
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <Face3OutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              {avatar != '' ? (
+                avatar
+              ) : (
+                <Typography color='textSecondary'>アバター</Typography>
+              )}
+            </Grid>
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <SubjectOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              {memo != '' ? (
+                memo
+              ) : (
+                <Typography color='textSecondary'>メモ</Typography>
+              )}
+            </Grid>
+          </Grid>
         </DialogContent>
       </Dialog>
     );

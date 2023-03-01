@@ -16,9 +16,10 @@ const theme = createTheme({
       main: red.A400,
     },
 
-    // text: {
-    //   primary: '#ff0000',
-    // },
+    text: {
+      primary: '#000000',
+      secondary: '#696969',
+    },
   },
 });
 

@@ -360,6 +360,17 @@ const PcCalendar = (props: Props) => {
           undoDelete={undoDelete}
           handleClose={() => setDeleteSnackbarOpen(false)}
         />
+        <ScheduleInfoDialog
+          editMode={!editMode}
+          eventInfo={eventInfo}
+          open={infoDialogOpen}
+          delete={deleteEvent}
+          edit={() => {
+            setEditDialogOpen(true);
+            setInfoDialogOpen(false);
+          }}
+          handleClose={() => setInfoDialogOpen(false)}
+        />
         {/* utils ↑ */}
       </Container>
     </>

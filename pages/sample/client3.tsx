@@ -16,17 +16,7 @@ const Client = () => {
       )}
 
       {/* utils ↓ */}
-      {/* <ScheduleInfoDialog
-          editMode={!editMode}
-          eventInfo={eventInfo}
-          open={infoDialogOpen}
-          delete={deleteEvent}
-          edit={() => {
-            setEditDialogOpen(true);
-            setInfoDialogOpen(false);
-          }}
-          handleClose={() => setInfoDialogOpen(false)}
-        /> */}
+
       {/* utils ↑ */}
     </>
   );

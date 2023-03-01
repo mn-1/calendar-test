@@ -39,8 +39,6 @@ export const CalendarHeader = (props: Props): ReactElement => {
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
     if (!calApi) return;
 
-    console.log(calApi.getDate(), new Date());
-
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
@@ -52,11 +50,7 @@ export const CalendarHeader = (props: Props): ReactElement => {
         variant='contained'
         disabled={editButtonDisable}
         sx={{ mb: '1rem' }}
-        onClick={() => {
-          if (!calApi) return;
-          if (calApi.view.type != 'resourceTimeGridDay') return;
-          setEditMode(!editMode);
-        }}
+        onClick={() => setEditMode(!editMode)}
       >
         {editMode ? '編集終了' : '編集する'}
       </Button>

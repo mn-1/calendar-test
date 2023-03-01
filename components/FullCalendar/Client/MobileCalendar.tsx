@@ -78,7 +78,7 @@ const ClientCalendar = (props: Props) => {
   } = EventControl();
 
   useEffect(() => {
-    getEvents(matches);
+    getEvents();
   }, [matches]);
 
   /**
@@ -193,14 +193,14 @@ const ClientCalendar = (props: Props) => {
 
   return (
     <>
-      <Header />
       <Grid container direction='row' sx={{ width: '100%', height: '100%' }}>
         <MobileHeader
           today={today.type}
-          setToday={setToday}
           handleViewChange={handleViewChange}
           calendarRef={calendarRef}
           editMode={editMode}
+          setEditMode={setEditMode}
+          editButtonDisable={editButtonDisable}
         />
         <Button
           fullWidth

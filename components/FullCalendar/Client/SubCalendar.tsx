@@ -1,4 +1,4 @@
-import { useEffect, useState, createRef, RefObject } from 'react';
+import { useEffect, useState, RefObject } from 'react';
 // MUI
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -9,17 +9,17 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list';
-import { CalendarApi } from '@fullcalendar/core';
+import { CalendarApi, DayCellContentArg } from '@fullcalendar/core';
+import { DayCellContainer } from '@fullcalendar/core/internal';
 
 type Props = {
   subCalendarRef: RefObject<FullCalendar>;
   handleNavLinkDayClick: Function;
 };
 
-export const SubCalendar = ({
-  subCalendarRef,
-  handleNavLinkDayClick,
-}: Props) => {
+export const SubCalendar = (props: Props) => {
+  const { subCalendarRef, handleNavLinkDayClick } = props;
+
   const [calApi, setCalApi] = useState<CalendarApi>();
   const [title, setTitle] = useState<string | undefined>();
 
@@ -33,8 +33,6 @@ export const SubCalendar = ({
 
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
     if (!calApi) return;
-
-    console.log(calApi.getDate(), new Date());
 
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
@@ -79,12 +77,9 @@ export const SubCalendar = ({
           plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
           initialView='dayGridMonth'
           eventContent={renderEventContent}
-          dayCellContent={(e) => {
-            e.dayNumberText = e.dayNumberText.replace('日', '');
-            return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
-          }}
+          dayCellContent={dayCellContent}
           //
-          selectable={true}
+          selectable={false}
           weekends={true}
           headerToolbar={false}
           navLinks={true}
@@ -106,4 +101,10 @@ function renderEventContent() {
       <Typography>●</Typography>
     </Grid>
   );
+}
+
+// カレンダー上の日付
+function dayCellContent(e: DayCellContentArg) {
+  e.dayNumberText = e.dayNumberText.replace('日', '');
+  return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
 }

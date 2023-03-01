@@ -25,15 +25,13 @@ export default function EventControl() {
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
    *
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const getEvents = (matches: boolean) => {
-    console.log('matches:', matches);
+  const getEvents = () => {
     // 背景色を変更してから収納
     for (let i = 0; i < events.length; i++) {
       const item = events[i];
 
       const { color } = divideColor(item.start, item.end);
       item.color = color;
-      if (matches) item.durationEditable = true;
     }
 
     const add = events.length;

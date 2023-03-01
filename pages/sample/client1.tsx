@@ -31,7 +31,7 @@ import { divideColor } from '../../lib/colorControl';
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Client/ScheduleInfoDialog';
 import DeleteSnackbar from '../../components/Snackbar/DeleteSnackbar';
-import EditScheduleDialog from '../../components/Dialog/Client/EditScheduleDialog';
+import EditScheduleDialog from '../../components/Dialog/Client/EditDialog';
 import { ExternalEvent } from '../../components/FullCalendar/Client/ExternalEvents';
 import { CalendarHeader } from '../../components/FullCalendar/Client/Header';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';

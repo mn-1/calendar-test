@@ -11,11 +11,19 @@ export type Props = {
   editMode: boolean;
   handleViewChange: Function;
   today: 'month' | 'week' | 'day';
-  setToday: Function;
+  setEditMode: Function;
+  editButtonDisable: boolean;
 };
 
 export const MobileHeader = (props: Props): ReactElement => {
-  const { calendarRef, editMode, handleViewChange, today, setToday } = props;
+  const {
+    calendarRef,
+    editMode,
+    handleViewChange,
+    today,
+    setEditMode,
+    editButtonDisable,
+  } = props;
 
   const [title, setTitle] = useState<string>();
   const [calApi, setCalApi] = useState<CalendarApi>();
@@ -34,8 +42,6 @@ export const MobileHeader = (props: Props): ReactElement => {
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
-
-    setToday({ type: today, date: calApi.getDate() });
   };
 
   return (
@@ -44,7 +50,7 @@ export const MobileHeader = (props: Props): ReactElement => {
       direction='column'
       justifyContent='center'
       alignItems='center'
-      sx={{ my: '1.2rem', width: '100%' }}
+      sx={{ mt: '1.2rem', width: '100%' }}
     >
       <Typography sx={{ fontSize: '1rem' }}>{title}</Typography>
       <Grid
@@ -94,6 +100,15 @@ export const MobileHeader = (props: Props): ReactElement => {
           </Grid>
         </Grid>
       </Grid>
+      <Button
+        fullWidth
+        variant='contained'
+        disabled={editButtonDisable}
+        sx={{ my: '0.5rem' }}
+        onClick={() => setEditMode(!editMode)}
+      >
+        {editMode ? '編集終了' : '編集する'}
+      </Button>
     </Grid>
   );
 };

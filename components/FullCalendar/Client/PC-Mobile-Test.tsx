@@ -7,7 +7,9 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
-import { Container } from '@mui/material';
+import { Container, Tooltip } from '@mui/material';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -20,13 +22,13 @@ import {
   EventClickArg,
   EventContentArg,
   EventDropArg,
+  DayCellContentArg,
 } from '@fullcalendar/core';
 import interactionPlugin, {
   EventResizeDoneArg,
   EventReceiveArg,
 } from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import { DayCellContentArg } from '@fullcalendar/core';
 // lib
 import { resources, operator, externalEvents } from '../../../lib/data';
 import EventControl from '../../../lib/eventControl-3';
@@ -58,11 +60,16 @@ const ClientCalendar = (props: Props) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
   const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
-  const [faliledSnackbarOpen, setFailedSnackbarOpen] = useState<boolean>(false);
+
   const [today, setToday] = useState<{
     type: 'month' | 'week' | 'day';
     date: Date;
-  }>({ type: 'day', date: new Date(new Date().toLocaleDateString()) });
+    view: string;
+  }>({
+    type: 'day',
+    date: new Date(new Date().toLocaleDateString()),
+    view: 'resourceTimeGridDay',
+  });
 
   const {
     countId,
@@ -70,6 +77,8 @@ const ClientCalendar = (props: Props) => {
     eventInfo,
     editDialogOpen,
     addDialogOpen,
+    faliledSnackbarOpen,
+    setFailedSnackbarOpen,
     mobileEditSchedule,
     addSchedule,
     setAddDialogOpen,
@@ -189,17 +198,17 @@ const ClientCalendar = (props: Props) => {
     if (direction === 'month') {
       calApi.changeView('dayGridMonth');
       setEditButtonDisable(true);
-      setToday({ ...today, type: 'month' });
+      setToday({ ...today, type: 'month', view: 'dayGridMonth' });
     }
     if (direction === 'week') {
       calApi.changeView('timeGridWeek');
       setEditButtonDisable(true);
-      setToday({ ...today, type: 'week' });
+      setToday({ ...today, type: 'week', view: 'timeGridWeek' });
     }
     if (direction === 'day') {
       calApi.changeView('resourceTimeGridDay');
       setEditButtonDisable(false);
-      setToday({ ...today, type: 'day' });
+      setToday({ ...today, type: 'day', view: 'resourceTimeGridDay' });
     }
   };
 
@@ -211,7 +220,7 @@ const ClientCalendar = (props: Props) => {
     if (!calApi) return setFailedSnackbarOpen(true);
     calApi.changeView('resourceTimeGridDay', date);
     setEditButtonDisable(false);
-    setToday({ ...today, type: 'day' });
+    setToday({ ...today, type: 'day', view: 'resourceTimeGridDay' });
   };
 
   return (
@@ -253,15 +262,15 @@ const ClientCalendar = (props: Props) => {
                 editMode={editMode}
                 setEditMode={setEditMode}
               />
-              {myEvents.length != 0 && (
-                <Stack
-                  sx={{
-                    border: 1,
-                    borderWidth: 1,
-                    borderColor: borderColor,
-                  }}
-                >
-                  <Calendar
+
+              <Stack
+                sx={{
+                  border: 1,
+                  borderWidth: 1,
+                  borderColor: borderColor,
+                }}
+              >
+                {/* <Calendar
                     calendarRef={calendarRef}
                     handleEventClick={handleEventClick}
                     changeColor={changeColor}
@@ -269,29 +278,30 @@ const ClientCalendar = (props: Props) => {
                     handleNavLinkDayClick={handleNavLinkDayClick}
                     editMode={editMode}
                     setBorderColor={setBorderColor}
-                  />
-                  {/* <FullCalendar
+                  /> */}
+                {myEvents.length != 0 && (
+                  <FullCalendar
                     locale='ja'
                     locales={[jaLocale]}
-                    dayMinWidth={100}
+                    // dayMinWidth={100}
                     contentHeight='100vh'
                     initialEvents={myEvents}
                     ref={calendarRef}
                     resources={resources}
                     slotMinTime='05:00:00'
-                    slotMaxTime='23:00:00'
+                    slotMaxTime='22:00:00'
                     slotDuration='00:30:00'
                     snapDuration='00:05:00'
                     plugins={[
                       resourceTimeGridPlugin,
                       resourceTimelinePlugIn,
                       interactionPlugin,
-                      scrollGridPlugin,
+                      //   scrollGridPlugin,//これの警告
                       dayGridPlugin,
                       timeGridPlugin,
                       multiMonthPlugin,
                     ]}
-                    initialView='resourceTimeGridDay'
+                    initialView={today.view}
                     eventContent={renderEventContent}
                     dayCellContent={dayCellContent}
                     //
@@ -315,19 +325,10 @@ const ClientCalendar = (props: Props) => {
                     slotEventOverlap={true}
                     navLinks={true}
                     //
-                    eventResizeStart={() => {
-                      if (editMode) setBorderColor('#0000FF');
-                    }}
-                    eventResizeStop={() => {
-                      if (editMode) setBorderColor('#DCDCDC');
-                    }}
-                    eventDragStart={() => {
-                      if (editMode) setBorderColor('#0000FF');
-                    }}
-                    eventDragStop={() => {
-                      if (editMode) setBorderColor('#DCDCDC');
-                    }}
-                    //
+                    eventResizeStart={() => setBorderColor('#0000FF')}
+                    eventResizeStop={() => setBorderColor('#DCDCDC')}
+                    eventDragStart={() => setBorderColor('#0000FF')}
+                    eventDragStop={() => setBorderColor('#DCDCDC')}
                     eventsSet={(events) => setMyEvents(events)}
                     eventClick={handleEventClick}
                     eventResize={changeColor}
@@ -335,9 +336,9 @@ const ClientCalendar = (props: Props) => {
                     eventReceive={handleEventReceive}
                     drop={() => setBorderColor('#DCDCDC')}
                     navLinkDayClick={handleNavLinkDayClick}
-                  /> */}
-                </Stack>
-              )}
+                  />
+                )}
+              </Stack>
             </Grid>
           </Grid>
         ) : (
@@ -391,7 +392,7 @@ const ClientCalendar = (props: Props) => {
                     timeGridPlugin,
                     multiMonthPlugin,
                   ]}
-                  initialView='resourceTimeGridDay'
+                  initialView={today.view}
                   eventContent={renderEventContent}
                   dayCellContent={dayCellContent}
                   // resourceAreaWidth='300px'
@@ -417,19 +418,10 @@ const ClientCalendar = (props: Props) => {
                   slotEventOverlap={true}
                   navLinks={true}
                   //
-                  eventResizeStart={() => {
-                    if (editMode) setBorderColor('#0000FF');
-                  }}
-                  eventResizeStop={() => {
-                    if (editMode) setBorderColor('#DCDCDC');
-                  }}
-                  eventDragStart={() => {
-                    if (editMode) setBorderColor('#0000FF');
-                  }}
-                  eventDragStop={() => {
-                    if (editMode) setBorderColor('#DCDCDC');
-                  }}
-                  //
+                  eventResizeStart={() => setBorderColor('#0000FF')}
+                  eventResizeStop={() => setBorderColor('#DCDCDC')}
+                  eventDragStart={() => setBorderColor('#0000FF')}
+                  eventDragStop={() => setBorderColor('#DCDCDC')}
                   eventsSet={(events) => setMyEvents(events)}
                   eventClick={handleEventClick}
                   eventResize={changeColor}
@@ -541,7 +533,6 @@ function Calendar(props: calendarProps) {
 
   return (
     <>
-      {' '}
       {myEvents.length != 0 && (
         <FullCalendar
           locale='ja'
@@ -590,18 +581,10 @@ function Calendar(props: calendarProps) {
           slotEventOverlap={true}
           navLinks={true}
           //
-          eventResizeStart={() => {
-            if (editMode) setBorderColor('#0000FF');
-          }}
-          eventResizeStop={() => {
-            if (editMode) setBorderColor('#DCDCDC');
-          }}
-          eventDragStart={() => {
-            if (editMode) setBorderColor('#0000FF');
-          }}
-          eventDragStop={() => {
-            if (editMode) setBorderColor('#DCDCDC');
-          }}
+          eventResizeStart={() => setBorderColor('#0000FF')}
+          eventResizeStop={() => setBorderColor('#DCDCDC')}
+          eventDragStart={() => setBorderColor('#0000FF')}
+          eventDragStop={() => setBorderColor('#DCDCDC')}
           //
           eventsSet={(events) => setMyEvents(events)}
           eventClick={(arg) => handleEventClick(arg)}
@@ -621,11 +604,25 @@ function Calendar(props: calendarProps) {
  ーーーーーーーーーーーーーーーーーー*/
 function renderEventContent(eventContent: EventContentArg) {
   return (
-    <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
-      {eventContent.timeText}
-      <br />
-      {eventContent.event.extendedProps.operatorName}
-    </Typography>
+    <Tooltip
+      title={eventContent.event.extendedProps.operatorName}
+      placement='top-end'
+    >
+      <Grid container direction='column'>
+        <Grid container direction='row' alignItems='center'>
+          <AccessTimeOutlinedIcon />
+          <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+            {eventContent.timeText}
+          </Typography>
+        </Grid>
+        <Grid container direction='row' alignItems='center'>
+          <PersonOutlineOutlinedIcon />
+          <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+            {eventContent.event.extendedProps.operatorName}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Tooltip>
   );
 }
 

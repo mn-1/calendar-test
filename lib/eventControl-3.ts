@@ -18,8 +18,8 @@ export default function EventControl() {
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   // 予定編集ダイアログopen
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
-  // カレンダー
-  // const [calApi, setCalApi] = useState<CalendarApi | null>(null);
+  // 失敗した時のスナックバー
+  const [faliledSnackbarOpen, setFailedSnackbarOpen] = useState<boolean>(false);
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
@@ -48,7 +48,7 @@ export default function EventControl() {
     const event = eventInfo?.event;
     console.log(values);
 
-    if (!event) return console.log('event none');
+    if (!event) return setFailedSnackbarOpen(true);
 
     event.setProp('title', values.title);
     event.setExtendedProp('memo', values.memo);
@@ -75,9 +75,7 @@ export default function EventControl() {
       if (item.title === values.locationName) return item;
     });
 
-    if (!resource) return console.log('resorce none');
-
-    if (!event) return console.log('event none');
+    if (!resource || !event) return setFailedSnackbarOpen(true);
 
     event.setStart(start);
     event.setEnd(end);
@@ -109,8 +107,7 @@ export default function EventControl() {
       if (item.title === values.locationName) return item;
     });
 
-    if (!resource) return console.log('resorce none');
-    if (!calApi) return console.log('api none');
+    if (!resource || !calApi) return setFailedSnackbarOpen(true);
 
     calApi.addEvent({
       id: `${countId}`,
@@ -125,6 +122,7 @@ export default function EventControl() {
       },
       allDay: false,
       color,
+      durationEditable: false,
     });
 
     setAddDialogOpen(false);
@@ -136,6 +134,8 @@ export default function EventControl() {
     addDialogOpen,
     eventInfo,
     editDialogOpen,
+    faliledSnackbarOpen,
+    setFailedSnackbarOpen,
     mobileEditSchedule,
     setEditDialogOpen,
     editSchedule,

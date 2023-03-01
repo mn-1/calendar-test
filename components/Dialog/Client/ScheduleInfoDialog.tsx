@@ -5,7 +5,6 @@ import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTo
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 // operator
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 // avatar
 import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
 // memo
@@ -16,7 +15,6 @@ import {
   DialogActions,
   Dialog,
   DialogContent,
-  DialogContentText,
   Grid,
   IconButton,
   Tooltip,
@@ -41,7 +39,6 @@ export default function ScheduleInfoDialog(props: Props) {
   if (!event)
     return <FailedDialog open={props.open} handleClose={props.handleClose} />;
 
-  console.log(event);
   const {
     start,
     end,
@@ -121,6 +118,7 @@ export default function ScheduleInfoDialog(props: Props) {
                 <Typography color='textSecondary'>アバター</Typography>
               )}
             </Grid>
+
             <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
               <SubjectOutlinedIcon />
             </Grid>

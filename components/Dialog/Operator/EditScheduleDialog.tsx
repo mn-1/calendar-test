@@ -93,7 +93,7 @@ export default function EditScheduleDialog(props: Props) {
               minRows={3}
               maxRows={10}
             />
-            <Button variant='contained' type='submit'>
+            <Button variant='contained' type='submit' fullWidth>
               保存
             </Button>
           </Box>

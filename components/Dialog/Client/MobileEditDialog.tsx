@@ -1,14 +1,17 @@
 // MUI
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
+import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
 import {
   Box,
   DialogContent,
   Dialog,
   Button,
-  Grid,
   Typography,
   DialogActions,
   Tooltip,
   IconButton,
+  Grid,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 // components
@@ -104,53 +107,72 @@ export default function MobileEditScheduleDialog(props: Props) {
               autoComplete='off'
               onSubmit={handleSubmit(onAdd)}
             >
-              <Typography color='secondary'>日程</Typography>
-              <DatePickerForm defaultValue={event.start} control={control} />
-              <br />
-              <TimeFormInput
-                control={control}
-                errors={errors}
-                startDefaultValue={event.start}
-                endDefaultValue={event.end}
-              />
-              <AddFormSelect
-                operator={operator}
-                location={location}
-                control={control}
-                errors={errors}
-                locationDefaultValue={event.getResources()[0]._resource.title}
-                operatorDefaultValue={event.extendedProps.operatorName}
-              />
-              <Typography color='secondary'>タイトル</Typography>
-              <EditFormInput
-                defaultValue={event.title ?? ''}
-                name='title'
-                autoComplete='off'
-                focused
-                placeholder='タイトル'
-                fullWidth
-              />
-              <Typography color='secondary'>アバター名</Typography>
-              <EditFormInput
-                defaultValue={event.extendedProps.avatar}
-                name='avatar'
-                autoComplete='off'
-                focused
-                placeholder='アバター'
-                fullWidth
-              />
-              <Typography color='secondary'>メモ</Typography>
-              <EditFormInput
-                defaultValue={event.extendedProps.memo}
-                name='memo'
-                autoComplete='off'
-                focused
-                placeholder='メモ'
-                fullWidth
-                multiline
-                minRows={3}
-                maxRows={10}
-              />
+              <Grid container direction='row' alignItems='center'>
+                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }} />
+                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                  <EditFormInput
+                    defaultValue={event.title ?? ''}
+                    name='title'
+                    autoComplete='off'
+                    focused
+                    placeholder='タイトル'
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+                  <AccessTimeOutlinedIcon />
+                </Grid>
+                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                  <DatePickerForm
+                    defaultValue={event.start}
+                    control={control}
+                  />
+                  <br />
+                  <TimeFormInput
+                    control={control}
+                    errors={errors}
+                    startDefaultValue={event.start}
+                    endDefaultValue={event.end}
+                  />
+                </Grid>
+                <AddFormSelect
+                  operator={operator}
+                  location={location}
+                  control={control}
+                  errors={errors}
+                  locationDefaultValue={event.getResources()[0]._resource.title}
+                  operatorDefaultValue={event.extendedProps.operatorName}
+                />
+                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+                  <Face3OutlinedIcon />
+                </Grid>
+                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                  <EditFormInput
+                    defaultValue={event.extendedProps.avatar}
+                    name='avatar'
+                    autoComplete='off'
+                    focused
+                    placeholder='アバター'
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+                  <SubjectOutlinedIcon />
+                </Grid>
+                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                  <EditFormInput
+                    defaultValue={event.extendedProps.memo}
+                    name='memo'
+                    autoComplete='off'
+                    focused
+                    placeholder='メモ'
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    maxRows={10}
+                  />
+                </Grid>
+              </Grid>
               <Button
                 fullWidth
                 variant='contained'

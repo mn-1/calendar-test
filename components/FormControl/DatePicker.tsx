@@ -33,6 +33,7 @@ export default function DatePickerForm({ defaultValue, control }: Props) {
             renderInput={(params) => (
               <CssTextField
                 {...params}
+                focused
                 sx={{ mb: '0.5rem' }}
                 error={!!errors['date']}
                 helperText={
@@ -71,10 +72,12 @@ const CssTextField = styled(TextField)({
       borderRadius: 0,
     },
     '&:hover fieldset': {
-      border: '1px solid #c8d0d4',
+      border: 0,
+      borderBottom: '1px solid #dddddd',
     },
     '&.Mui-focused fieldset': {
-      border: '1px solid #c8d0d4',
+      border: 0,
+      borderBottom: '1px solid #dddddd',
     },
     '& .Mui-disabled': {
       backgroundColor: '#F8F5F0',

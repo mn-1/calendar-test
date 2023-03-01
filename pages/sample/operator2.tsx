@@ -98,9 +98,6 @@ const SampleCalendar: React.FC = () => {
 
   const now = new Date();
 
-  let calendarSize = 12;
-  if (matches) calendarSize = 9;
-
   return (
     <>
       <Header />
@@ -126,7 +123,7 @@ const SampleCalendar: React.FC = () => {
               </Grid>
             )}
 
-            <Grid item xs={calendarSize}>
+            <Grid item xs={matches ? 9 : 12}>
               <CalendarHeader
                 calendarRef={calendarRef}
                 handleViewChange={handleViewChange}
@@ -163,7 +160,6 @@ const SampleCalendar: React.FC = () => {
           }}
           handleClose={() => setInfoDialogOpen(false)}
         />
-
         {/* utils ↑ */}
       </Container>
     </>

@@ -1,7 +1,17 @@
 // react
 import React, { useState, RefObject, useEffect } from 'react';
 // MUI
-import { Box, Container, Grid, Typography, Stack } from '@mui/material';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Stack,
+  Tooltip,
+} from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -88,11 +98,23 @@ export default MainCalendar;
 
 // カレンダーに表示する内容
 function renderEventContent(eventContent: EventContentArg) {
+  const location = eventContent.event.getResources()[0]._resource.title;
   return (
-    <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
-      {eventContent.timeText}
-      <br />
-      {eventContent.event.extendedProps.operatorName}
-    </Typography>
+    <Tooltip title={location} placement='top-end'>
+      <Grid container direction='column'>
+        <Grid container direction='row' alignItems='center'>
+          <AccessTimeOutlinedIcon />
+          <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+            {eventContent.timeText}
+          </Typography>
+        </Grid>
+        <Grid container direction='row' alignItems='center'>
+          <LocationOnOutlinedIcon />
+          <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+            {location}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Tooltip>
   );
 }

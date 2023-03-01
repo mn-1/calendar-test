@@ -26,17 +26,16 @@ export const CalendarHeader = (props: Props): ReactElement => {
   } = props;
 
   const [title, setTitle] = useState<string>();
-  const [calApi, setCalApi] = useState<CalendarApi>();
 
   useEffect(() => {
     if (calendarRef.current) {
       const calApi = calendarRef.current.getApi();
       setTitle(calApi.view.title);
-      setCalApi(calApi);
     }
   }, [calendarRef]);
 
   const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
+    const calApi = calendarRef.current?.getApi();
     if (!calApi) return;
 
     if (direction === 'prev') calApi.prev();

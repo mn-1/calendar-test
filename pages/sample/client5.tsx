@@ -81,7 +81,7 @@ const ClientCalendar = () => {
 
   useEffect(() => {
     console.log(matches);
-    getEvents(matches);
+    getEvents();
   }, [matches]);
 
   /**

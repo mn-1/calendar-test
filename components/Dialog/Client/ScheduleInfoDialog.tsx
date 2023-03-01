@@ -28,8 +28,6 @@ type Props = {
 export default function ScheduleInfoDialog(props: Props) {
   const event = props.eventInfo?.event;
 
-  console.log(props);
-
   if (event && event.start && event.end)
     return (
       <Dialog open={props.open} fullWidth>

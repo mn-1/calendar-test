@@ -10,7 +10,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list';
 import { CalendarApi, DayCellContentArg } from '@fullcalendar/core';
-import { DayCellContainer } from '@fullcalendar/core/internal';
 
 type Props = {
   subCalendarRef: RefObject<FullCalendar>;

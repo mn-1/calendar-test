@@ -294,6 +294,12 @@ const PcCalendar = (props: Props) => {
                   ]}
                   initialView='resourceTimeGridDay'
                   eventContent={renderEventContent}
+                  dayCellContent={(e) => {
+                    e.dayNumberText = e.dayNumberText.replace('日', '');
+                    return (
+                      <Typography fontSize='14px'>{e.dayNumberText}</Typography>
+                    );
+                  }}
                   //
                   droppable={editMode}
                   editable={editMode}

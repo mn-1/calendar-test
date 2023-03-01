@@ -1,5 +1,11 @@
 // react
-import React, { useState, useRef, createRef, useEffect } from 'react';
+import React, {
+  useState,
+  useRef,
+  createRef,
+  useEffect,
+  RefObject,
+} from 'react';
 // MUI
 import { Box, Container, Grid, Typography, Button, Stack } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -39,19 +45,35 @@ import { SubCalendar } from './SubCalendar';
 
 type Props = {
   matches: boolean;
+  calendarRef: RefObject<FullCalendar>;
+  handleEventClick: Function;
+  deleteEvent: VoidFunction;
+  undoDelete: VoidFunction;
+  handleInnerEventDrop: Function;
+  handleEventResize: Function;
+  setInfoDialogOpen: Function;
+  infoDialogOpen: boolean;
 };
 
 const PcCalendar = (props: Props) => {
-  const { matches } = props;
-  const calendarRef = createRef<FullCalendar>();
+  const {
+    matches,
+    calendarRef,
+    handleEventClick,
+    deleteEvent,
+    undoDelete,
+    handleInnerEventDrop,
+    handleEventResize,
+    setInfoDialogOpen,
+    infoDialogOpen,
+  } = props;
+
   const subCalendarRef = createRef<FullCalendar>();
 
-  const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
-  const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false);
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
   const [today, setToday] = useState<'month' | 'week' | 'day'>('day');
   const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
+  const [editMode, setEditMode] = useState<boolean>(false);
 
   const {
     countId,
@@ -73,96 +95,9 @@ const PcCalendar = (props: Props) => {
   }, [matches]);
 
   /**
-   * イベント詳細表示ダイアログ開く
-   */
-  const handleEventClick = (arg: EventClickArg) => {
-    setInfoDialogOpen(true);
-    setEventInfo(arg);
-  };
-
-  /**
-   * イベントを削除
-   */
-  const deleteEvent = () => {
-    const calApi = calendarRef.current?.getApi();
-    if (!eventInfo || !calApi) return;
-
-    eventInfo.event.remove();
-    setInfoDialogOpen(false);
-    setDeleteSnackbarOpen(true);
-  };
-
-  /**
-   * イベントを削除したのを取り消す
-   */
-  const undoDelete = () => {
-    const calApi = calendarRef.current?.getApi();
-    if (!eventInfo || !calApi) return;
-
-    const {
-      id,
-      borderColor,
-      backgroundColor,
-      title,
-      startStr,
-      endStr,
-      extendedProps: { memo, operatorName, avatar },
-    } = eventInfo.event;
-
-    calApi.addEvent({
-      id,
-      title,
-      start: startStr,
-      end: endStr,
-      resourceId: eventInfo.event.getResources()[0]._resource.id,
-      extendedProps: {
-        memo: memo ?? '',
-        operatorName: operatorName ?? '',
-        avatar: avatar ?? '',
-      },
-      backgroundColor,
-      borderColor,
-    });
-
-    setDeleteSnackbarOpen(false);
-  };
-
-  /**
-   * イベント移動した時に色変える
-   * 日表示以外だったら戻す
-   */
-  const handleInnerEventDrop = (arg: EventDropArg) => {
-    const calApi = calendarRef.current?.getApi();
-    const { start, end } = arg.event;
-
-    // 取得できない,日表示でなかったら戻す
-    if (!calApi || !start || !end || !editMode) return arg.revert();
-
-    const { color } = divideColor(start.getTime(), end.getTime());
-
-    arg.event.setProp('color', color);
-  };
-
-  /**
-   * イベントのサイズ変更した時に色変える
-   */
-  const handleEventResize = (arg: EventResizeDoneArg) => {
-    const calApi = calendarRef.current?.getApi();
-    const { start, end } = arg.event;
-
-    // 取得できない,日表示でなかったら戻す
-    if (!calApi || !start || !end || !editMode) return arg.revert();
-
-    const { color } = divideColor(start.getTime(), end.getTime());
-
-    arg.event.setProp('color', color);
-  };
-
-  /**
    * 外部のイベント追加
    */
   const drop = (arg: DropArg) => {
-    console.log('drop info', arg);
     setBorderColor('#DCDCDC');
   };
 
@@ -170,7 +105,6 @@ const PcCalendar = (props: Props) => {
    * 外部のイベント受付
    */
   const handleEventReceive = (arg: EventReceiveArg) => {
-    console.log('event receive');
     const start = arg.event.start;
     let end = start;
 
@@ -324,9 +258,9 @@ const PcCalendar = (props: Props) => {
                   //
                   drop={drop}
                   eventReceive={handleEventReceive}
-                  eventClick={handleEventClick}
-                  eventResize={handleEventResize}
-                  eventDrop={handleInnerEventDrop}
+                  eventClick={(arg) => handleEventClick(arg)}
+                  eventResize={(arg) => handleEventResize(arg)}
+                  eventDrop={(arg) => handleInnerEventDrop(arg)}
                   eventsSet={(events) => {
                     console.log('events:', events);
                     setMyEvents(events);
@@ -354,11 +288,16 @@ const PcCalendar = (props: Props) => {
             editSchedule={editSchedule}
           />
         )}
-
-        <DeleteSnackbar
-          open={deleteSnackbarOpen}
-          undoDelete={undoDelete}
-          handleClose={() => setDeleteSnackbarOpen(false)}
+        <ScheduleInfoDialog
+          editMode={!editMode}
+          eventInfo={eventInfo}
+          open={infoDialogOpen}
+          delete={deleteEvent}
+          edit={() => {
+            setEditDialogOpen(true);
+            setInfoDialogOpen(false);
+          }}
+          handleClose={() => setInfoDialogOpen(false)}
         />
         {/* utils ↑ */}
       </Container>

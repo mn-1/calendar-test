@@ -291,8 +291,8 @@ export const eventsOperator = [
       operatorName: 'オペレーターAさん',
       avatar: 'アバターE',
     },
-    color: '',
-    // display: 'background',
+    color: '#ff9f89',
+    display: 'background',
   },
   {
     id: '3',

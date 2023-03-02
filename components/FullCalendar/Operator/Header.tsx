@@ -1,40 +1,28 @@
-import { ReactElement, RefObject, useEffect, useMemo, useState } from 'react';
+import { ReactElement, RefObject, useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
-import { Button, Stack, Typography, Grid } from '@mui/material';
+import { Button, Typography, Grid } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { CalendarApi } from '@fullcalendar/core';
 
 type Props = {
   calendarRef: RefObject<FullCalendar>;
   handleViewChange: Function;
   today: 'month' | 'week' | 'day' | 'day2' | 'list';
+  handleDateChange: Function;
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
-  const { calendarRef, handleViewChange, today } = props;
+  const { calendarRef, handleViewChange, today, handleDateChange } = props;
 
   const [title, setTitle] = useState<string>();
-  const [calApi, setCalApi] = useState<CalendarApi>();
 
   useEffect(() => {
     if (calendarRef.current) {
       const calApi = calendarRef.current.getApi();
       setTitle(calApi.view.title);
-      setCalApi(calApi);
     }
   }, [calendarRef]);
-
-  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
-    if (!calApi) return;
-
-    console.log(calApi.getDate(), new Date());
-
-    if (direction === 'prev') calApi.prev();
-    if (direction === 'next') calApi.next();
-    if (direction === 'today') calApi.today();
-  };
 
   return (
     <header>

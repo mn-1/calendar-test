@@ -16,6 +16,8 @@ export default function EventControl() {
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定編集ダイアログopen
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+  // 失敗した時のスナックバー
+  const [failedSnackbarOpen, setFailedSnackbarOpen] = useState<boolean>(false);
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
@@ -55,6 +57,8 @@ export default function EventControl() {
     myEvents,
     eventInfo,
     editDialogOpen,
+    failedSnackbarOpen,
+    setFailedSnackbarOpen,
     setEditDialogOpen,
     editMemo,
     setEventInfo,

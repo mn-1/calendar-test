@@ -60,7 +60,6 @@ const ClientCalendar = (props: Props) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editButtonDisable, setEditButtonDisable] = useState<boolean>(false);
   const [borderColor, setBorderColor] = useState<string>('#DCDCDC');
-
   const [today, setToday] = useState<{
     type: 'month' | 'week' | 'day';
     date: Date;

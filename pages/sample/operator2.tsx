@@ -20,15 +20,17 @@ const SampleCalendar: React.FC = () => {
   const matches: boolean = useMediaQuery('(min-width:992px)');
   const calendarRef = createRef<FullCalendar>();
 
-  const [today, setToday] = useState<
-    'month' | 'week' | 'day' | 'day2' | 'list'
-  >('day');
+  const [today, setToday] = useState<{
+    type: 'month' | 'week' | 'day' | 'day2' | 'list';
+  }>({ type: 'day' });
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
 
   const {
     myEvents,
     eventInfo,
     editDialogOpen,
+    failedSnackbarOpen,
+    setFailedSnackbarOpen,
     setEditDialogOpen,
     editMemo,
     setEventInfo,
@@ -60,10 +62,11 @@ const SampleCalendar: React.FC = () => {
    * サブカレンダーの日付選択
    */
   const handleNavLinkDayClick = (date: Date) => {
-    const mainCalApi = calendarRef.current?.getApi();
-    if (!mainCalApi) return console.log('calApi none');
-    mainCalApi.changeView('resourceTimeGridDay', date);
-    setToday('day');
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return setFailedSnackbarOpen(true);
+
+    calApi.changeView('resourceTimeGridDay', date);
+    setToday({ ...today, type: 'day' });
   };
 
   /**
@@ -76,23 +79,41 @@ const SampleCalendar: React.FC = () => {
     if (!calApi) return;
     if (direction === 'month') {
       calApi.changeView('dayGridMonth');
-      setToday('month');
+      setToday({ ...today, type: 'month' });
     }
     if (direction === 'week') {
       calApi.changeView('timeGridWeek');
-      setToday('week');
+      setToday({ ...today, type: 'week' });
     }
     if (direction === 'day') {
       calApi.changeView('resourceTimeGridDay');
-      setToday('day');
+      setToday({ ...today, type: 'day' });
     }
     if (direction === 'day2') {
       calApi.changeView('timeGridDay');
-      setToday('day2');
+      setToday({ ...today, type: 'day2' });
     }
     if (direction === 'list') {
       calApi.changeView('listMonth');
-      setToday('list');
+      setToday({ ...today, type: 'list' });
+    }
+  };
+
+  /**
+   * カレンダーの日付前後する
+   */
+  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return setFailedSnackbarOpen(true);
+
+    if (direction === 'prev') {
+      calApi.prev();
+    }
+    if (direction === 'next') {
+      calApi.next();
+    }
+    if (direction === 'today') {
+      calApi.today();
     }
   };
 
@@ -127,7 +148,8 @@ const SampleCalendar: React.FC = () => {
               <CalendarHeader
                 calendarRef={calendarRef}
                 handleViewChange={handleViewChange}
-                today={today}
+                today={today.type}
+                handleDateChange={handleDateChange}
               />
               <Stack overflow='scroll'>
                 <MainCalendar
@@ -135,6 +157,7 @@ const SampleCalendar: React.FC = () => {
                   myEvents={myEvents}
                   handleEventClick={handleEventClick}
                   handleEventSet={handleEventSet}
+                  handleNavLinkDayClick={handleNavLinkDayClick}
                 />
               </Stack>
             </Grid>

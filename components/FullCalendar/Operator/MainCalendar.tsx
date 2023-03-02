@@ -4,14 +4,7 @@ import React, { useState, RefObject, useEffect } from 'react';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Stack,
-  Tooltip,
-} from '@mui/material';
+import { Grid, Typography, Stack, Tooltip } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import jaLocale from '@fullcalendar/core/locales/ja';
@@ -31,24 +24,29 @@ export type Props = {
   myEvents: any;
   handleEventClick: Function;
   handleEventSet: Function;
+  handleNavLinkDayClick: Function;
 };
 
 const MainCalendar = (props: Props) => {
-  const { calendarRef, myEvents, handleEventClick, handleEventSet } = props;
+  const {
+    calendarRef,
+    myEvents,
+    handleEventClick,
+    handleEventSet,
+    handleNavLinkDayClick,
+  } = props;
   const [calApi, setCalApi] = useState<CalendarApi | null>(null);
 
   useEffect(() => {
     // ここで取得する必要がある
     const calApi = calendarRef.current?.getApi();
     if (calApi) setCalApi(calApi);
-  }, [calApi]);
+  }, [calendarRef]);
 
   // カレンダーに表示する内容
   function renderEventContent(eventContent: EventContentArg) {
     if (!calApi) return <></>;
     const view = calApi.view.type;
-
-    console.log(view);
 
     const location = eventContent.event.getResources()[0]._resource.title;
     return (
@@ -121,6 +119,7 @@ const MainCalendar = (props: Props) => {
           //
           eventClick={(arg) => handleEventClick(arg)}
           eventsSet={(events) => handleEventSet(events)}
+          navLinkDayClick={(date) => handleNavLinkDayClick(date)}
         />
       </Stack>
     </>

@@ -77,6 +77,7 @@ const MainCalendar = (props: Props) => {
       locale='ja'
       eventColor='#6A5ACD'
       contentHeight='auto'
+      dayMinWidth={100}
       resources={resources}
       slotDuration='00:30:00'
       slotMinTime='05:00:00'
@@ -108,15 +109,10 @@ const MainCalendar = (props: Props) => {
       navLinks={true}
       expandRows={true}
       //
-      dayMinWidth={100}
+
       eventClick={(arg) => handleEventClick(arg)}
       eventsSet={(events) => handleEventSet(events)}
       navLinkDayClick={(date) => handleNavLinkDayClick(date)}
-      //
-
-      select={(arg) => {
-        console.log(arg);
-      }}
     />
   );
 };

@@ -11,12 +11,7 @@ const Home: NextPage = () => {
         </Link>
         <br />
         <ClientText />
-        {/* <Link href='/sample/operator2' passHref>
-          <Button variant='contained'>
-            オペレーターページ(左のカレンダー2つ)
-          </Button>
-        </Link>
-        <br /> */}
+
         <Link href='/sample/operator3' passHref>
           <Button variant='contained'>オペレーターページ</Button>
         </Link>

@@ -113,7 +113,7 @@ const MainCalendar = (props: Props) => {
       eventsSet={(events) => handleEventSet(events)}
       navLinkDayClick={(date) => handleNavLinkDayClick(date)}
       //
-      selectable={true}
+
       select={(arg) => {
         console.log(arg);
       }}

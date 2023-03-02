@@ -23,7 +23,7 @@ export default function EventControl() {
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
-   *
+   * 一覧取得
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const getEvents = () => {
     // 背景色を変更してから収納

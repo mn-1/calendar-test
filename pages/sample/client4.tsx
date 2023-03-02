@@ -13,7 +13,7 @@ import { EventResizeDoneArg, EventReceiveArg } from '@fullcalendar/interaction';
 import { EventApi } from '@fullcalendar/core';
 // lib
 import { resources, operator, externalEvents } from '../../lib/data';
-import EventControl from '../../lib/eventControl-3';
+import EventControl from '../../lib/eventControl';
 import { divideColor } from '../../lib/colorControl';
 import { scheduleDataInfo } from '../../lib/inputDataControl';
 // components

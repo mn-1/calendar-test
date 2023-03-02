@@ -4,7 +4,6 @@ import { Button, Typography, Grid } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { CalendarApi } from '@fullcalendar/core';
 
 export type Props = {
   calendarRef: RefObject<FullCalendar>;

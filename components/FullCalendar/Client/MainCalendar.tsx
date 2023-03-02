@@ -1,12 +1,9 @@
 // react
-import React, { useState, createRef, useEffect, RefObject } from 'react';
+import React, { RefObject } from 'react';
 // MUI
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Box from '@mui/material/Box';
 import { Container, Tooltip } from '@mui/material';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -18,35 +15,11 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import resourceTimelinePlugIn from '@fullcalendar/resource-timeline';
-import {
-  EventClickArg,
-  EventContentArg,
-  EventDropArg,
-  DayCellContentArg,
-} from '@fullcalendar/core';
-import interactionPlugin, {
-  EventResizeDoneArg,
-  EventReceiveArg,
-} from '@fullcalendar/interaction';
+import { EventContentArg, DayCellContentArg } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 // lib
-import { resources, operator, externalEvents } from '../../../lib/data';
-import EventControl from '../../../lib/eventControl-3';
-import { divideColor } from '../../../lib/colorControl';
-import { scheduleDataInfo } from '../../../lib/inputDataControl';
-// components
-import Header from '../../Header/Header';
-import ScheduleInfoDialog from '../../Dialog/Client/ScheduleInfoDialog';
-import DeleteSnackbar from '../../Snackbar/DeleteSnackbar';
-import { MobileHeader } from './MobileHeader';
-import AddScheduleDialog from '../../Dialog/Client/AddScheduleDialog';
-import MobileEditScheduleDialog from '../../Dialog/Client/MobileEditDialog';
-import { ExternalEvent } from '../../FullCalendar/Client/ExternalEvents';
-import { CalendarHeader } from './Header';
-import FailedSnackbar from '../../Snackbar/FailedSnackbar';
-import { SubCalendar } from './SubCalendar';
-import EditScheduleDialog from '../../Dialog/Client/EditDialog';
-import { EventApi } from '@fullcalendar/core';
+import { resources } from '../../../lib/data';
 
 type calendarProps = {
   editMode: boolean;

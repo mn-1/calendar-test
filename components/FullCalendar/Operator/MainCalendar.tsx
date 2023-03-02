@@ -19,7 +19,7 @@ import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
 import { resources, operator } from '../../../lib/data';
 import { CalendarApi } from '@fullcalendar/core';
 
-export type Props = {
+type Props = {
   calendarRef: RefObject<FullCalendar>;
   myEvents: any;
   handleEventClick: Function;
@@ -70,64 +70,54 @@ const MainCalendar = (props: Props) => {
   }
 
   return (
-    <>
-      <Stack
-        sx={{
-          minWidth: '800px',
-          border: 1,
-          borderWidth: 3,
-          borderColor: '#dcdcdc',
-        }}
-      >
-        <FullCalendar
-          initialEvents={myEvents}
-          ref={calendarRef}
-          locales={[jaLocale]}
-          locale='ja'
-          eventColor='#6A5ACD'
-          contentHeight='auto'
-          resources={resources}
-          slotDuration='00:30:00'
-          slotMinTime='05:00:00'
-          slotMaxTime='23:00:00'
-          plugins={[
-            timeGridPlugin, // 縦軸時間に
-            dayGridPlugin, // 日付ごとに
-            interactionPlugin,
-            listPlugin,
-            resourceTimeGridPlugin,
-            interactionPlugin,
-            scrollGridPlugin,
-          ]}
-          initialView='resourceTimeGrid'
-          eventContent={renderEventContent}
-          //
-          droppable={false}
-          editable={false}
-          //
-          eventOverlap={false}
-          headerToolbar={false}
-          // selectable={false}
-          selectMirror={true}
-          weekends={true}
-          eventResizableFromStart={true}
-          nowIndicator={true}
-          allDaySlot={false}
-          slotEventOverlap={true}
-          navLinks={true}
-          expandRows={true}
-          //
-          eventClick={(arg) => handleEventClick(arg)}
-          eventsSet={(events) => handleEventSet(events)}
-          navLinkDayClick={(date) => handleNavLinkDayClick(date)}
-          //
-          selectable={true}
-          select={(arg) => {
-            console.log(arg);
-          }}
-        />
-      </Stack>
-    </>
+    <FullCalendar
+      initialEvents={myEvents}
+      ref={calendarRef}
+      locales={[jaLocale]}
+      locale='ja'
+      eventColor='#6A5ACD'
+      contentHeight='auto'
+      resources={resources}
+      slotDuration='00:30:00'
+      slotMinTime='05:00:00'
+      slotMaxTime='23:00:00'
+      plugins={[
+        timeGridPlugin, // 縦軸時間に
+        dayGridPlugin, // 日付ごとに
+        interactionPlugin,
+        listPlugin,
+        resourceTimeGridPlugin,
+        interactionPlugin,
+        scrollGridPlugin,
+      ]}
+      initialView='resourceTimeGrid'
+      eventContent={renderEventContent}
+      //
+      droppable={false}
+      editable={false}
+      //
+      eventOverlap={false}
+      headerToolbar={false}
+      selectable={false}
+      selectMirror={true}
+      weekends={true}
+      eventResizableFromStart={true}
+      nowIndicator={true}
+      allDaySlot={false}
+      slotEventOverlap={true}
+      navLinks={true}
+      expandRows={true}
+      //
+      dayMinWidth={100}
+      eventClick={(arg) => handleEventClick(arg)}
+      eventsSet={(events) => handleEventSet(events)}
+      navLinkDayClick={(date) => handleNavLinkDayClick(date)}
+      //
+      selectable={true}
+      select={(arg) => {
+        console.log(arg);
+      }}
+    />
   );
 };
 

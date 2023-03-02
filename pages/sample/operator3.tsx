@@ -148,7 +148,24 @@ const SampleCalendar: React.FC = () => {
                 today={today.type}
                 handleDateChange={handleDateChange}
               />
-              <Stack overflow='scroll'>
+
+              {/* <Stack
+                overflow='scroll'
+                sx={{
+                  minWidth: '800px',
+                  border: 1,
+                  borderWidth: 3,
+                  borderColor: '#dcdcdc',
+                }}
+              > */}
+              <Stack
+                sx={{
+                  border: 1,
+                  borderWidth: 1,
+                  borderColor: '#dcdcdc',
+                  overflow: 'scroll',
+                }}
+              >
                 <MainCalendar
                   calendarRef={calendarRef}
                   myEvents={myEvents}

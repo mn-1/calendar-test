@@ -10,14 +10,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import listPlugin from '@fullcalendar/list';
+import { DayCellContentArg } from '@fullcalendar/core';
 
 type Props = {
-  today: string;
-  handleNavLinkClick: Function;
+  handleSelect: Function;
 };
 
 export default function Month(props: Props) {
-  const { today, handleNavLinkClick } = props;
+  const { handleSelect } = props;
 
   const calendarRef = createRef<FullCalendar>();
 
@@ -37,15 +37,9 @@ export default function Month(props: Props) {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return;
 
-    if (direction === 'prev') {
-      calApi.prev();
-    }
-    if (direction === 'next') {
-      calApi.next();
-    }
-    if (direction === 'today') {
-      calApi.today();
-    }
+    if (direction === 'prev') calApi.prev();
+    if (direction === 'next') calApi.next();
+    if (direction === 'today') calApi.today();
 
     setTitle(calApi.view.title);
   };
@@ -93,13 +87,6 @@ export default function Month(props: Props) {
           initialView='dayGridMonth'
           eventBackgroundColor='#FFA500'
           //
-          ref={calendarRef}
-          initialEvents={events}
-          dayCellContent={(e) => {
-            e.dayNumberText = e.dayNumberText.replace('日', '');
-            return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
-          }}
-          //
           headerToolbar={false}
           fixedWeekCount={false}
           expandRows={true}
@@ -107,11 +94,22 @@ export default function Month(props: Props) {
           dayMaxEvents={true}
           selectable={true}
           //
-          select={(arg) => handleNavLinkClick(arg.start)}
+          ref={calendarRef}
+          initialEvents={events}
+          dayCellContent={dayCellContent}
+          select={(arg) => handleSelect(arg.start)}
         />
       </Box>
     </Container>
   );
+}
+
+/**ーーーーーーーーーーーーーーーーーー
+ * カレンダー上の日付
+ ーーーーーーーーーーーーーーーーーー*/
+function dayCellContent(e: DayCellContentArg) {
+  e.dayNumberText = e.dayNumberText.replace('日', '');
+  return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
 }
 
 const events = [

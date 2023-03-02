@@ -122,8 +122,6 @@ const SampleCalendar: React.FC = () => {
     }
   };
 
-  const now = new Date();
-
   return (
     <>
       <Header />
@@ -139,10 +137,7 @@ const SampleCalendar: React.FC = () => {
           <Grid container direction='row'>
             {matches && (
               <Grid item xs={3}>
-                <Month
-                  handleNavLinkClick={handleNavLinkDayClick}
-                  today={today.type}
-                />
+                <Month handleSelect={handleNavLinkDayClick} />
               </Grid>
             )}
 

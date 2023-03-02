@@ -2,7 +2,7 @@
 import { useState } from 'react';
 // lib
 import { resources, eventsOperator } from './data';
-import { divideColor } from './colorControl';
+import { divideColor, divideColor2 } from './colorControl';
 import { editMemoInfo } from './inputDataControl';
 // Fullcalendar
 import { CalendarApi, EventClickArg } from '@fullcalendar/core';
@@ -28,7 +28,7 @@ export default function EventControl() {
     for (let i = 0; i < eventsOperator.length; i++) {
       const item = eventsOperator[i];
 
-      const { color } = divideColor(item.start, item.end);
+      const { color } = divideColor2(new Date(item.start), new Date(item.end));
       item.color = color;
     }
 
@@ -37,6 +37,25 @@ export default function EventControl() {
 
     setMyEvents(eventsOperator);
   };
+
+  // const getColorEvents = () => {
+  //   // 背景色を変更してから収納
+  //   for (let i = 0; i < eventsOperator.length; i++) {
+  //     const item = eventsOperator[i];
+
+  //     const { color } = divideColor2(new Date(item.start), new Date(item.end));
+  //     item.color = color;
+
+  //     item.start = item.start.slice(0, 10);
+  //     item.end = item.end.slice(0, 10);
+  //     item.display = 'background';
+  //   }
+
+  //   const add = eventsOperator.length;
+  //   setCountId(add);
+
+  //   setMyEvents2(eventsOperator);
+  // };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * 予定編集

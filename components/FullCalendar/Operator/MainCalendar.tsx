@@ -107,7 +107,7 @@ const MainCalendar = (props: Props) => {
           //
           eventOverlap={false}
           headerToolbar={false}
-          selectable={false}
+          // selectable={false}
           selectMirror={true}
           weekends={true}
           eventResizableFromStart={true}
@@ -120,6 +120,11 @@ const MainCalendar = (props: Props) => {
           eventClick={(arg) => handleEventClick(arg)}
           eventsSet={(events) => handleEventSet(events)}
           navLinkDayClick={(date) => handleNavLinkDayClick(date)}
+          //
+          selectable={true}
+          select={(arg) => {
+            console.log(arg);
+          }}
         />
       </Stack>
     </>

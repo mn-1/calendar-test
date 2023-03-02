@@ -9,10 +9,12 @@ const Home: NextPage = () => {
         <Link href='/sample/client3' passHref>
           <Button variant='contained'>顧客ページ</Button>
         </Link>
+        <br />
         <ClientText />
         <Link href='/sample/operator2' passHref>
           <Button variant='contained'>オペレーターページ</Button>
         </Link>
+        <br />
         <OperatorText />
       </Grid>
     </>

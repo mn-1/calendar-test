@@ -24,6 +24,7 @@ import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
 // lib
 import { resources, operator } from '../../../lib/data';
+import { CalendarApi } from '@fullcalendar/core';
 
 export type Props = {
   calendarRef: RefObject<FullCalendar>;
@@ -32,12 +33,44 @@ export type Props = {
   handleEventSet: Function;
 };
 
-const MainCalendar = ({
-  calendarRef,
-  myEvents,
-  handleEventClick,
-  handleEventSet,
-}: Props) => {
+const MainCalendar = (props: Props) => {
+  const { calendarRef, myEvents, handleEventClick, handleEventSet } = props;
+  const [calApi, setCalApi] = useState<CalendarApi | null>(null);
+
+  useEffect(() => {
+    // ここで取得する必要がある
+    const calApi = calendarRef.current?.getApi();
+    if (calApi) setCalApi(calApi);
+  }, [calApi]);
+
+  // カレンダーに表示する内容
+  function renderEventContent(eventContent: EventContentArg) {
+    if (!calApi) return <></>;
+    const view = calApi.view.type;
+
+    console.log(view);
+
+    const location = eventContent.event.getResources()[0]._resource.title;
+    return (
+      <Tooltip title={view != 'listMonth' ? location : ''} placement='top-end'>
+        <Grid container direction='column'>
+          <Grid container direction='row' alignItems='center'>
+            <AccessTimeOutlinedIcon />
+            <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+              {eventContent.timeText}
+            </Typography>
+          </Grid>
+          <Grid container direction='row' alignItems='center'>
+            <LocationOnOutlinedIcon />
+            <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
+              {location}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Tooltip>
+    );
+  }
+
   return (
     <>
       <Stack
@@ -95,26 +128,3 @@ const MainCalendar = ({
 };
 
 export default MainCalendar;
-
-// カレンダーに表示する内容
-function renderEventContent(eventContent: EventContentArg) {
-  const location = eventContent.event.getResources()[0]._resource.title;
-  return (
-    <Tooltip title={location} placement='top-end'>
-      <Grid container direction='column'>
-        <Grid container direction='row' alignItems='center'>
-          <AccessTimeOutlinedIcon />
-          <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
-            {eventContent.timeText}
-          </Typography>
-        </Grid>
-        <Grid container direction='row' alignItems='center'>
-          <LocationOnOutlinedIcon />
-          <Typography sx={{ fontSize: { xs: '0.7rem', md: '1rem' } }}>
-            {location}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Tooltip>
-  );
-}

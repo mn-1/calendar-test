@@ -13,6 +13,7 @@ export type Props = {
   editButtonDisable: boolean;
   handleViewChange: Function;
   today: 'month' | 'week' | 'day';
+  handleDateChange: Function;
 };
 
 export const CalendarHeader = (props: Props): ReactElement => {
@@ -23,6 +24,7 @@ export const CalendarHeader = (props: Props): ReactElement => {
     editButtonDisable,
     handleViewChange,
     today,
+    handleDateChange,
   } = props;
 
   const [title, setTitle] = useState<string>();
@@ -33,15 +35,6 @@ export const CalendarHeader = (props: Props): ReactElement => {
       setTitle(calApi.view.title);
     }
   }, [calendarRef]);
-
-  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
-    const calApi = calendarRef.current?.getApi();
-    if (!calApi) return;
-
-    if (direction === 'prev') calApi.prev();
-    if (direction === 'next') calApi.next();
-    if (direction === 'today') calApi.today();
-  };
 
   return (
     <header>

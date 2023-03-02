@@ -218,9 +218,31 @@ const ClientCalendar = (props: Props) => {
   const handleNavLinkDayClick = (date: Date) => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
+
     calApi.changeView('resourceTimeGridDay', date);
     setEditButtonDisable(false);
     setToday({ ...today, type: 'day', view: 'resourceTimeGridDay' });
+  };
+
+  /**
+   * カレンダーの日付前後する
+   */
+  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
+    const calApi = calendarRef.current?.getApi();
+    if (!calApi) return setFailedSnackbarOpen(true);
+
+    if (direction === 'prev') {
+      calApi.prev();
+      setToday({ ...today, date: calApi.getDate() });
+    }
+    if (direction === 'next') {
+      calApi.next();
+      setToday({ ...today, date: calApi.getDate() });
+    }
+    if (direction === 'today') {
+      calApi.today();
+      setToday({ ...today, date: calApi.getDate() });
+    }
   };
 
   return (
@@ -261,6 +283,7 @@ const ClientCalendar = (props: Props) => {
                 calendarRef={calendarRef}
                 editMode={editMode}
                 setEditMode={setEditMode}
+                handleDateChange={handleDateChange}
               />
 
               <Stack
@@ -350,6 +373,7 @@ const ClientCalendar = (props: Props) => {
               editMode={editMode}
               setEditMode={setEditMode}
               editButtonDisable={editButtonDisable}
+              handleDateChange={handleDateChange}
             />
             {editMode && (
               <Button

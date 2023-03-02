@@ -139,7 +139,7 @@ export default function AddScheduleDialog(props: Props) {
                   name='avatar'
                   autoComplete='off'
                   focused
-                  placeholder='タイトル'
+                  placeholder='アバター名'
                   fullWidth
                 />
               </Grid>

@@ -13,6 +13,7 @@ export type Props = {
   today: 'month' | 'week' | 'day';
   setEditMode: Function;
   editButtonDisable: boolean;
+  handleDateChange: Function;
 };
 
 export const MobileHeader = (props: Props): ReactElement => {
@@ -23,26 +24,17 @@ export const MobileHeader = (props: Props): ReactElement => {
     today,
     setEditMode,
     editButtonDisable,
+    handleDateChange,
   } = props;
 
   const [title, setTitle] = useState<string>();
-  const [calApi, setCalApi] = useState<CalendarApi>();
 
   useEffect(() => {
     if (calendarRef.current) {
       const calApi = calendarRef.current.getApi();
       setTitle(calApi.view.title);
-      setCalApi(calApi);
     }
   }, [calendarRef]);
-
-  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
-    if (!calApi) return;
-
-    if (direction === 'prev') calApi.prev();
-    if (direction === 'next') calApi.next();
-    if (direction === 'today') calApi.today();
-  };
 
   return (
     <Grid

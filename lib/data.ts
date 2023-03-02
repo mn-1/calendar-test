@@ -268,7 +268,7 @@ export const externalEvents = [
 export const eventsOperator = [
   {
     id: '1',
-    title: '90 Minute Massage',
+    title: 'sample title',
     resourceId: '1',
     start: new Date('2023/2/11 15:00').getTime(),
     end: new Date('2023/2/11 20:00').getTime(),
@@ -278,10 +278,11 @@ export const eventsOperator = [
       avatar: 'アバターE',
     },
     color: '',
+    // display: 'background',
   },
   {
     id: '2',
-    title: 'Haircut',
+    title: 'sample title',
     resourceId: '2',
     start: new Date('2023/3/21 15:00').getTime(),
     end: new Date('2023/3/21 20:00').getTime(),
@@ -291,10 +292,11 @@ export const eventsOperator = [
       avatar: 'アバターE',
     },
     color: '',
+    // display: 'background',
   },
   {
     id: '3',
-    title: 'タイトル',
+    title: 'sample title',
     resourceId: '3',
     start: new Date('2023/2/16 15:00').getTime(),
     end: new Date('2023/2/16 20:00').getTime(),
@@ -304,10 +306,11 @@ export const eventsOperator = [
       avatar: 'アバターE',
     },
     color: '',
+    // display: 'background',
   },
   {
     id: '4',
-    title: '緊急',
+    title: 'sample title',
     resourceId: '2',
     start: new Date('2023/2/21 15:00').getTime(),
     end: new Date('2023/2/21 20:00').getTime(),
@@ -320,7 +323,7 @@ export const eventsOperator = [
   },
   {
     id: '5',
-    title: '緊急',
+    title: 'sample title',
     resourceId: '2',
     start: new Date('2023/2/25 10:00').getTime(),
     end: new Date('2023/2/25 20:00').getTime(),
@@ -333,7 +336,7 @@ export const eventsOperator = [
   },
   {
     id: '6',
-    title: '延期２回目',
+    title: 'sample title',
     resourceId: '3',
     start: new Date('2023/3/01 10:00').getTime(),
     end: new Date('2023/3/01 20:00').getTime(),

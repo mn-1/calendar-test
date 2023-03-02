@@ -10,7 +10,6 @@ import { SubmitHandler } from 'react-hook-form';
 
 /**
  * event配列をDBからとってくる
- * @returns event配列
  */
 export const getEvents = () => {
   // 背景色を変更してから収納
@@ -25,12 +24,3 @@ export const getEvents = () => {
 
   return { events, countId };
 };
-
-// export const registerSchedule: SubmitHandler<RegisterScheduleDataInfo> = async (
-//   values: RegisterScheduleDataInfo
-// ) => {
-//   const { backgroundColor, borderColor } = divideColor(
-//     new Date(start).getTime(),
-//     new Date(end).getTime()
-//   );
-// };

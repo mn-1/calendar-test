@@ -12,7 +12,7 @@ import EventControl from '../../lib/operatorEventControl';
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
 import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
-import Month from '../../components/FullCalendar/Operator/SubCalendar2';
+import Month from '../../components/FullCalendar/Operator/SubCalendar';
 import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 

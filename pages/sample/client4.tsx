@@ -292,13 +292,13 @@ const ClientCalendar = () => {
           </Grid>
         ) : (
           <Grid container direction='column'>
-            <CalendarHeader
+            <MobileHeader
               today={today.type}
               handleViewChange={handleViewChange}
-              editButtonDisable={editButtonDisable}
               calendarRef={calendarRef}
               editMode={editMode}
               setEditMode={setEditMode}
+              editButtonDisable={editButtonDisable}
               handleDateChange={handleDateChange}
             />
             {editMode && (

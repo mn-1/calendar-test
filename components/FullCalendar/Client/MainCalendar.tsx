@@ -53,19 +53,6 @@ export default function Calendar(props: calendarProps) {
 
   const matches: boolean = useMediaQuery('(min-width:992px)');
 
-  const slotLabelContent = (e: SlotLabelContentArg) => {
-    const now = Number(
-      new Date()
-        .toLocaleTimeString()
-        .substring(0, new Date().toLocaleTimeString().indexOf(':'))
-    );
-    const date = Number(e.text.substring(0, e.text.indexOf('時')));
-    console.log(now, date);
-    let color: string = '#FF0000';
-    if (now > date) color = '#00BFFF';
-    return <Typography color={color}>{e.text}</Typography>;
-  };
-
   let plugins = [
     resourceTimeGridPlugin,
     resourceTimelinePlugIn,
@@ -180,8 +167,8 @@ function renderEventContent(eventContent: EventContentArg) {
 }
 
 /**ーーーーーーーーーーーーーーーーーー
-   * カレンダー上の日付
-   ーーーーーーーーーーーーーーーーーー*/
+   * カレンダーのヘッダーの表示
+ ーーーーーーーーーーーーーーーーーー*/
 function dayHeaderContent(e: DayHeaderContentArg) {
   const date = e.date.getDate();
   const day = ['日', '月', '火', '水', '木', '金', '土'][e.date.getDay()];
@@ -190,7 +177,7 @@ function dayHeaderContent(e: DayHeaderContentArg) {
     return (
       <Stack
         sx={{
-          backgroundColor: '#00BFFF',
+          backgroundColor: '#4682B4',
           width: '50px',
           height: '50px',
           color: '#ffffff',
@@ -220,12 +207,28 @@ function dayHeaderContent(e: DayHeaderContentArg) {
 
 /**ーーーーーーーーーーーーーーーーーー
    * カレンダー上の日付
-   ーーーーーーーーーーーーーーーーーー*/
+ ーーーーーーーーーーーーーーーーーー*/
 function dayCellContent(e: DayCellContentArg) {
   e.dayNumberText = e.dayNumberText.replace('日', '');
 
   return <Typography fontSize='14px'>{e.dayNumberText}</Typography>;
 }
+
+/**ーーーーーーーーーーーーーーーーーー
+   * 横軸の表示
+ ーーーーーーーーーーーーーーーーーー*/
+const slotLabelContent = (e: SlotLabelContentArg) => {
+  const now = Number(
+    new Date()
+      .toLocaleTimeString()
+      .substring(0, new Date().toLocaleTimeString().indexOf(':'))
+  );
+  const date = Number(e.text.substring(0, e.text.indexOf('時')));
+  console.log(now, date);
+  let color: string = '#FF0000';
+  if (now >= date) color = '#4682B4';
+  return <Typography color={color}>{e.text}</Typography>;
+};
 
 const StyleWrapper = styled(Box)({
   '& .fc .fc-col-header-cell': {
@@ -257,16 +260,3 @@ const StyleWrapper = styled(Box)({
     },
   },
 });
-
-// const CircleNumber = styled.div`
-//   display: inline-flex;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 50%;
-//   flex-flow: column;
-//   vertical-align: top;
-//   background: #eb5757;
-//   color: white;
-//   width: 30px;
-//   height: 30px;
-// `;

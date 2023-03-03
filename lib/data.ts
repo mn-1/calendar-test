@@ -40,6 +40,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターAさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     color: '',
@@ -54,6 +55,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターBさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     color: '',
@@ -68,6 +70,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターCさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     // groupId: '',
@@ -83,6 +86,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターDさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     color: '',
@@ -98,6 +102,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターEさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     durationEditable: false,
@@ -111,6 +116,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターLさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     durationEditable: false,
@@ -124,6 +130,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターLさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     color: '',
@@ -138,6 +145,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターMさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     color: '',
@@ -152,6 +160,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターMさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     color: '',
@@ -166,6 +175,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターMさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     durationEditable: false,
@@ -179,6 +189,7 @@ export const events = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターMさん',
+      locationName: '',
       avatar: 'アバターE',
     },
     durationEditable: false,
@@ -275,6 +286,7 @@ export const eventsOperator = [
     extendedProps: {
       memo: '遅れるかも',
       operatorName: 'オペレーターAさん',
+      locationName: '盛岡支店',
       avatar: 'アバターE',
     },
     color: '',
@@ -289,6 +301,7 @@ export const eventsOperator = [
     extendedProps: {
       memo: '',
       operatorName: 'オペレーターAさん',
+      locationName: '川崎支店',
       avatar: 'アバターE',
     },
     color: '#ff9f89',
@@ -302,6 +315,7 @@ export const eventsOperator = [
     extendedProps: {
       memo: '遅れるかも',
       operatorName: 'オペレーターAさん',
+      locationName: '高松支店',
       avatar: 'アバターE',
     },
     color: '',
@@ -315,6 +329,7 @@ export const eventsOperator = [
     extendedProps: {
       memo: '遅れるかも',
       operatorName: 'オペレーターAさん',
+      locationName: '川崎支店',
       avatar: 'アバターK',
     },
     color: '',
@@ -328,6 +343,7 @@ export const eventsOperator = [
     extendedProps: {
       memo: '遅れるかも',
       operatorName: 'オペレーターAさん',
+      locationName: '川崎支店',
       avatar: 'アバターL',
     },
     color: '',
@@ -341,6 +357,7 @@ export const eventsOperator = [
     extendedProps: {
       memo: '遅れるかも',
       operatorName: 'オペレーターAさん',
+      locationName: '高松支店',
       avatar: 'アバターX',
     },
     color: '',

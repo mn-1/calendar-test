@@ -5,6 +5,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
 import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import {
   Box,
   DialogActions,
@@ -78,6 +79,21 @@ export default function ScheduleInfoDialog(props: Props) {
                 </Typography>
               )}
             </Grid>
+
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <LocationOnOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              <Typography variant='h6'>
+                {event.getResources()[0]._resource.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <PersonOutlineOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              <Typography>{operatorName}</Typography>
+            </Grid>
             <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
               <AccessTimeOutlinedIcon />
             </Grid>
@@ -86,43 +102,35 @@ export default function ScheduleInfoDialog(props: Props) {
             </Grid>
 
             <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
-              <PersonOutlineOutlinedIcon />
-            </Grid>
-            <Grid item xs={10} sx={{ mb: '1rem' }}>
-              <Typography>{operatorName}</Typography>
-            </Grid>
-
-            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
               <Face3OutlinedIcon />
             </Grid>
             <Grid item xs={10} sx={{ mb: '1rem' }}>
-              {avatar != '' ? (
-                avatar
-              ) : (
-                <Typography color='textSecondary'>アバター</Typography>
-              )}
+              <Typography color={avatar === '' ? 'textSecondary' : 'inherit'}>
+                {avatar != '' ? avatar : 'アバター'}
+              </Typography>
             </Grid>
-
-            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
-              <SubjectOutlinedIcon />
-            </Grid>
-            <Grid item xs={10} sx={{ mb: '1rem' }}>
-              {memo != '' ? (
-                memo
-              ) : (
-                <Typography color='textSecondary'>メモ</Typography>
-              )}
+            <Grid container direction='row'>
+              <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+                メモ
+              </Grid>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  mb: '1rem',
+                  border: 1,
+                  borderRadius: 1,
+                  borderColor: '#dcdcdc',
+                  height: '5rem',
+                  overflow: 'auto',
+                }}
+              >
+                <Typography color={memo === '' ? 'textSecondary' : 'inherit'}>
+                  {memo != '' ? memo : ''}
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
-          {/* タイトル: {event.title}
-              <br />
-              オペレーター名: {event.extendedProps.operatorName}
-              <br />
-              時間: {formatDate(event.start)} ~ {formatDate(event.end)}
-              <br />
-              アバター: {event.extendedProps.avatar}
-              <br />
-              メモ：{event.extendedProps.memo} */}
         </DialogContent>
       </Dialog>
     );

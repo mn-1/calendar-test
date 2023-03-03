@@ -25,6 +25,7 @@ import { editMemoInfo } from '../../../lib/inputDataControl';
 // components
 import FailedDialog from '../FailedDialog';
 import EditFormInput from '../../FormControl/EditFormInput';
+import MemoFormInput from '../../FormControl/MemoFormInput';
 
 type Props = {
   open: boolean;
@@ -82,12 +83,10 @@ export default function EditScheduleDialog(props: Props) {
             onSubmit={handleSubmit(onSave)}
             sx={{ p: '1rem' }}
           >
-            <EditFormInput
-              name='memo'
+            <MemoFormInput
               defaultValue={event.extendedProps.memo}
               autoComplete='off'
               focused
-              placeholder='メモ'
               fullWidth
               multiline
               minRows={3}

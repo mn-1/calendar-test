@@ -57,7 +57,7 @@ const ClientCalendar = () => {
     eventInfo,
     editDialogOpen,
     addDialogOpen,
-    faliledSnackbarOpen,
+    failedSnackbarOpen,
     setFailedSnackbarOpen,
     mobileEditSchedule,
     addSchedule,
@@ -341,7 +341,7 @@ const ClientCalendar = () => {
 
       {/* utils ↓ */}
       <FailedSnackbar
-        open={faliledSnackbarOpen}
+        open={failedSnackbarOpen}
         handleClose={() => setFailedSnackbarOpen(false)}
       />
       <ScheduleInfoDialog

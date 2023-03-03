@@ -5,32 +5,28 @@ import { styled } from '@mui/material/styles';
 
 // Type of Props the FormInput will receive
 type FormInputProps = {
-  name: string;
   defaultValue: string;
 } & TextFieldProps;
 
-const MemoFormInput: FC<FormInputProps> = ({
-  name,
-  defaultValue,
-  ...otherProps
-}) => {
+const MemoFormInput: FC<FormInputProps> = ({ defaultValue, ...otherProps }) => {
   const {
     formState: { errors },
   } = useFormContext();
 
   return (
     <Controller
-      name={name}
+      name='memo'
       defaultValue={defaultValue}
       render={({ field }) => (
         <CssTextField
           {...field}
           {...otherProps}
+          placeholder='メモ'
           variant='outlined'
           sx={{ my: '0.5rem' }}
-          error={!!errors[name]}
+          error={!!errors['memo']}
           helperText={
-            errors[name] ? (errors[name]?.message as unknown as string) : ''
+            errors['memo'] ? (errors['memo']?.message as unknown as string) : ''
           }
         />
       )}

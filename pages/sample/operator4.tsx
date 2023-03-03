@@ -14,10 +14,10 @@ import EventControl from '../../lib/operatorEventControl';
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
 import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
-import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar-2';
-import Month from '../../components/FullCalendar/Operator/OneSubCalendar';
 import { NewHeader } from '../../components/FullCalendar/Operator/NewHeader';
+import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
+import { E } from '@fullcalendar/resource/internal-common';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,18 +62,20 @@ export default function BasicTabs() {
   /**
    * タブ切り替え
    */
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (newValue: number): void => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
-    setTab(newValue);
-
-    console.log(newValue, today.type);
+    // e.preventDefault();
 
     // if (today.type === 'day') {
     //   if (newValue === 0) calApi.changeView('resourceTimelineDay');
     //   if (newValue === 1) calApi.changeView('resourceTimeGridDay');
     // }
+    // calApi.changeView('resourceTimeGridDay');
+    setTab(newValue);
+
+    console.log(newValue, today.type);
   };
 
   /**
@@ -162,7 +164,13 @@ export default function BasicTabs() {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={tab}
-            onChange={handleChange}
+            onChange={(e, newValue) => {
+              e.preventDefault();
+              const calApi = calendarRef.current?.getApi();
+              if (!calApi) return setFailedSnackbarOpen(true);
+              calApi.changeView('resourceTimeGridDay');
+              handleChange(newValue);
+            }}
             aria-label='basic tabs example'
           >
             <Tab label='オペレーター名' {...a11yProps(0)} />
@@ -218,6 +226,10 @@ export default function BasicTabs() {
             setInfoDialogOpen(false);
           }}
           handleClose={() => setInfoDialogOpen(false)}
+        />
+        <FailedSnackbar
+          open={failedSnackbarOpen}
+          handleClose={() => setFailedSnackbarOpen(false)}
         />
         {/* utils ↑ */}
       </Container>

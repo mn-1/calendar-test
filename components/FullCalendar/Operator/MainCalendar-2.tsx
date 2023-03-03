@@ -52,7 +52,7 @@ const MainCalendar = (props: Props) => {
     if (!calApi) return <></>;
     const view = calApi.view.type;
 
-    const location = eventContent.event.getResources()[0]._resource.title;
+    const location = eventContent.event.extendedProps.locationName ?? '';
     return (
       <Tooltip title={view != 'listMonth' ? location : ''} placement='top-end'>
         <Grid container direction='column'>

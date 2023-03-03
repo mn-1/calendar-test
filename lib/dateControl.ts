@@ -26,13 +26,27 @@ export function createDate(date: Date) {
    * @returns 日時
    ーーーーーーーーーーーー*/
 export function formatDate(start: Date, end: Date) {
+  const year = start.getFullYear();
   const month = start.getMonth() + 1;
   const date = start.getDate();
   const day = ['日', '月', '火', '水', '木', '金', '土'][start.getDay()];
   const st = start.toTimeString().slice(0, 5);
   const et = end.toTimeString().slice(0, 5);
 
-  return month + '月 ' + date + '日 ' + '(' + day + '曜日)　' + st + ' − ' + et;
+  return (
+    year +
+    '年 ' +
+    month +
+    '月 ' +
+    date +
+    '日 ' +
+    '(' +
+    day +
+    '曜日)　' +
+    st +
+    ' − ' +
+    et
+  );
 }
 
 export function formatDateTime(date: any) {

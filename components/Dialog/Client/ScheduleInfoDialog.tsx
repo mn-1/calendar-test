@@ -9,6 +9,8 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
 // memo
 import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
+// location
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
@@ -23,6 +25,7 @@ import { EventClickArg } from '@fullcalendar/core';
 import { formatDate } from '../../../lib/dateControl';
 import FailedDialog from '../FailedDialog';
 import { Typography } from '@material-ui/core';
+import MemoFormInput from '../../FormControl/MemoFormInput';
 
 type Props = {
   open: boolean;
@@ -94,6 +97,21 @@ export default function ScheduleInfoDialog(props: Props) {
                 </Typography>
               )}
             </Grid>
+
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <LocationOnOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              <Typography variant='h6'>
+                {event.getResources()[0]._resource.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+              <PersonOutlineOutlinedIcon />
+            </Grid>
+            <Grid item xs={10} sx={{ mb: '1rem' }}>
+              <Typography>{operatorName}</Typography>
+            </Grid>
             <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
               <AccessTimeOutlinedIcon />
             </Grid>
@@ -102,32 +120,33 @@ export default function ScheduleInfoDialog(props: Props) {
             </Grid>
 
             <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
-              <PersonOutlineOutlinedIcon />
-            </Grid>
-            <Grid item xs={10} sx={{ mb: '1rem' }}>
-              <Typography>{operatorName}</Typography>
-            </Grid>
-
-            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
               <Face3OutlinedIcon />
             </Grid>
             <Grid item xs={10} sx={{ mb: '1rem' }}>
-              {avatar != '' ? (
-                avatar
-              ) : (
-                <Typography color='textSecondary'>アバター</Typography>
-              )}
+              <Typography color={avatar === '' ? 'textSecondary' : 'inherit'}>
+                {avatar != '' ? avatar : 'アバター'}
+              </Typography>
             </Grid>
-
-            <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
-              <SubjectOutlinedIcon />
-            </Grid>
-            <Grid item xs={10} sx={{ mb: '1rem' }}>
-              {memo != '' ? (
-                memo
-              ) : (
-                <Typography color='textSecondary'>メモ</Typography>
-              )}
+            <Grid container direction='row'>
+              <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>
+                メモ
+              </Grid>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  mb: '1rem',
+                  border: 1,
+                  borderRadius: 1,
+                  borderColor: '#dcdcdc',
+                  height: '5rem',
+                  overflow: 'auto',
+                }}
+              >
+                <Typography color={memo === '' ? 'textSecondary' : 'inherit'}>
+                  {memo != '' ? memo : ''}
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </DialogContent>

@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 
 export const scheduleSchema = yup.object().shape({
-  //
   date: yup.date().typeError('正しい日付を入力してください。'),
   start: yup.date().typeError('正しい時間を入力してください。'),
   end: yup
@@ -20,16 +19,28 @@ export const scheduleSchema = yup.object().shape({
   operatorName: yup.string().required('オペレーター名を選択してください。'),
   //
   title: yup.string(),
-  memo: yup.string(),
+  memo: yup
+    .string()
+    .max(120, '120文字以内で入力してください。')
+    .min(2, '最低2文字含めてください。')
+    .transform((value, old) => (old === '' ? null : value)),
   avatar: yup.string(),
 });
 
 export const editScheduleSchema = yup.object().shape({
   title: yup.string(),
-  memo: yup.string(),
+  memo: yup
+    .string()
+    .max(120, '120文字以内で入力してください。')
+    .min(2, '最低2文字含めてください。')
+    .transform((value, old) => (old === '' ? null : value)),
   avatar: yup.string(),
 });
 
 export const editMemoSchema = yup.object().shape({
-  memo: yup.string(),
+  memo: yup
+    .string()
+    .max(120, '120文字以内で入力してください。')
+    .min(2, '最低2文字含めてください。')
+    .transform((value, old) => (old === '' ? null : value)),
 });

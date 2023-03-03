@@ -19,6 +19,7 @@ import EditFormInput from '../../FormControl/EditFormInput';
 import DatePickerForm from '../../FormControl/DatePicker';
 import AddFormSelect from '../../FormControl/AddFormSelect';
 import TimeFormInput from '../../FormControl/TimeFormInput';
+import MemoFormInput from '../../FormControl/MemoFormInput';
 // validate
 import { scheduleSchema } from '../../../schema/inputSchedule';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -67,11 +68,7 @@ export default function MobileEditScheduleDialog(props: Props) {
   } = useFormMethods;
 
   // 登録ボタンアクション
-  const onAdd: SubmitHandler<scheduleDataInfo> = async (
-    values: scheduleDataInfo
-  ) => {
-    console.log('add values', values);
-
+  const onAdd: SubmitHandler<scheduleDataInfo> = (values: scheduleDataInfo) => {
     editSchedule(values);
     reset(resetValues);
   };
@@ -148,7 +145,7 @@ export default function MobileEditScheduleDialog(props: Props) {
                 </Grid>
                 <Grid item xs={10} sx={{ mb: '0.5rem' }}>
                   <EditFormInput
-                    defaultValue={event.extendedProps.avatar}
+                    defaultValue={event.extendedProps.avatar ?? ''}
                     name='avatar'
                     autoComplete='off'
                     focused
@@ -160,8 +157,8 @@ export default function MobileEditScheduleDialog(props: Props) {
                   <SubjectOutlinedIcon />
                 </Grid>
                 <Grid item xs={10} sx={{ mb: '0.5rem' }}>
-                  <EditFormInput
-                    defaultValue={event.extendedProps.memo}
+                  <MemoFormInput
+                    defaultValue={event.extendedProps.memo ?? ''}
                     name='memo'
                     autoComplete='off'
                     focused

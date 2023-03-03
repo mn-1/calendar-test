@@ -26,6 +26,7 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 // lib
 import { editScheduleDataInfo } from '../../../lib/inputDataControl';
 import { EventClickArg } from '@fullcalendar/core';
+import MemoFormInput from '../../FormControl/MemoFormInput';
 
 type Props = {
   open: boolean;
@@ -63,90 +64,93 @@ export default function EditScheduleDialog(props: Props) {
     reset(resetValues);
   };
 
-  const locationDefaultValue =
-    eventInfo.event.getResources()[0]._resource.title;
+  if (!eventInfo) return <FailedDialog open={open} handleClose={handleClose} />;
 
-  if (eventInfo)
-    return (
-      <Dialog open={open}>
-        <DialogActions>
-          <Tooltip title='閉じる'>
-            <IconButton onClick={handleCancelButton}>
-              <CloseIcon fontSize='large' />
-            </IconButton>
-          </Tooltip>
-        </DialogActions>
+  const {
+    event: {
+      extendedProps: { avatar, memo },
+    },
+  } = eventInfo;
 
-        <DialogTitle>
-          <Grid container justifyContent='center'>
-            <Typography variant='h5' color='secondary'>
-              予定を編集
-            </Typography>
-          </Grid>
-        </DialogTitle>
+  return (
+    <Dialog open={open}>
+      <DialogActions>
+        <Tooltip title='閉じる'>
+          <IconButton onClick={handleCancelButton}>
+            <CloseIcon fontSize='large' />
+          </IconButton>
+        </Tooltip>
+      </DialogActions>
 
-        <DialogContent>
-          <FormProvider {...useFormMethods}>
-            <Box
-              component='form'
-              noValidate
-              autoComplete='off'
-              onSubmit={handleSubmit(onAdd)}
-            >
-              <Grid container direction='row'>
-                <Grid item xs={1} sx={{ my: '1rem', mr: '0.4rem' }}></Grid>
-                <Grid item xs={10} sx={{ mb: '1rem' }}>
-                  <EditFormInput
-                    name='title'
-                    defaultValue={eventInfo.event.title ?? ''}
-                    autoComplete='off'
-                    focused
-                    placeholder='タイトル'
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={1} sx={{ my: '1.3rem', mr: '0.4rem' }}>
-                  <Face3OutlinedIcon />
-                </Grid>
-                <Grid item xs={10} sx={{ mb: '1rem' }}>
-                  <EditFormInput
-                    name='avatar'
-                    defaultValue={eventInfo.event.extendedProps.avatar}
-                    autoComplete='off'
-                    focused
-                    placeholder='アバター'
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={1} sx={{ my: '1.3rem', mr: '0.4rem' }}>
-                  <SubjectOutlinedIcon />
-                </Grid>
-                <Grid item xs={10} sx={{ mb: '1rem' }}>
-                  <EditFormInput
-                    name='memo'
-                    defaultValue={eventInfo.event.extendedProps.memo}
-                    autoComplete='off'
-                    focused
-                    placeholder='メモ'
-                    fullWidth
-                    multiline
-                    minRows={3}
-                    maxRows={10}
-                  />
-                </Grid>
-                <Button
+      <DialogTitle>
+        <Grid container justifyContent='center'>
+          <Typography variant='h5' color='secondary'>
+            予定を編集
+          </Typography>
+        </Grid>
+      </DialogTitle>
+
+      <DialogContent>
+        <FormProvider {...useFormMethods}>
+          <Box
+            component='form'
+            noValidate
+            autoComplete='off'
+            onSubmit={handleSubmit(onAdd)}
+          >
+            <Grid container direction='row'>
+              <Grid item xs={1} sx={{ my: '1rem', mr: '0.4rem' }}></Grid>
+              <Grid item xs={10} sx={{ mb: '1rem' }}>
+                <EditFormInput
+                  name='title'
+                  defaultValue={eventInfo.event.title ?? ''}
+                  autoComplete='off'
+                  focused
+                  placeholder='タイトル'
                   fullWidth
-                  variant='contained'
-                  type='submit'
-                  sx={{ fontWeight: 'bold', my: '0.5rem' }}
-                >
-                  登録する
-                </Button>
+                />
               </Grid>
-            </Box>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
-    );
-  else return <FailedDialog open={open} handleClose={handleClose} />;
+              <Grid item xs={1} sx={{ my: '1.3rem', mr: '0.4rem' }}>
+                <Face3OutlinedIcon />
+              </Grid>
+              <Grid item xs={10} sx={{ mb: '1rem' }}>
+                <EditFormInput
+                  name='avatar'
+                  defaultValue={avatar ?? ''}
+                  autoComplete='off'
+                  focused
+                  placeholder='アバター'
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={1} sx={{ my: '1.3rem', mr: '0.4rem' }}>
+                <SubjectOutlinedIcon />
+              </Grid>
+              <Grid item xs={10} sx={{ mb: '1rem' }}>
+                <MemoFormInput
+                  name='memo'
+                  defaultValue={memo ?? ''}
+                  autoComplete='off'
+                  focused
+                  placeholder='メモ'
+                  fullWidth
+                  multiline
+                  minRows={3}
+                  maxRows={10}
+                />
+              </Grid>
+              <Button
+                fullWidth
+                variant='contained'
+                type='submit'
+                sx={{ fontWeight: 'bold', my: '0.5rem' }}
+              >
+                登録する
+              </Button>
+            </Grid>
+          </Box>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  );
 }

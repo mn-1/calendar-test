@@ -21,6 +21,9 @@ import Month from '../../components/FullCalendar/Operator/OneSubCalendar';
 import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
 
+const debugLog =
+  process.env.NODE_ENV !== 'production' ? console.log.bind(console) : () => {};
+
 const SampleCalendar: React.FC = () => {
   const matches: boolean = useMediaQuery('(min-width:992px)');
   const calendarRef = createRef<FullCalendar>();
@@ -111,15 +114,9 @@ const SampleCalendar: React.FC = () => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
-    if (direction === 'prev') {
-      calApi.prev();
-    }
-    if (direction === 'next') {
-      calApi.next();
-    }
-    if (direction === 'today') {
-      calApi.today();
-    }
+    if (direction === 'prev') calApi.prev();
+    if (direction === 'next') calApi.next();
+    if (direction === 'today') calApi.today();
   };
 
   return (
@@ -204,3 +201,21 @@ const SampleCalendar: React.FC = () => {
 };
 
 export default SampleCalendar;
+
+let host: string | undefined = '';
+if (process.env.NODE_ENV === 'production') {
+  host = process.env.PROD_URL;
+} else {
+  host = process.env.DEV_URL;
+}
+
+export async function getServerSideProps() {
+  let acquisitionData: any = '';
+  try {
+    const res = await fetch(`${host}/api/acquisition-data/200`);
+    acquisitionData = await res.json();
+  } catch (error) {
+    debugLog(error);
+  }
+  return { props: { acquisitionData } };
+}

@@ -6,7 +6,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Grid container direction='column' sx={{ m: '3rem' }}>
-        <Link href='/sample/client3' passHref>
+        <Link href='/sample/client4' passHref>
           <Button variant='contained'>顧客ページ</Button>
         </Link>
         <br />

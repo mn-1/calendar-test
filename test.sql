@@ -7,7 +7,8 @@ CREATE TABLE `event_list` (
     `location_cognito_user_id` varchar(64) NOT NULL COMMENT '拠点cognitoUserID',
     -- イベント情報
     `title` varchar(64) COMMENT 'タイトル',
-    `memo` varchar(256) COMMENT 'メモ',
+    `location_memo` varchar(512) COMMENT '拠点のメモ',
+    `operator_memo` varchar(512) COMMENT 'オペレーターのメモ',
     `avatar` varchar(64) COMMENT 'アバター名',
     `start` datetime NOT NULL COMMENT '予定開始時刻',
     `end` datetime NOT NULL COMMENT '予定終了時刻',

@@ -77,7 +77,7 @@ const MainCalendar = (props: Props) => {
       locale='ja'
       eventColor='#6A5ACD'
       contentHeight='auto'
-      dayMinWidth={100}
+      // dayMinWidth={100}
       resources={resources}
       slotDuration='00:30:00'
       slotMinTime='05:00:00'

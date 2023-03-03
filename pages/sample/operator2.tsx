@@ -25,7 +25,7 @@ const SampleCalendar: React.FC = () => {
   const calendarRef = createRef<FullCalendar>();
 
   const [today, setToday] = useState<{
-    type: 'month' | 'week' | 'day' | 'day2' | 'list';
+    type: 'month' | 'week' | 'day';
   }>({ type: 'day' });
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
 
@@ -92,14 +92,6 @@ const SampleCalendar: React.FC = () => {
     if (direction === 'day') {
       calApi.changeView('resourceTimeGridDay');
       setToday({ ...today, type: 'day' });
-    }
-    if (direction === 'day2') {
-      calApi.changeView('timeGridDay');
-      setToday({ ...today, type: 'day2' });
-    }
-    if (direction === 'list') {
-      calApi.changeView('listMonth');
-      setToday({ ...today, type: 'list' });
     }
   };
 

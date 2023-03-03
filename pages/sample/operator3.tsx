@@ -20,13 +20,14 @@ import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDia
 import Month from '../../components/FullCalendar/Operator/OneSubCalendar';
 import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
+import { MobileHeader } from '../../components/FullCalendar/Operator/MobileHeader';
 
 const SampleCalendar: React.FC = () => {
   const matches: boolean = useMediaQuery('(min-width:992px)');
   const calendarRef = createRef<FullCalendar>();
 
   const [today, setToday] = useState<{
-    type: 'month' | 'week' | 'day' | 'day2' | 'list';
+    type: 'month' | 'week' | 'day';
   }>({ type: 'day' });
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
 
@@ -77,9 +78,7 @@ const SampleCalendar: React.FC = () => {
   /**
    * カレンダーの表示変更
    */
-  const handleViewChange = (
-    direction: 'week' | 'day' | 'day2' | 'list' | 'month'
-  ): void => {
+  const handleViewChange = (direction: 'week' | 'day' | 'month'): void => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return;
     if (direction === 'month') {
@@ -93,14 +92,6 @@ const SampleCalendar: React.FC = () => {
     if (direction === 'day') {
       calApi.changeView('resourceTimeGridDay');
       setToday({ ...today, type: 'day' });
-    }
-    if (direction === 'day2') {
-      calApi.changeView('timeGridDay');
-      setToday({ ...today, type: 'day2' });
-    }
-    if (direction === 'list') {
-      calApi.changeView('listMonth');
-      setToday({ ...today, type: 'list' });
     }
   };
 
@@ -124,7 +115,7 @@ const SampleCalendar: React.FC = () => {
         sx={{
           width: '100%',
           height: '100%',
-          mt: '4rem',
+          mt: '1rem',
         }}
       >
         {myEvents.length != 0 && (
@@ -136,12 +127,21 @@ const SampleCalendar: React.FC = () => {
             )}
 
             <Grid item xs={matches ? 9 : 12}>
-              <CalendarHeader
-                calendarRef={calendarRef}
-                handleViewChange={handleViewChange}
-                today={today.type}
-                handleDateChange={handleDateChange}
-              />
+              {matches ? (
+                <CalendarHeader
+                  calendarRef={calendarRef}
+                  handleViewChange={handleViewChange}
+                  today={today.type}
+                  handleDateChange={handleDateChange}
+                />
+              ) : (
+                <MobileHeader
+                  today={today.type}
+                  handleViewChange={handleViewChange}
+                  calendarRef={calendarRef}
+                  handleDateChange={handleDateChange}
+                />
+              )}
 
               {/* <Stack
                 overflow='scroll'

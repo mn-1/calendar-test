@@ -103,7 +103,7 @@ export default function ScheduleInfoDialog(props: Props) {
             </Grid>
             <Grid item xs={10} sx={{ mb: '1rem' }}>
               <Typography variant='h6'>
-                {event.getResources()[0]._resource.title}
+                {event.extendedProps.locationName ?? ''}
               </Typography>
             </Grid>
             <Grid item xs={1} sx={{ mb: '1rem', mr: '0.4rem' }}>

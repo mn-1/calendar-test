@@ -91,11 +91,6 @@ export default function Calendar(props: calendarProps) {
         eventContent={renderEventContent}
         dayCellContent={dayCellContent}
         dayHeaderContent={dayHeaderContent}
-        views={{
-          timeGrid: {
-            // options apply to timeGridWeek and timeGridDay views
-          },
-        }}
         slotLabelContent={slotLabelContent}
         //
         eventResizableFromStart={editMode}

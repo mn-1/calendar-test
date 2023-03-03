@@ -10,14 +10,14 @@ import FullCalendar from '@fullcalendar/react';
 import { EventApi, DateSelectArg, EventClickArg } from '@fullcalendar/core';
 // lib
 import EventControl from '../../lib/operatorEventControl';
+import { resources } from '../../lib/data';
 // components
 import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
 import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
-import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar-2';
 import { NewHeader } from '../../components/FullCalendar/Operator/NewHeader';
 import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
-import { E } from '@fullcalendar/resource/internal-common';
+import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar-2';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -57,25 +57,19 @@ export default function BasicTabs() {
 
   useEffect(() => {
     getEvents();
+    console.log('今');
   }, [calendarRef]);
 
   /**
    * タブ切り替え
    */
-  const handleChange = (newValue: number): void => {
-    const calApi = calendarRef.current?.getApi();
-    if (!calApi) return setFailedSnackbarOpen(true);
-
-    // e.preventDefault();
-
-    // if (today.type === 'day') {
-    //   if (newValue === 0) calApi.changeView('resourceTimelineDay');
-    //   if (newValue === 1) calApi.changeView('resourceTimeGridDay');
-    // }
-    // calApi.changeView('resourceTimeGridDay');
+  const handleChange = async (e: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
 
-    console.log(newValue, today.type);
+    if (today.type === 'day') {
+      if (newValue === 0) setToday({ ...today, view: 'resourceTimelineDay' });
+      if (newValue === 1) setToday({ ...today, view: 'resourceTimeGridDay' });
+    }
   };
 
   /**
@@ -100,7 +94,9 @@ export default function BasicTabs() {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
-    calApi.changeView('resourceTimeGridDay', date);
+    if (tab === 0) calApi.changeView('resourceTimelineDay', date);
+    if (tab === 1) calApi.changeView('resourceTimeGridDay', date);
+
     setToday({ ...today, type: 'day' });
   };
 
@@ -141,6 +137,8 @@ export default function BasicTabs() {
     if (direction === 'prev') calApi.prev();
     if (direction === 'next') calApi.next();
     if (direction === 'today') calApi.today();
+
+    setToday({ ...today, date: calApi.getDate() });
   };
 
   return (
@@ -164,14 +162,9 @@ export default function BasicTabs() {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={tab}
-            onChange={(e, newValue) => {
-              e.preventDefault();
-              const calApi = calendarRef.current?.getApi();
-              if (!calApi) return setFailedSnackbarOpen(true);
-              calApi.changeView('resourceTimeGridDay');
-              handleChange(newValue);
-            }}
+            onChange={handleChange}
             aria-label='basic tabs example'
+            scrollButtons={false}
           >
             <Tab label='オペレーター名' {...a11yProps(0)} />
             <Tab label='顧客名' {...a11yProps(1)} />
@@ -183,12 +176,19 @@ export default function BasicTabs() {
           {myEvents.length != 0 && (
             <Stack sx={{ overflow: 'scroll' }}>
               <MainCalendar
-                calendarRef={calendarRef}
-                myEvents={myEvents}
+                handleNavLinkDayClick={handleNavLinkDayClick}
                 handleEventClick={handleEventClick}
                 handleEventSet={handleEventSet}
-                handleNavLinkDayClick={handleNavLinkDayClick}
+                calendarRef={calendarRef}
                 initialView={today.view}
+                initialDate={today.date}
+                myEvents={myEvents}
+                resources={[
+                  {
+                    id: '1',
+                    title: 'オペレーターF',
+                  },
+                ]}
               />
             </Stack>
           )}
@@ -197,12 +197,14 @@ export default function BasicTabs() {
           {myEvents.length != 0 && (
             <Stack sx={{ overflow: 'scroll' }}>
               <MainCalendar
-                calendarRef={calendarRef}
-                myEvents={myEvents}
+                handleNavLinkDayClick={handleNavLinkDayClick}
                 handleEventClick={handleEventClick}
                 handleEventSet={handleEventSet}
-                handleNavLinkDayClick={handleNavLinkDayClick}
+                calendarRef={calendarRef}
                 initialView={today.view}
+                initialDate={today.date}
+                myEvents={myEvents}
+                resources={resources}
               />
             </Stack>
           )}

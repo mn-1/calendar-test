@@ -15,9 +15,11 @@ import { EventContentArg, EventDropArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 // lib
 import { resources, operator } from '../../../lib/data';
 import { CalendarApi } from '@fullcalendar/core';
+import resourceTimeline from '@fullcalendar/resource-timeline';
 
 type Props = {
   calendarRef: RefObject<FullCalendar>;
@@ -25,6 +27,7 @@ type Props = {
   handleEventClick: Function;
   handleEventSet: Function;
   handleNavLinkDayClick: Function;
+  initialView: string;
 };
 
 const MainCalendar = (props: Props) => {
@@ -34,6 +37,7 @@ const MainCalendar = (props: Props) => {
     handleEventClick,
     handleEventSet,
     handleNavLinkDayClick,
+    initialView,
   } = props;
   const [calApi, setCalApi] = useState<CalendarApi | null>(null);
 
@@ -86,12 +90,12 @@ const MainCalendar = (props: Props) => {
         timeGridPlugin, // 縦軸時間に
         dayGridPlugin, // 日付ごとに
         interactionPlugin,
-        listPlugin,
         resourceTimeGridPlugin,
+        resourceTimelinePlugin,
         interactionPlugin,
         scrollGridPlugin,
       ]}
-      initialView='resourceTimeGrid'
+      initialView={initialView}
       eventContent={renderEventContent}
       //
       droppable={false}
@@ -109,7 +113,6 @@ const MainCalendar = (props: Props) => {
       navLinks={true}
       expandRows={true}
       //
-
       eventClick={(arg) => handleEventClick(arg)}
       eventsSet={(events) => handleEventSet(events)}
       navLinkDayClick={(date) => handleNavLinkDayClick(date)}

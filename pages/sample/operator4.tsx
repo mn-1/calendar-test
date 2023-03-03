@@ -15,7 +15,7 @@ import Header from '../../components/Header/Header';
 import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
 import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
 import { CalendarHeader } from '../../components/FullCalendar/Operator/Header';
-import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar';
+import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar-2';
 import Month from '../../components/FullCalendar/Operator/OneSubCalendar';
 import { NewHeader } from '../../components/FullCalendar/Operator/NewHeader';
 

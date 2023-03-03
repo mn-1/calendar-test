@@ -27,6 +27,7 @@ type Props = {
   handleEventClick: Function;
   handleEventSet: Function;
   handleNavLinkDayClick: Function;
+  initialView: string;
 };
 
 const MainCalendar = (props: Props) => {
@@ -36,6 +37,7 @@ const MainCalendar = (props: Props) => {
     handleEventClick,
     handleEventSet,
     handleNavLinkDayClick,
+    initialView,
   } = props;
   const [calApi, setCalApi] = useState<CalendarApi | null>(null);
 
@@ -91,10 +93,9 @@ const MainCalendar = (props: Props) => {
         resourceTimeGridPlugin,
         resourceTimelinePlugin,
         interactionPlugin,
-        // scrollGridPlugin,
+        scrollGridPlugin,
       ]}
-      // initialView='resourceTimeGrid'
-      initialView='resourceTimeline'
+      initialView={initialView}
       eventContent={renderEventContent}
       //
       droppable={false}

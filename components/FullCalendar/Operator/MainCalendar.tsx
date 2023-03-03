@@ -15,11 +15,9 @@ import { EventContentArg, EventDropArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list'; // 予定をリスト表示
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 // lib
 import { resources, operator } from '../../../lib/data';
 import { CalendarApi } from '@fullcalendar/core';
-import resourceTimeline from '@fullcalendar/resource-timeline';
 
 type Props = {
   calendarRef: RefObject<FullCalendar>;
@@ -88,13 +86,12 @@ const MainCalendar = (props: Props) => {
         timeGridPlugin, // 縦軸時間に
         dayGridPlugin, // 日付ごとに
         interactionPlugin,
+        listPlugin,
         resourceTimeGridPlugin,
-        resourceTimelinePlugin,
         interactionPlugin,
-        // scrollGridPlugin,
+        scrollGridPlugin,
       ]}
-      // initialView='resourceTimeGrid'
-      initialView='resourceTimeline'
+      initialView='resourceTimeGrid'
       eventContent={renderEventContent}
       //
       droppable={false}
@@ -112,6 +109,7 @@ const MainCalendar = (props: Props) => {
       navLinks={true}
       expandRows={true}
       //
+
       eventClick={(arg) => handleEventClick(arg)}
       eventsSet={(events) => handleEventSet(events)}
       navLinkDayClick={(date) => handleNavLinkDayClick(date)}

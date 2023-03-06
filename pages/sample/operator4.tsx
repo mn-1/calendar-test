@@ -8,6 +8,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
 import { EventApi, DateSelectArg, EventClickArg } from '@fullcalendar/core';
+import { CalendarApi } from '@fullcalendar/core';
 // lib
 import EventControl from '../../lib/operatorEventControl';
 import { resources } from '../../lib/data';
@@ -30,6 +31,7 @@ export default function BasicTabs() {
   const calendarRef = createRef<FullCalendar>();
 
   const [tab, setTab] = useState<number>(0);
+  const [calApi, setCalApi] = useState<CalendarApi | null>(null);
 
   const [today, setToday] = useState<{
     type: 'month' | 'week' | 'day';
@@ -43,7 +45,8 @@ export default function BasicTabs() {
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
 
   const {
-    myEvents,
+    operatorEvents,
+    clientEvents,
     eventInfo,
     editDialogOpen,
     failedSnackbarOpen,
@@ -51,13 +54,17 @@ export default function BasicTabs() {
     setEditDialogOpen,
     editMemo,
     setEventInfo,
-    getEvents,
-    setMyEvents,
+    getOperatorEvents,
+    getClientEvents,
   } = EventControl();
 
   useEffect(() => {
-    getEvents();
-    console.log('今');
+    getOperatorEvents();
+    getClientEvents();
+
+    // ここで取得する必要がある
+    const calApi = calendarRef.current?.getApi();
+    if (calApi) setCalApi(calApi);
   }, [calendarRef]);
 
   /**
@@ -84,7 +91,7 @@ export default function BasicTabs() {
    * イベント追加したりした時に発火
    */
   const handleEventSet = (events: EventApi[]) => {
-    setMyEvents(events);
+    // setMyEvents(events);
   };
 
   /**
@@ -97,7 +104,7 @@ export default function BasicTabs() {
     if (tab === 0) calApi.changeView('resourceTimelineDay', date);
     if (tab === 1) calApi.changeView('resourceTimeGridDay', date);
 
-    setToday({ ...today, type: 'day' });
+    setToday({ ...today, type: 'day', date: calApi.getDate() });
   };
 
   /**
@@ -173,7 +180,7 @@ export default function BasicTabs() {
 
         {/* タブの中身ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */}
         <TabPanel value={tab} index={0}>
-          {myEvents.length != 0 && (
+          {operatorEvents.length != 0 && (
             <Stack sx={{ overflow: 'scroll' }}>
               <MainCalendar
                 handleNavLinkDayClick={handleNavLinkDayClick}
@@ -182,11 +189,11 @@ export default function BasicTabs() {
                 calendarRef={calendarRef}
                 initialView={today.view}
                 initialDate={today.date}
-                myEvents={myEvents}
+                myEvents={operatorEvents}
                 resources={[
                   {
                     id: '1',
-                    title: 'オペレーターF',
+                    title: 'オペレーターAさん',
                   },
                 ]}
               />
@@ -194,7 +201,7 @@ export default function BasicTabs() {
           )}
         </TabPanel>
         <TabPanel value={tab} index={1}>
-          {myEvents.length != 0 && (
+          {clientEvents.length != 0 && (
             <Stack sx={{ overflow: 'scroll' }}>
               <MainCalendar
                 handleNavLinkDayClick={handleNavLinkDayClick}
@@ -203,7 +210,7 @@ export default function BasicTabs() {
                 calendarRef={calendarRef}
                 initialView={today.view}
                 initialDate={today.date}
-                myEvents={myEvents}
+                myEvents={clientEvents}
                 resources={resources}
               />
             </Stack>

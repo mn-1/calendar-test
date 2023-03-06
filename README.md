@@ -29,6 +29,7 @@ npx create-next-app calendar-test --typescript
    @fullcalendar/resource \
    @fullcalendar/resource-timeline \
    @fullcalendar/resource-timegrid \
+   @fullcalendar/resource-daygrid \
    @fullcalendar/moment-timezone \
    @fullcalendar/multimonth
 

@@ -1,8 +1,8 @@
 // react
 import { useState } from 'react';
 // lib
-import { eventsOperator } from './data';
-import { divideColor2 } from './colorControl';
+import { eventsOperator, events } from './data';
+import { divideColor2, divideColor } from './colorControl';
 import { editMemoInfo } from './inputDataControl';
 // Fullcalendar
 import { CalendarApi, EventClickArg } from '@fullcalendar/core';
@@ -10,8 +10,10 @@ import { CalendarApi, EventClickArg } from '@fullcalendar/core';
 export default function EventControl() {
   // IDセット
   const [countId, setCountId] = useState<number>(0);
-  // イベント一覧収納
-  const [myEvents, setMyEvents] = useState<any>([]);
+  // イベント一覧収納ーオペレーターごとの予定
+  const [operatorEvents, setOperatorEvents] = useState<any>([]);
+  // イベント一覧収納ー顧客全体の予定
+  const [clientEvents, setClientEvents] = useState<any>([]);
   // 予定情報
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定編集ダイアログopen
@@ -23,7 +25,7 @@ export default function EventControl() {
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
    *
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const getEvents = () => {
+  const getOperatorEvents = () => {
     // 背景色を変更してから収納
     for (let i = 0; i < eventsOperator.length; i++) {
       const item = eventsOperator[i];
@@ -35,7 +37,22 @@ export default function EventControl() {
     const add = eventsOperator.length;
     setCountId(add);
 
-    setMyEvents(eventsOperator);
+    setOperatorEvents(eventsOperator);
+  };
+
+  const getClientEvents = () => {
+    // 背景色を変更してから収納
+    for (let i = 0; i < events.length; i++) {
+      const item = events[i];
+
+      const { color } = divideColor(item.start, item.end);
+      item.color = color;
+    }
+
+    const add = events.length;
+    setCountId(add);
+
+    setClientEvents(events);
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -54,16 +71,18 @@ export default function EventControl() {
 
   return {
     countId,
-    myEvents,
+    operatorEvents,
+    clientEvents,
     eventInfo,
     editDialogOpen,
     failedSnackbarOpen,
+    getClientEvents,
     setFailedSnackbarOpen,
     setEditDialogOpen,
     editMemo,
     setEventInfo,
-    getEvents,
+    getOperatorEvents,
     setCountId,
-    setMyEvents,
+    setOperatorEvents,
   };
 }

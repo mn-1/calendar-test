@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const ExternalEvent = ({ event }: Props) => {
-  const elRef = useRef<any>(null);
+  const elRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (!elRef.current) return;

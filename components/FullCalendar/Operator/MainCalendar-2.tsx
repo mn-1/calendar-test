@@ -1,9 +1,6 @@
 // react
 import React, { useState, RefObject, useEffect } from 'react';
 // MUI
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import { Grid, Typography, Stack, Tooltip } from '@mui/material';
 // FullCalendar
 import FullCalendar from '@fullcalendar/react';
@@ -12,6 +9,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import {
+  CalendarApi,
   DateInput,
   EventContentArg,
   SlotLabelContentArg,
@@ -21,9 +19,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import { DayCellContentArg } from '@fullcalendar/core';
-// lib
-
-import { CalendarApi } from '@fullcalendar/core';
+import resourceDayGridPlugin from '@fullcalendar/resource-daygrid';
 
 type Props = {
   calendarRef: RefObject<FullCalendar>;
@@ -65,6 +61,7 @@ export default function LocationCalendar(props: Props) {
       contentHeight='auto'
       dayMinWidth={100}
       resources={resources}
+      // resources={[{ id: '1', title: 'taitoru' }]}
       slotDuration='00:30:00'
       slotMinTime='05:00:00'
       slotMaxTime='23:00:00'
@@ -194,7 +191,7 @@ const slotLabelContent = (e: SlotLabelContentArg) => {
       .substring(0, new Date().toLocaleTimeString().indexOf(':'))
   );
   const date = Number(e.text.substring(0, e.text.indexOf('時')));
-  console.log(now, date);
+
   let color: string = '#FF0000';
   if (now >= date) color = '#4682B4';
   return <Typography color={color}>{e.text}</Typography>;

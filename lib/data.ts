@@ -295,7 +295,7 @@ export const eventsOperator = [
   {
     id: '2',
     title: 'sample title',
-    resourceId: '2',
+    resourceId: '1',
     start: new Date('2023/4/21 15:00').toISOString(),
     end: new Date('2023/4/21 20:00').toISOString(),
     extendedProps: {
@@ -309,7 +309,7 @@ export const eventsOperator = [
   {
     id: '3',
     title: 'sample title',
-    resourceId: '3',
+    resourceId: '1',
     start: new Date('2023/4/16 15:00').toISOString(),
     end: new Date('2023/4/16 20:00').toISOString(),
     extendedProps: {
@@ -323,7 +323,7 @@ export const eventsOperator = [
   {
     id: '4',
     title: 'sample title',
-    resourceId: '2',
+    resourceId: '1',
     start: new Date('2023/3/21 15:00').toISOString(),
     end: new Date('2023/3/21 20:00').toISOString(),
     extendedProps: {
@@ -337,7 +337,7 @@ export const eventsOperator = [
   {
     id: '5',
     title: 'sample title',
-    resourceId: '2',
+    resourceId: '1',
     start: new Date('2023/3/25 10:00').toISOString(),
     end: new Date('2023/3/25 20:00').toISOString(),
     extendedProps: {
@@ -351,7 +351,7 @@ export const eventsOperator = [
   {
     id: '6',
     title: 'sample title',
-    resourceId: '3',
+    resourceId: '1',
     start: new Date('2023/3/01 10:00').toISOString(),
     end: new Date('2023/3/01 20:00').toISOString(),
     extendedProps: {

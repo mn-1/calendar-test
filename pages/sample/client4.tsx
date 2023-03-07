@@ -14,8 +14,8 @@ import { EventApi } from "@fullcalendar/core";
 // lib
 import { resources, operator, externalEvents } from "../../lib/data";
 import EventControl from "../../lib/clientEventControl";
-import { divideColor } from "../../lib/colorControl";
-import { scheduleDataInfo } from "../../lib/inputDataControl";
+import { divideColor } from "../../lib/color";
+import { scheduleDataInfo } from "../../lib/inputData";
 import { locationSortData } from "../../lib/dataControl";
 // components
 import Header from "../../components/Header/Header";
@@ -80,7 +80,7 @@ const ClientCalendar = () => {
    */
   const locationData = locationSortData(myEvents);
 
-  /**ok
+  /**
    * イベント詳細表示ダイアログ開く
    */
   const handleEventClick = (arg: EventClickArg) => {
@@ -135,7 +135,7 @@ const ClientCalendar = () => {
     setDeleteSnackbarOpen(false);
   };
 
-  /**ok
+  /**
    * イベント移動した時に色変える
    * イベントのサイズ変更した時に色変える
    */
@@ -154,7 +154,7 @@ const ClientCalendar = () => {
     arg.event.setProp("color", color);
   };
 
-  /**ok
+  /**
    * 外部のイベント受付
    */
   const handleEventReceive = (arg: EventReceiveArg) => {
@@ -174,7 +174,7 @@ const ClientCalendar = () => {
     arg.event.setEnd(end);
   };
 
-  /**ok
+  /**
    * メインカレンダーの表示変更
    */
   const handleViewChange = (direction: "month" | "week" | "day"): void => {
@@ -198,7 +198,7 @@ const ClientCalendar = () => {
     }
   };
 
-  /**ok
+  /**
    * カレンダーの日付選択するとその日に飛ぶ
    */
   const handleNavLinkDayClick = (date: Date) => {

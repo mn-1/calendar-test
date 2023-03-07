@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC } from "react";
 // MUI
-import { styled } from '@mui/material/styles';
-import FormHelperText from '@mui/material/FormHelperText';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { styled } from "@mui/material/styles";
+import FormHelperText from "@mui/material/FormHelperText";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import {
   FormControl,
   Select,
@@ -11,11 +11,11 @@ import {
   SelectProps,
   Typography,
   Grid,
-} from '@mui/material';
+} from "@mui/material";
 // validate
-import { Control, Controller, FieldErrors } from 'react-hook-form';
+import { Control, Controller, FieldErrors } from "react-hook-form";
 // lib
-import { scheduleDataInfo } from '../../lib/inputDataControl';
+import { scheduleDataInfo } from "../../lib/inputData";
 
 type FormSelectProps = {
   operator: any;
@@ -38,19 +38,19 @@ const FormSelect: FC<FormSelectProps> = ({
 }: FormSelectProps) => {
   return (
     <>
-      <Grid container direction='row' alignItems='center'>
-        <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+      <Grid container direction="row" alignItems="center">
+        <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
           <LocationOnOutlinedIcon />
         </Grid>
-        <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+        <Grid item xs={10} sx={{ mb: "0.5rem" }}>
           <Controller
             defaultValue={locationDefaultValue}
             control={control}
-            name='locationName'
+            name="locationName"
             render={({ field }) => (
-              <CssFormControl fullWidth sx={{ my: '0.5rem' }} focused>
+              <CssFormControl fullWidth sx={{ my: "0.5rem" }} focused>
                 <Select {...otherProps} {...field} required>
-                  <MenuItem disabled value=''>
+                  <MenuItem disabled value="">
                     <em>選択してください</em>
                   </MenuItem>
                   {location &&
@@ -60,25 +60,25 @@ const FormSelect: FC<FormSelectProps> = ({
                       </MenuItem>
                     ))}
                 </Select>
-                <FormHelperText sx={{ color: '#FF0000' }}>
+                <FormHelperText sx={{ color: "#FF0000" }}>
                   {errors.locationName?.message}
                 </FormHelperText>
               </CssFormControl>
             )}
           />
         </Grid>
-        <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+        <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
           <PersonOutlineOutlinedIcon />
         </Grid>
-        <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+        <Grid item xs={10} sx={{ mb: "0.5rem" }}>
           <Controller
             defaultValue={operatorDefaultValue}
             control={control}
-            name='operatorName'
+            name="operatorName"
             render={({ field }) => (
-              <CssFormControl fullWidth sx={{ my: '0.5rem' }} focused>
+              <CssFormControl fullWidth sx={{ my: "0.5rem" }} focused>
                 <Select {...otherProps} {...field} required>
-                  <MenuItem disabled value=''>
+                  <MenuItem disabled value="">
                     <em>選択してください</em>
                   </MenuItem>
                   {operator &&
@@ -88,7 +88,7 @@ const FormSelect: FC<FormSelectProps> = ({
                       </MenuItem>
                     ))}
                 </Select>
-                <FormHelperText sx={{ color: '#FF0000' }}>
+                <FormHelperText sx={{ color: "#FF0000" }}>
                   {errors.operatorName?.message}
                 </FormHelperText>
               </CssFormControl>
@@ -104,36 +104,36 @@ export default FormSelect;
 
 // Styled Material UI TextField Component
 const CssFormControl = styled(FormControl)({
-  '& label.Mui-focused': {
-    color: '#5e5b5d',
+  "& label.Mui-focused": {
+    color: "#5e5b5d",
     fontWeight: 400,
   },
-  '& .MuiInputBase-input': {
-    borderColor: '#c8d0d4',
+  "& .MuiInputBase-input": {
+    borderColor: "#c8d0d4",
   },
-  '& .MuiInput-underline:after': {
-    border: 'none',
+  "& .MuiInput-underline:after": {
+    border: "none",
   },
-  '& .MuiOutlinedInput-root': {
-    '&.Mui-error': {
-      '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: '#d32f2f',
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-error": {
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#d32f2f",
       },
     },
-    '& fieldset': {
-      borderColor: '#c8d0d4',
+    "& fieldset": {
+      borderColor: "#c8d0d4",
       borderRadius: 0,
     },
-    '&:hover fieldset': {
+    "&:hover fieldset": {
       border: 0,
-      borderBottom: '1px solid #dddddd',
+      borderBottom: "1px solid #dddddd",
     },
-    '&.Mui-focused fieldset': {
+    "&.Mui-focused fieldset": {
       border: 0,
-      borderBottom: '1px solid #dddddd',
+      borderBottom: "1px solid #dddddd",
     },
-    '& .Mui-disabled': {
-      backgroundColor: '#F8F5F0',
+    "& .Mui-disabled": {
+      backgroundColor: "#F8F5F0",
     },
   },
 });

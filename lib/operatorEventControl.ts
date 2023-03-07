@@ -2,7 +2,7 @@
 import { useState } from "react";
 // lib
 import { events } from "./data";
-import { editMemoInfo } from "./inputDataControl";
+import { editMemoInfo } from "./inputData";
 // Fullcalendar
 import { CalendarApi, EventClickArg } from "@fullcalendar/core";
 

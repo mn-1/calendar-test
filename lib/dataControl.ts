@@ -1,4 +1,4 @@
-import { divideColor } from "./colorControl";
+import { divideColor } from "./color";
 
 /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
  * 拠点をリソースにしたのカレンダーイベント形式配列

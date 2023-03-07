@@ -2,8 +2,8 @@
 import { useState } from "react";
 // lib
 import { resources, events } from "./data";
-import { divideColor } from "./colorControl";
-import { scheduleDataInfo } from "./inputDataControl";
+import { divideColor } from "./color";
+import { scheduleDataInfo } from "./inputData";
 // Fullcalendar
 import { CalendarApi, EventClickArg } from "@fullcalendar/core";
 

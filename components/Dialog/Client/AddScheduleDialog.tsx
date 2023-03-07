@@ -1,7 +1,7 @@
 // MUI
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
-import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
+import SubjectOutlinedIcon from "@mui/icons-material/SubjectOutlined";
 import {
   Box,
   DialogContent,
@@ -12,19 +12,19 @@ import {
   DialogActions,
   Tooltip,
   IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 // components
-import EditFormInput from '../../FormControl/EditFormInput';
-import DatePickerForm from '../../FormControl/DatePicker';
-import AddFormSelect from '../../FormControl/AddFormSelect';
-import TimeFormInput from '../../FormControl/TimeFormInput';
+import EditFormInput from "../../FormControl/EditFormInput";
+import DatePickerForm from "../../FormControl/DatePicker";
+import AddFormSelect from "../../FormControl/AddFormSelect";
+import TimeFormInput from "../../FormControl/TimeFormInput";
 // validate
-import { scheduleSchema } from '../../../schema/inputSchedule';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { scheduleSchema } from "../../../schema/inputSchedule";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 // lib
-import { scheduleDataInfo } from '../../../lib/inputDataControl';
+import { scheduleDataInfo } from "../../../lib/inputData";
 
 type Props = {
   open: boolean;
@@ -39,11 +39,11 @@ export default function AddScheduleDialog(props: Props) {
   const { open, handleClose, addSchedule, operator, location, date } = props;
 
   const resetValues = {
-    locationName: '',
-    operatorName: '',
-    title: '',
-    memo: '',
-    avatar: '',
+    locationName: "",
+    operatorName: "",
+    title: "",
+    memo: "",
+    avatar: "",
   };
 
   const useFormMethods = useForm<scheduleDataInfo>({
@@ -61,7 +61,7 @@ export default function AddScheduleDialog(props: Props) {
   const onAdd: SubmitHandler<scheduleDataInfo> = async (
     values: scheduleDataInfo
   ) => {
-    console.log('add values', values);
+    console.log("add values", values);
 
     addSchedule(values);
     reset(resetValues);
@@ -76,50 +76,50 @@ export default function AddScheduleDialog(props: Props) {
   return (
     <Dialog open={open} fullScreen>
       <DialogActions>
-        <Tooltip title='閉じる'>
+        <Tooltip title="閉じる">
           <IconButton onClick={handleCancelButton}>
-            <CloseIcon fontSize='large' />
+            <CloseIcon fontSize="large" />
           </IconButton>
         </Tooltip>
       </DialogActions>
 
       <DialogContent>
-        <Grid container justifyContent='center'>
-          <Typography variant='h4' color='secondary'>
+        <Grid container justifyContent="center">
+          <Typography variant="h4" color="secondary">
             予定を追加
           </Typography>
         </Grid>
 
         <FormProvider {...useFormMethods}>
           <Box
-            component='form'
+            component="form"
             noValidate
-            autoComplete='off'
+            autoComplete="off"
             onSubmit={handleSubmit(onAdd)}
           >
-            <Grid container direction='row' alignItems='center'>
-              <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }} />
-              <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+            <Grid container direction="row" alignItems="center">
+              <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }} />
+              <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                 <EditFormInput
-                  defaultValue=''
-                  name='title'
-                  autoComplete='off'
+                  defaultValue=""
+                  name="title"
+                  autoComplete="off"
                   focused
-                  placeholder='タイトル'
+                  placeholder="タイトル"
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+              <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
                 <AccessTimeOutlinedIcon />
               </Grid>
-              <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+              <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                 <DatePickerForm defaultValue={date} control={control} />
                 <br />
                 <TimeFormInput
                   control={control}
                   errors={errors}
-                  startDefaultValue={new Date('2018-01-01T01:00:00.000Z')}
-                  endDefaultValue={new Date('2018-01-01T02:00:00.000Z')}
+                  startDefaultValue={new Date("2018-01-01T01:00:00.000Z")}
+                  endDefaultValue={new Date("2018-01-01T02:00:00.000Z")}
                 />
               </Grid>
               <AddFormSelect
@@ -127,32 +127,32 @@ export default function AddScheduleDialog(props: Props) {
                 location={location}
                 control={control}
                 errors={errors}
-                locationDefaultValue=''
-                operatorDefaultValue=''
+                locationDefaultValue=""
+                operatorDefaultValue=""
               />
-              <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+              <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
                 <Face3OutlinedIcon />
               </Grid>
-              <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+              <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                 <EditFormInput
-                  defaultValue=''
-                  name='avatar'
-                  autoComplete='off'
+                  defaultValue=""
+                  name="avatar"
+                  autoComplete="off"
                   focused
-                  placeholder='アバター名'
+                  placeholder="アバター名"
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+              <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
                 <SubjectOutlinedIcon />
               </Grid>
-              <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+              <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                 <EditFormInput
-                  defaultValue=''
-                  name='memo'
-                  autoComplete='off'
+                  defaultValue=""
+                  name="memo"
+                  autoComplete="off"
                   focused
-                  placeholder='メモ'
+                  placeholder="メモ"
                   fullWidth
                   multiline
                   minRows={3}
@@ -161,9 +161,9 @@ export default function AddScheduleDialog(props: Props) {
               </Grid>
               <Button
                 fullWidth
-                variant='contained'
-                type='submit'
-                sx={{ fontWeight: 'bold', my: '0.5rem' }}
+                variant="contained"
+                type="submit"
+                sx={{ fontWeight: "bold", my: "0.5rem" }}
               >
                 登録する
               </Button>

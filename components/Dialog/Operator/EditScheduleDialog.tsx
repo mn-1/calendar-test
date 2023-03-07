@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 // MUI
-import CloseIcon from '@mui/icons-material/Close';
-import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+import CloseIcon from "@mui/icons-material/Close";
+import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 import {
   Box,
   DialogActions,
@@ -13,19 +13,19 @@ import {
   Tooltip,
   Button,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 // fullcalendar
-import { EventClickArg } from '@fullcalendar/core';
+import { EventClickArg } from "@fullcalendar/core";
 // validate
-import { editMemoSchema } from '../../../schema/inputSchedule';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { editMemoSchema } from "../../../schema/inputSchedule";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 // lib
-import { editMemoInfo } from '../../../lib/inputDataControl';
+import { editMemoInfo } from "../../../lib/inputData";
 // components
-import FailedDialog from '../FailedDialog';
-import EditFormInput from '../../FormControl/EditFormInput';
-import MemoFormInput from '../../FormControl/MemoFormInput';
+import FailedDialog from "../FailedDialog";
+import EditFormInput from "../../FormControl/EditFormInput";
+import MemoFormInput from "../../FormControl/MemoFormInput";
 
 type Props = {
   open: boolean;
@@ -46,7 +46,7 @@ export default function EditScheduleDialog(props: Props) {
 
   // 登録ボタンアクション
   const onSave: SubmitHandler<editMemoInfo> = async (values: editMemoInfo) => {
-    console.log('memo', values);
+    console.log("memo", values);
     editMemo(values);
   };
 
@@ -56,43 +56,43 @@ export default function EditScheduleDialog(props: Props) {
         <DialogActions>
           <Grid
             container
-            direction='row'
-            justifyContent='space-between'
-            alignItems='flex-end'
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-end"
           >
-            <Box sx={{ mx: '1rem' }} />
-            <Typography variant='h6' color='secondary' fontWeight='bold'>
+            <Box sx={{ mx: "1rem" }} />
+            <Typography variant="h6" color="secondary" fontWeight="bold">
               メモを編集する
             </Typography>
-            <Tooltip title='閉じる'>
+            <Tooltip title="閉じる">
               <IconButton
                 onClick={() => {
-                  reset({ memo: '' });
+                  reset({ memo: "" });
                   handleClose();
                 }}
               >
-                <CloseIcon fontSize='medium' />
+                <CloseIcon fontSize="medium" />
               </IconButton>
             </Tooltip>
           </Grid>
         </DialogActions>
         <FormProvider {...useFormMethods}>
           <Box
-            component='form'
-            autoComplete='off'
+            component="form"
+            autoComplete="off"
             onSubmit={handleSubmit(onSave)}
-            sx={{ p: '1rem' }}
+            sx={{ p: "1rem" }}
           >
             <MemoFormInput
               defaultValue={event.extendedProps.memo}
-              autoComplete='off'
+              autoComplete="off"
               focused
               fullWidth
               multiline
               minRows={3}
               maxRows={10}
             />
-            <Button variant='contained' type='submit' fullWidth>
+            <Button variant="contained" type="submit" fullWidth>
               保存
             </Button>
           </Box>

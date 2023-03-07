@@ -1,7 +1,7 @@
 // MUI
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import Face3OutlinedIcon from '@mui/icons-material/Face3Outlined';
-import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
+import SubjectOutlinedIcon from "@mui/icons-material/SubjectOutlined";
 import {
   Box,
   DialogContent,
@@ -12,22 +12,22 @@ import {
   Tooltip,
   IconButton,
   Grid,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 // components
-import EditFormInput from '../../FormControl/EditFormInput';
-import DatePickerForm from '../../FormControl/DatePicker';
-import AddFormSelect from '../../FormControl/AddFormSelect';
-import TimeFormInput from '../../FormControl/TimeFormInput';
-import MemoFormInput from '../../FormControl/MemoFormInput';
+import EditFormInput from "../../FormControl/EditFormInput";
+import DatePickerForm from "../../FormControl/DatePicker";
+import AddFormSelect from "../../FormControl/AddFormSelect";
+import TimeFormInput from "../../FormControl/TimeFormInput";
+import MemoFormInput from "../../FormControl/MemoFormInput";
 // validate
-import { scheduleSchema } from '../../../schema/inputSchedule';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
+import { scheduleSchema } from "../../../schema/inputSchedule";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 // lib
-import { scheduleDataInfo } from '../../../lib/inputDataControl';
-import { EventClickArg } from '@fullcalendar/core';
-import FailedDialog from '../FailedDialog';
+import { scheduleDataInfo } from "../../../lib/inputData";
+import { EventClickArg } from "@fullcalendar/core";
+import FailedDialog from "../FailedDialog";
 
 type Props = {
   open: boolean;
@@ -49,11 +49,11 @@ export default function MobileEditScheduleDialog(props: Props) {
   } = props;
 
   const resetValues = {
-    locationName: '',
-    operatorName: '',
-    title: '',
-    memo: '',
-    avatar: '',
+    locationName: "",
+    operatorName: "",
+    title: "",
+    memo: "",
+    avatar: "",
   };
 
   const useFormMethods = useForm<scheduleDataInfo>({
@@ -83,43 +83,43 @@ export default function MobileEditScheduleDialog(props: Props) {
     return (
       <Dialog open={open} fullScreen>
         <DialogActions>
-          <Tooltip title='閉じる'>
+          <Tooltip title="閉じる">
             <IconButton onClick={handleCancelButton}>
-              <CloseIcon fontSize='large' />
+              <CloseIcon fontSize="large" />
             </IconButton>
           </Tooltip>
         </DialogActions>
 
         <DialogContent>
-          <Grid container justifyContent='center'>
-            <Typography variant='h4' color='secondary'>
+          <Grid container justifyContent="center">
+            <Typography variant="h4" color="secondary">
               予定を編集
             </Typography>
           </Grid>
 
           <FormProvider {...useFormMethods}>
             <Box
-              component='form'
+              component="form"
               noValidate
-              autoComplete='off'
+              autoComplete="off"
               onSubmit={handleSubmit(onAdd)}
             >
-              <Grid container direction='row' alignItems='center'>
-                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }} />
-                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+              <Grid container direction="row" alignItems="center">
+                <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }} />
+                <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                   <EditFormInput
-                    defaultValue={event.title ?? ''}
-                    name='title'
-                    autoComplete='off'
+                    defaultValue={event.title ?? ""}
+                    name="title"
+                    autoComplete="off"
                     focused
-                    placeholder='タイトル'
+                    placeholder="タイトル"
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+                <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
                   <AccessTimeOutlinedIcon />
                 </Grid>
-                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                   <DatePickerForm
                     defaultValue={event.start}
                     control={control}
@@ -140,29 +140,29 @@ export default function MobileEditScheduleDialog(props: Props) {
                   locationDefaultValue={event.getResources()[0]._resource.title}
                   operatorDefaultValue={event.extendedProps.operatorName}
                 />
-                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+                <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
                   <Face3OutlinedIcon />
                 </Grid>
-                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                   <EditFormInput
-                    defaultValue={event.extendedProps.avatar ?? ''}
-                    name='avatar'
-                    autoComplete='off'
+                    defaultValue={event.extendedProps.avatar ?? ""}
+                    name="avatar"
+                    autoComplete="off"
                     focused
-                    placeholder='アバター'
+                    placeholder="アバター"
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={1} sx={{ mb: '0.5rem', mr: '0.4rem' }}>
+                <Grid item xs={1} sx={{ mb: "0.5rem", mr: "0.4rem" }}>
                   <SubjectOutlinedIcon />
                 </Grid>
-                <Grid item xs={10} sx={{ mb: '0.5rem' }}>
+                <Grid item xs={10} sx={{ mb: "0.5rem" }}>
                   <MemoFormInput
-                    defaultValue={event.extendedProps.memo ?? ''}
-                    name='memo'
-                    autoComplete='off'
+                    defaultValue={event.extendedProps.memo ?? ""}
+                    name="memo"
+                    autoComplete="off"
                     focused
-                    placeholder='メモ'
+                    placeholder="メモ"
                     fullWidth
                     multiline
                     minRows={3}
@@ -172,9 +172,9 @@ export default function MobileEditScheduleDialog(props: Props) {
               </Grid>
               <Button
                 fullWidth
-                variant='contained'
-                type='submit'
-                sx={{ fontWeight: 'bold', my: '0.5rem' }}
+                variant="contained"
+                type="submit"
+                sx={{ fontWeight: "bold", my: "0.5rem" }}
               >
                 登録する
               </Button>

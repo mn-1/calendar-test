@@ -2,13 +2,13 @@
  * できた
  * https://codesandbox.io/s/full-calendar-react-template-7o7bl?file=/src/data.ts:0-3430
  */
-import { createRef, useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
-import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import { events, eventConstraints, resources } from '../lib/data';
-import { Container, Grid } from '@mui/material';
+import { createRef, useEffect, useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import scrollGridPlugin from "@fullcalendar/scrollgrid";
+import { events, eventConstraints, resources } from "../../lib/data";
+import { Container, Grid } from "@mui/material";
 
 export default function App() {
   const calendarRef = createRef<FullCalendar>();
@@ -18,7 +18,7 @@ export default function App() {
 
   const handleDateClick = (arg: DateClickArg) => {
     console.log(arg);
-    const title = prompt('Please enter a new title for your event');
+    const title = prompt("Please enter a new title for your event");
     const calendarApi = arg.view.calendar;
 
     // https://fullcalendar.io/docs/unselect-callback
@@ -34,9 +34,9 @@ export default function App() {
       start: arg.dateStr,
       resourceId: arg.resource?.id,
       // end: selectInfo.endStr,
-      slotDuration: '01:00:00',
+      slotDuration: "01:00:00",
       allDay: false,
-      color: '#3CB371',
+      color: "#3CB371",
     });
   };
 
@@ -51,7 +51,7 @@ export default function App() {
       //   window.dateOnClick = calendarApi.select;
 
       // イベント一覧取得
-      console.log('calendarApi:', calendarApi.getEvents());
+      console.log("calendarApi:", calendarApi.getEvents());
     }
   }, [calendarRef]);
 
@@ -61,8 +61,8 @@ export default function App() {
     const eventEndTime = new Date(arg.event.endStr);
     if (calendarRef.current) {
       if (+eventEndTime === 10) {
-        console.log('sfsdfsd');
-        calendarRef.current?.getApi().setOption('snapDuration', { minute: 5 });
+        console.log("sfsdfsd");
+        calendarRef.current?.getApi().setOption("snapDuration", { minute: 5 });
       }
       eventConstraints.forEach((item) => {
         if (+resources[0].id === +item.resourceId) {
@@ -74,7 +74,7 @@ export default function App() {
 
   const handleResizeStop = () => {
     if (calendarRef.current) {
-      calendarRef.current?.getApi().setOption('snapDuration', { minute: 15 });
+      calendarRef.current?.getApi().setOption("snapDuration", { minute: 15 });
 
       eventConstraints.forEach((item) => {
         const event = calendarRef.current?.getApi().getEventById(item.id);
@@ -102,11 +102,11 @@ export default function App() {
             scrollGridPlugin,
           ]}
           headerToolbar={{
-            start: 'title',
-            center: 'futureDay',
-            end: 'today prev,next',
+            start: "title",
+            center: "futureDay",
+            end: "today prev,next",
           }}
-          initialView='resourceTimeGridDay'
+          initialView="resourceTimeGridDay"
           //
           allDaySlot={false}
           editable={true}

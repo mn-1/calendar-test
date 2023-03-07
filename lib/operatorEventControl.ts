@@ -1,19 +1,19 @@
 // react
-import { useState } from 'react';
+import { useState } from "react";
 // lib
-import { eventsOperator, events } from './data';
-import { divideColor2, divideColor } from './colorControl';
-import { editMemoInfo } from './inputDataControl';
+import { events, operatorEvents } from "./data";
+import { divideColor2, divideColor } from "./colorControl";
+import { editMemoInfo } from "./inputDataControl";
 // Fullcalendar
-import { CalendarApi, EventClickArg } from '@fullcalendar/core';
+import { CalendarApi, EventClickArg } from "@fullcalendar/core";
 
 export default function EventControl() {
   // IDセット
   const [countId, setCountId] = useState<number>(0);
-  // イベント一覧収納ーオペレーターごとの予定
-  const [operatorEvents, setOperatorEvents] = useState<any>([]);
   // イベント一覧収納ー顧客全体の予定
-  const [clientEvents, setClientEvents] = useState<any>([]);
+  const [myEvents, setMyEvents] = useState<any>([]);
+  // イベント一覧収納ー顧客全体の予定
+  const [operatorEvent, setOperatorEvent] = useState<any>([]);
   // 予定情報
   const [eventInfo, setEventInfo] = useState<EventClickArg | null>(null);
   // 予定編集ダイアログopen
@@ -23,36 +23,36 @@ export default function EventControl() {
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
    * DBから撮ってきたeventsを色分けしてカレンダーに入れる
-   *
+   * 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
-  const getOperatorEvents = () => {
-    // 背景色を変更してから収納
-    for (let i = 0; i < eventsOperator.length; i++) {
-      const item = eventsOperator[i];
-
-      const { color } = divideColor2(new Date(item.start), new Date(item.end));
-      item.color = color;
-    }
-
-    const add = eventsOperator.length;
-    setCountId(add);
-
-    setOperatorEvents(eventsOperator);
-  };
-
-  const getClientEvents = () => {
+  const getEvents = () => {
     // 背景色を変更してから収納
     for (let i = 0; i < events.length; i++) {
       const item = events[i];
 
-      const { color } = divideColor(item.start, item.end);
+      const { color } = divideColor2(new Date(item.start), new Date(item.end));
+
       item.color = color;
     }
 
-    const add = events.length;
-    setCountId(add);
+    setMyEvents(events);
+  };
 
-    setClientEvents(events);
+  /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+   * DBから撮ってきたeventsを色分けしてカレンダーに入れる
+   * オペレーター表示用
+   ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+  const getOperatorEvents = () => {
+    //   // 背景色を変更してから収納
+    for (let i = 0; i < operatorEvents.length; i++) {
+      const item = operatorEvents[i];
+
+      const { color } = divideColor2(new Date(item.start), new Date(item.end));
+
+      item.color = color;
+    }
+
+    setOperatorEvent(operatorEvents);
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -62,27 +62,26 @@ export default function EventControl() {
   const editMemo = async (values: editMemoInfo) => {
     const event = eventInfo?.event;
     console.log(values);
-    if (!event) return console.log('event none');
+    if (!event) return console.log("event none");
 
-    event.setExtendedProp('memo', values.memo);
+    event.setExtendedProp("memo", values.memo);
 
     setEditDialogOpen(false);
   };
 
   return {
     countId,
-    operatorEvents,
-    clientEvents,
+    myEvents,
     eventInfo,
     editDialogOpen,
     failedSnackbarOpen,
-    getClientEvents,
+    operatorEvent,
+    getOperatorEvents,
+    getEvents,
     setFailedSnackbarOpen,
     setEditDialogOpen,
     editMemo,
     setEventInfo,
-    getOperatorEvents,
     setCountId,
-    setOperatorEvents,
   };
 }

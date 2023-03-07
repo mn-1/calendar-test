@@ -1,24 +1,25 @@
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 // react
-import React, { useState, useRef, createRef, useEffect } from 'react';
+import React, { useState, useRef, createRef, useEffect } from "react";
 // MUI
-import { Box, Container, Grid, Typography, Stack } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { Box, Container, Grid, Typography, Stack } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 // FullCalendar
-import FullCalendar from '@fullcalendar/react';
-import { EventApi, DateSelectArg, EventClickArg } from '@fullcalendar/core';
-import { CalendarApi } from '@fullcalendar/core';
+import FullCalendar from "@fullcalendar/react";
+import { EventApi, DateSelectArg, EventClickArg } from "@fullcalendar/core";
+import { CalendarApi } from "@fullcalendar/core";
 // lib
-import EventControl from '../../lib/operatorEventControl';
-import { resources } from '../../lib/data';
+import EventControl from "../../lib/operatorEventControl";
+import { resources } from "../../lib/data";
+import { SortData } from "../../lib/dataControl";
 // components
-import Header from '../../components/Header/Header';
-import ScheduleInfoDialog from '../../components/Dialog/Operator/ScheduleInfoDialog';
-import EditScheduleDialog from '../../components/Dialog/Operator/EditScheduleDialog';
-import { NewHeader } from '../../components/FullCalendar/Operator/NewHeader';
-import FailedSnackbar from '../../components/Snackbar/FailedSnackbar';
-import MainCalendar from '../../components/FullCalendar/Operator/MainCalendar-2';
+import Header from "../../components/Header/Header";
+import ScheduleInfoDialog from "../../components/Dialog/Operator/ScheduleInfoDialog";
+import EditScheduleDialog from "../../components/Dialog/Operator/EditScheduleDialog";
+import { NewHeader } from "../../components/FullCalendar/Operator/NewHeader";
+import FailedSnackbar from "../../components/Snackbar/FailedSnackbar";
+import MainCalendar from "../../components/FullCalendar/Operator/MainCalendar-2";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -27,45 +28,55 @@ interface TabPanelProps {
 }
 
 export default function BasicTabs() {
-  const matches: boolean = useMediaQuery('(min-width:992px)');
+  const matches: boolean = useMediaQuery("(min-width:992px)");
   const calendarRef = createRef<FullCalendar>();
 
   const [tab, setTab] = useState<number>(0);
   const [calApi, setCalApi] = useState<CalendarApi | null>(null);
 
   const [today, setToday] = useState<{
-    type: 'month' | 'week' | 'day';
+    type: "month" | "week" | "day";
     date: Date;
     view: string;
   }>({
-    type: 'day',
+    type: "day",
     date: new Date(new Date().toLocaleDateString()),
-    view: 'resourceTimelineDay',
+    view: "resourceTimelineDay",
   });
   const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
 
   const {
-    operatorEvents,
-    clientEvents,
     eventInfo,
     editDialogOpen,
     failedSnackbarOpen,
+    myEvents,
+    operatorEvent,
     setFailedSnackbarOpen,
     setEditDialogOpen,
     editMemo,
     setEventInfo,
+    getEvents,
+
     getOperatorEvents,
-    getClientEvents,
   } = EventControl();
 
   useEffect(() => {
+    getEvents();
     getOperatorEvents();
-    getClientEvents();
 
     // ここで取得する必要がある
-    const calApi = calendarRef.current?.getApi();
-    if (calApi) setCalApi(calApi);
+    if (calendarRef.current) {
+      const calApi = calendarRef.current?.getApi();
+      setCalApi(calApi);
+    }
   }, [calendarRef]);
+
+  /**
+   * データ整形
+   */
+  const locationData = SortData("location");
+  const operatorData = SortData("operator");
+  console.log(locationData, operatorData);
 
   /**
    * タブ切り替え
@@ -73,9 +84,9 @@ export default function BasicTabs() {
   const handleChange = async (e: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
 
-    if (today.type === 'day') {
-      if (newValue === 0) setToday({ ...today, view: 'resourceTimelineDay' });
-      if (newValue === 1) setToday({ ...today, view: 'resourceTimeGridDay' });
+    if (today.type === "day") {
+      if (newValue === 0) setToday({ ...today, view: "resourceTimelineDay" });
+      if (newValue === 1) setToday({ ...today, view: "resourceTimeGridDay" });
     }
   };
 
@@ -83,6 +94,7 @@ export default function BasicTabs() {
    * メモ編集ダイアログ開く
    */
   const handleEventClick = async (arg: EventClickArg) => {
+    console.log("arg:", arg);
     setEventInfo(arg);
     setInfoDialogOpen(true);
   };
@@ -101,35 +113,35 @@ export default function BasicTabs() {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
-    if (tab === 0) calApi.changeView('resourceTimelineDay', date);
-    if (tab === 1) calApi.changeView('resourceTimeGridDay', date);
+    if (tab === 0) calApi.changeView("resourceTimelineDay", date);
+    if (tab === 1) calApi.changeView("resourceTimeGridDay", date);
 
-    setToday({ ...today, type: 'day', date: calApi.getDate() });
+    setToday({ ...today, type: "day", date: calApi.getDate() });
   };
 
   /**
    * カレンダーの表示変更
    */
-  const handleViewChange = (direction: 'week' | 'day' | 'month'): void => {
+  const handleViewChange = (direction: "week" | "day" | "month"): void => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
-    if (direction === 'month') {
-      calApi.changeView('dayGridMonth');
-      setToday({ ...today, type: 'month', view: 'dayGridMonth' });
+    if (direction === "month") {
+      calApi.changeView("dayGridMonth");
+      setToday({ ...today, type: "month", view: "dayGridMonth" });
     }
-    if (direction === 'week') {
-      calApi.changeView('timeGridWeek');
-      setToday({ ...today, type: 'week', view: 'timeGridWeek' });
+    if (direction === "week") {
+      calApi.changeView("timeGridWeek");
+      setToday({ ...today, type: "week", view: "timeGridWeek" });
     }
-    if (direction === 'day') {
+    if (direction === "day") {
       if (tab === 0) {
-        calApi.changeView('resourceTimelineDay');
-        setToday({ ...today, type: 'day', view: 'resourceTimelineDay' });
+        calApi.changeView("resourceTimelineDay");
+        setToday({ ...today, type: "day", view: "resourceTimelineDay" });
       }
       if (tab === 1) {
-        calApi.changeView('resourceTimeGridDay');
-        setToday({ ...today, type: 'day', view: 'resourceTimeGridDay' });
+        calApi.changeView("resourceTimeGridDay");
+        setToday({ ...today, type: "day", view: "resourceTimeGridDay" });
       }
     }
   };
@@ -137,13 +149,13 @@ export default function BasicTabs() {
   /**
    * カレンダーの日付前後する
    */
-  const handleDateChange = (direction: 'prev' | 'today' | 'next'): void => {
+  const handleDateChange = (direction: "prev" | "today" | "next"): void => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
-    if (direction === 'prev') calApi.prev();
-    if (direction === 'next') calApi.next();
-    if (direction === 'today') calApi.today();
+    if (direction === "prev") calApi.prev();
+    if (direction === "next") calApi.next();
+    if (direction === "today") calApi.today();
 
     setToday({ ...today, date: calApi.getDate() });
   };
@@ -154,9 +166,9 @@ export default function BasicTabs() {
       <Container
         maxWidth={false}
         sx={{
-          width: '100%',
-          height: '100%',
-          mt: '4rem',
+          width: "100%",
+          height: "100%",
+          mt: "4rem",
         }}
       >
         <NewHeader
@@ -166,22 +178,22 @@ export default function BasicTabs() {
           handleDateChange={handleDateChange}
         />
         {/* タブの部分ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             value={tab}
             onChange={handleChange}
-            aria-label='basic tabs example'
+            aria-label="basic tabs example"
             scrollButtons={false}
           >
-            <Tab label='オペレーター名' {...a11yProps(0)} />
-            <Tab label='顧客名' {...a11yProps(1)} />
+            <Tab label="オペレーター名" {...a11yProps(0)} />
+            <Tab label="顧客名" {...a11yProps(1)} />
           </Tabs>
         </Box>
 
         {/* タブの中身ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */}
         <TabPanel value={tab} index={0}>
-          {operatorEvents.length != 0 && (
-            <Stack sx={{ overflow: 'scroll' }}>
+          {myEvents.length != 0 && (
+            <Stack sx={{ overflow: "scroll" }}>
               <MainCalendar
                 handleNavLinkDayClick={handleNavLinkDayClick}
                 handleEventClick={handleEventClick}
@@ -189,11 +201,11 @@ export default function BasicTabs() {
                 calendarRef={calendarRef}
                 initialView={today.view}
                 initialDate={today.date}
-                myEvents={operatorEvents}
+                myEvents={operatorEvent}
                 resources={[
                   {
-                    id: '1',
-                    title: 'オペレーターAさん',
+                    id: "1",
+                    title: "オペレーターAさん",
                   },
                 ]}
               />
@@ -201,8 +213,8 @@ export default function BasicTabs() {
           )}
         </TabPanel>
         <TabPanel value={tab} index={1}>
-          {clientEvents.length != 0 && (
-            <Stack sx={{ overflow: 'scroll' }}>
+          {myEvents.length != 0 && (
+            <Stack sx={{ overflow: "scroll" }}>
               <MainCalendar
                 handleNavLinkDayClick={handleNavLinkDayClick}
                 handleEventClick={handleEventClick}
@@ -210,7 +222,7 @@ export default function BasicTabs() {
                 calendarRef={calendarRef}
                 initialView={today.view}
                 initialDate={today.date}
-                myEvents={clientEvents}
+                myEvents={locationData.locationData}
                 resources={resources}
               />
             </Stack>
@@ -251,7 +263,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      role='tabpanel'
+      role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -265,6 +277,6 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }

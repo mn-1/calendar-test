@@ -4,23 +4,8 @@
  * @param end
  * @returns イベントの色
  */
-export const divideColor = (start: number, end: number) => {
-  let color: string = '';
-
-  const now = new Date().getTime();
-
-  // 予定
-  if (start > now) color = '#2E8B57';
-  // 稼働中
-  if (start <= now && now <= end) color = '#4169E1';
-  // 古い
-  if (end < now) color = '#A9A9A9';
-
-  return { color };
-};
-
-export const divideColor2 = (start: Date, end: Date) => {
-  let color: string = '';
+export const divideColor = (start: Date, end: Date) => {
+  let color: string = "";
 
   const startNum = start.getTime();
   const endNum = end.getTime();
@@ -28,11 +13,11 @@ export const divideColor2 = (start: Date, end: Date) => {
   const now = new Date().getTime();
 
   // 予定
-  if (startNum > now) color = '#2E8B57';
+  if (startNum > now) color = "#2E8B57";
   // 稼働中
-  if (startNum <= now && now <= endNum) color = '#4169E1';
+  if (startNum <= now && now <= endNum) color = "#4169E1";
   // 古い
-  if (endNum < now) color = '#A9A9A9';
+  if (endNum < now) color = "#A9A9A9";
 
   return { color };
 };
@@ -47,9 +32,9 @@ export const divideColor2 = (start: Date, end: Date) => {
 export const divideColor3 = (
   start: Date,
   end: Date,
-  operatorActionType: 'LOGIN' | 'LOGOUT'
+  operatorActionType: "LOGIN" | "LOGOUT"
 ) => {
-  let color: string = '';
+  let color: string = "";
 
   const startNum = start.getTime();
   const endNum = end.getTime();
@@ -57,15 +42,15 @@ export const divideColor3 = (
   const now = new Date().getTime();
 
   // 予約
-  if (startNum > now) color = '#2E8B57';
+  if (startNum > now) color = "#2E8B57";
   // 古い
-  if (endNum < now) color = '#A9A9A9';
+  if (endNum < now) color = "#A9A9A9";
   // 稼働中
-  if (startNum <= now && now <= endNum && operatorActionType === 'LOGIN')
-    color = '#4169E1';
+  if (startNum <= now && now <= endNum && operatorActionType === "LOGIN")
+    color = "#4169E1";
   // 稼働していない
-  if (startNum <= now && now <= endNum && operatorActionType === 'LOGOUT')
-    color = '#FF0000';
+  if (startNum <= now && now <= endNum && operatorActionType === "LOGOUT")
+    color = "#FF0000";
 
   return { color };
 };

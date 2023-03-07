@@ -33,8 +33,6 @@ type Props = {
 export default function ScheduleInfoDialog(props: Props) {
   const event = props.eventInfo?.event;
 
-  console.log(event);
-
   if (!event)
     return <FailedDialog open={props.open} handleClose={props.handleClose} />;
 
@@ -42,7 +40,7 @@ export default function ScheduleInfoDialog(props: Props) {
     start,
     end,
     title,
-    extendedProps: { avatar, memo, operatorName },
+    extendedProps: { avatar, locationMemo, operatorName },
   } = event;
 
   if (start && end)
@@ -139,8 +137,10 @@ export default function ScheduleInfoDialog(props: Props) {
                   overflow: "auto",
                 }}
               >
-                <Typography color={memo === "" ? "textSecondary" : "inherit"}>
-                  {memo != "" ? memo : ""}
+                <Typography
+                  color={locationMemo === "" ? "textSecondary" : "inherit"}
+                >
+                  {locationMemo != "" ? locationMemo : ""}
                 </Typography>
               </Grid>
             </Grid>

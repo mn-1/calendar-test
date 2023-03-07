@@ -12,7 +12,7 @@ import { CalendarApi } from "@fullcalendar/core";
 // lib
 import EventControl from "../../lib/operatorEventControl";
 import { resources } from "../../lib/data";
-import { SortData } from "../../lib/dataControl";
+import { locationSortData, operatorSortData } from "../../lib/dataControl";
 // components
 import Header from "../../components/Header/Header";
 import ScheduleInfoDialog from "../../components/Dialog/Operator/ScheduleInfoDialog";
@@ -50,19 +50,15 @@ export default function BasicTabs() {
     editDialogOpen,
     failedSnackbarOpen,
     myEvents,
-    operatorEvent,
     setFailedSnackbarOpen,
     setEditDialogOpen,
     editMemo,
     setEventInfo,
     getEvents,
-
-    getOperatorEvents,
   } = EventControl();
 
   useEffect(() => {
     getEvents();
-    getOperatorEvents();
 
     // ここで取得する必要がある
     if (calendarRef.current) {
@@ -74,9 +70,8 @@ export default function BasicTabs() {
   /**
    * データ整形
    */
-  const locationData = SortData("location");
-  const operatorData = SortData("operator");
-  console.log(locationData, operatorData);
+  const locationData = locationSortData(myEvents);
+  const operatorData = operatorSortData("DE-RQxKOBdkE7whg8DO", myEvents);
 
   /**
    * タブ切り替え
@@ -186,7 +181,7 @@ export default function BasicTabs() {
             scrollButtons={false}
           >
             <Tab label="オペレーター名" {...a11yProps(0)} />
-            <Tab label="顧客名" {...a11yProps(1)} />
+            <Tab label="拠点名" {...a11yProps(1)} />
           </Tabs>
         </Box>
 
@@ -201,12 +196,9 @@ export default function BasicTabs() {
                 calendarRef={calendarRef}
                 initialView={today.view}
                 initialDate={today.date}
-                myEvents={operatorEvent}
+                myEvents={operatorData.setData}
                 resources={[
-                  {
-                    id: "1",
-                    title: "オペレーターAさん",
-                  },
+                  { id: "DE-RQxKOBdkE7whg8DO", name: "オペレーターAさん" },
                 ]}
               />
             </Stack>
@@ -222,7 +214,7 @@ export default function BasicTabs() {
                 calendarRef={calendarRef}
                 initialView={today.view}
                 initialDate={today.date}
-                myEvents={locationData.locationData}
+                myEvents={locationData.setData}
                 resources={resources}
               />
             </Stack>

@@ -1,21 +1,57 @@
-import { event } from "./data";
-import { divideColor2 } from "./colorControl";
+import { divideColor } from "./colorControl";
 
-export const SortData = (type: "location" | "operator") => {
+/**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+ * 拠点をリソースにしたのカレンダーイベント形式配列
+ ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+export const locationSortData = (events: any) => {
   let data: any;
+  let setData: Array<any> = [];
 
-  let locationData: Array<any> = [];
-  let operatorData: Array<any> = [];
+  for (let i = 0; i < events.length; i++) {
+    const e = events[i];
 
-  for (let i = 0; i < event.length; i++) {
-    const e = event[i];
+    const { color } = divideColor(new Date(e.start), new Date(e.end));
 
-    let resourceId: string = "";
-    if (type === "location") resourceId = e.location_cognito_user_id;
-    if (type === "operator") resourceId = e.operator_cognito_user_id;
+    // FullCalendarのイベントの型にして配列に収納
+    data = {
+      id: String(e.id),
+      title: e.title,
+      resourceId: e.location_cognito_user_id,
+      start: new Date(e.start).toISOString(),
+      end: new Date(e.end).toISOString(),
+      extendedProps: {
+        locationMemo: e.location_memo,
+        operatorMemo: e.operator_memo,
+        operatorName: e.operator_name,
+        locationName: e.location_name,
+        avatar: e.avatar,
+      },
+      color: color,
+      durationEditable: false,
+    };
+    setData.push(data);
+  }
+  return { setData };
+};
 
-    const { color } = divideColor2(new Date(e.start), new Date(e.end));
+/**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
+ * オペレーターをリソースにしたカレンダーイベント形式配列
+ * 指定したオペレーターのデータのみ
+ ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
+export const operatorSortData = (resourceId: string, events: any) => {
+  let data: any;
+  let setData: Array<any> = [];
 
+  // 指定したオペレーターIDにがっちする予定だけを抽出
+  const userData = events.filter((item: any) => {
+    return item.operator_cognito_user_id === resourceId;
+  });
+
+  for (let i = 0; i < userData.length; i++) {
+    const e = userData[i];
+    const { color } = divideColor(new Date(e.start), new Date(e.end));
+
+    // FullCalendarのイベントの型にして配列に収納
     data = {
       id: String(e.id),
       title: e.title,
@@ -32,9 +68,7 @@ export const SortData = (type: "location" | "operator") => {
       color: color,
       durationEditable: false,
     };
-
-    if (type === "location") locationData.push(data);
-    if (type === "operator") operatorData.push(data);
+    setData.push(data);
   }
-  return { locationData, operatorData };
+  return { setData };
 };

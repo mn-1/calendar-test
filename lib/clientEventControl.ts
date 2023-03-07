@@ -1,11 +1,11 @@
 // react
-import { useState } from 'react';
+import { useState } from "react";
 // lib
-import { resources, events } from './data';
-import { divideColor } from './colorControl';
-import { scheduleDataInfo } from './inputDataControl';
+import { resources, events } from "./data";
+import { divideColor } from "./colorControl";
+import { scheduleDataInfo } from "./inputDataControl";
 // Fullcalendar
-import { CalendarApi, EventClickArg } from '@fullcalendar/core';
+import { CalendarApi, EventClickArg } from "@fullcalendar/core";
 
 export default function EventControl() {
   // IDセット
@@ -26,17 +26,6 @@ export default function EventControl() {
    * 一覧取得
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const getEvents = () => {
-    // 背景色を変更してから収納
-    for (let i = 0; i < events.length; i++) {
-      const item = events[i];
-
-      const { color } = divideColor(item.start, item.end);
-      item.color = color;
-    }
-
-    const add = events.length;
-    setCountId(add);
-
     setMyEvents(events);
   };
 
@@ -50,9 +39,9 @@ export default function EventControl() {
 
     if (!event) return setFailedSnackbarOpen(true);
 
-    event.setProp('title', values.title);
-    event.setExtendedProp('memo', values.memo);
-    event.setExtendedProp('avatar', values.avatar);
+    event.setProp("title", values.title);
+    event.setExtendedProp("memo", values.memo);
+    event.setExtendedProp("avatar", values.avatar);
 
     setEditDialogOpen(false);
   };
@@ -69,7 +58,7 @@ export default function EventControl() {
     const end = new Date(
       `${values.date.toDateString()} ${values.end.toTimeString()}`
     );
-    const { color } = divideColor(start.getTime(), end.getTime());
+    const { color } = divideColor(new Date(start), new Date(end));
 
     const resource = resources.find((item) => {
       if (item.title === values.locationName) return item;
@@ -79,18 +68,18 @@ export default function EventControl() {
 
     event.setStart(start);
     event.setEnd(end);
-    event.setProp('color', color);
-    event.setProp('title', values.title);
+    event.setProp("color", color);
+    event.setProp("title", values.title);
     event.setResources([resource.id]);
-    event.setExtendedProp('operatorName', values.operatorName);
-    event.setExtendedProp('memo', values.memo);
-    event.setExtendedProp('avatar', values.avatar);
+    event.setExtendedProp("operatorName", values.operatorName);
+    event.setExtendedProp("memo", values.memo);
+    event.setExtendedProp("avatar", values.avatar);
 
     setEditDialogOpen(false);
   };
 
   /**ーーーーーーーーーーーーーーーーーーーーーーーーーーー
-   * 予定登録
+   * スマホで予定登録
    * @param values 
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const addSchedule = async (values: scheduleDataInfo, calApi: CalendarApi) => {
@@ -101,7 +90,7 @@ export default function EventControl() {
       `${values.date.toDateString()} ${values.end.toTimeString()}`
     );
 
-    const { color } = divideColor(start.getTime(), end.getTime());
+    const { color } = divideColor(new Date(start), new Date(end));
 
     const resource = resources.find((item) => {
       if (item.title === values.locationName) return item;

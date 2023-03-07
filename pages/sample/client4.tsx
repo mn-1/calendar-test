@@ -13,9 +13,10 @@ import { EventResizeDoneArg, EventReceiveArg } from "@fullcalendar/interaction";
 import { EventApi } from "@fullcalendar/core";
 // lib
 import { resources, operator, externalEvents } from "../../lib/data";
-import EventControl from "../../lib/eventControl";
+import EventControl from "../../lib/clientEventControl";
 import { divideColor } from "../../lib/colorControl";
 import { scheduleDataInfo } from "../../lib/inputDataControl";
+import { locationSortData } from "../../lib/dataControl";
 // components
 import Header from "../../components/Header/Header";
 import ScheduleInfoDialog from "../../components/Dialog/Client/ScheduleInfoDialog";
@@ -73,6 +74,11 @@ const ClientCalendar = () => {
   useEffect(() => {
     getEvents();
   }, [matches]);
+
+  /**
+   * データ整形
+   */
+  const locationData = locationSortData(myEvents);
 
   /**ok
    * イベント詳細表示ダイアログ開く
@@ -144,7 +150,7 @@ const ClientCalendar = () => {
       return;
     }
 
-    const { color } = divideColor(start.getTime(), end.getTime());
+    const { color } = divideColor(new Date(start), new Date(start));
     arg.event.setProp("color", color);
   };
 
@@ -158,7 +164,7 @@ const ClientCalendar = () => {
     if (!start || !end) return arg.event.remove();
     end = new Date(end.setMinutes(start.getMinutes() + 30));
 
-    const { color } = divideColor(start.getTime(), end.getTime());
+    const { color } = divideColor(new Date(start), new Date(start));
 
     const add = countId + 1;
     setCountId(add);
@@ -284,7 +290,7 @@ const ClientCalendar = () => {
                     editMode={editMode}
                     setBorderColor={setBorderColor}
                     view={today.view}
-                    myEvents={myEvents}
+                    myEvents={locationData.setData}
                     eventsSet={(arg: EventApi) => setMyEvents(arg)}
                   />
                 )}

@@ -26,6 +26,7 @@ export default function EventControl() {
    * 一覧取得
    ーーーーーーーーーーーーーーーーーーーーーーーーーーー*/
   const getEvents = () => {
+    console.log("今イベント更新した");
     setMyEvents(events);
   };
 

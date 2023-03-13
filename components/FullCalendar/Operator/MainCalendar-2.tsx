@@ -12,7 +12,6 @@ import {
   CalendarApi,
   DateInput,
   EventContentArg,
-  SlotLabelContentArg,
   DayHeaderContentArg,
 } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";

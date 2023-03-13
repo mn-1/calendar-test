@@ -73,6 +73,7 @@ const ClientCalendar = () => {
 
   useEffect(() => {
     getEvents();
+    console.log("表示最終日", calendarRef.current?.getApi().view);
   }, [matches]);
 
   /**
@@ -181,6 +182,11 @@ const ClientCalendar = () => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
 
+    console.log(
+      "カレンダーに表示されている最初の日",
+      calendarRef.current?.getApi().view.activeStart
+    );
+
     if (direction === "month") {
       calApi.changeView("dayGridMonth");
       setEditButtonDisable(true);
@@ -216,6 +222,7 @@ const ClientCalendar = () => {
   const handleDateChange = (direction: "prev" | "today" | "next"): void => {
     const calApi = calendarRef.current?.getApi();
     if (!calApi) return setFailedSnackbarOpen(true);
+    console.log(calendarRef.current);
 
     if (direction === "prev") {
       calApi.prev();

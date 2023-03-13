@@ -106,3 +106,7 @@ https://fullcalendar.io/docs/event-dragging-resizing
 - fixedWeekCount
   - 5 行の月は 5 行のままになる
   - https://fullcalendar.io/docs/fixedWeekCount
+- slotLabelContent
+  - 横軸の表示をオリジナルにできる
+- slotlabelFormat
+  - 横軸の表示を月、日、時間、分の部分を編集できる

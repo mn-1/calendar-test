@@ -1,9 +1,10 @@
-import { ReactElement, RefObject, useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import { Button, Typography, Grid } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import { ReactElement, RefObject, useEffect, useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import { Button, Typography, Grid, Box } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import { styled } from "@mui/material/styles";
 
 export type Props = {
   calendarRef: RefObject<FullCalendar>;
@@ -11,7 +12,7 @@ export type Props = {
   setEditMode: Function;
   editButtonDisable: boolean;
   handleViewChange: Function;
-  today: 'month' | 'week' | 'day';
+  today: "month" | "week" | "day";
   handleDateChange: Function;
 };
 
@@ -37,60 +38,71 @@ export const CalendarHeader = (props: Props): ReactElement => {
 
   return (
     <header>
-      <Button
-        variant='contained'
+      <CssButton
+        variant="contained"
         disabled={editButtonDisable}
-        sx={{ mb: '1rem' }}
         onClick={() => setEditMode(!editMode)}
       >
-        {editMode ? '編集終了' : '編集する'}
-      </Button>
+        {editMode ? "編集終了" : "編集する"}
+      </CssButton>
       <Grid
         container
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'
-        sx={{ mb: '1rem' }}
+        direction="row"
+        // justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: "1rem" }}
       >
-        <ButtonGroup>
-          <Button onClick={(): void => handleDateChange('prev')}>
-            <ChevronLeftIcon />
-          </Button>
-          <Button onClick={(): void => handleDateChange('today')}>
-            {today === 'day' && '今日'}
-            {today === 'week' && '今週'}
-            {today === 'month' && '今月'}
-          </Button>
-          <Button onClick={(): void => handleDateChange('next')}>
-            <ChevronRightIcon />
-          </Button>
-        </ButtonGroup>
-
-        <Typography sx={{ fontWeight: 'bold', fontSize: '2rem' }}>
-          {title}
-        </Typography>
-
-        <ButtonGroup disabled={editMode}>
-          <Button
-            onClick={() => handleViewChange('month')}
-            variant={today === 'month' ? 'contained' : 'outlined'}
+        <Grid item xs={4}>
+          <CssButton
+            onClick={() => handleViewChange("month")}
+            variant={today === "month" ? "contained" : "text"}
+            sx={{ borderRadius: 0 }}
           >
             月
-          </Button>
-          <Button
-            onClick={() => handleViewChange('week')}
-            variant={today === 'week' ? 'contained' : 'outlined'}
+          </CssButton>
+          <CssButton
+            onClick={() => handleViewChange("week")}
+            variant={today === "week" ? "contained" : "text"}
+            sx={{ borderRadius: 0 }}
           >
             週
-          </Button>
-          <Button
-            onClick={() => handleViewChange('day')}
-            variant={today === 'day' ? 'contained' : 'outlined'}
+          </CssButton>
+          <CssButton
+            onClick={() => handleViewChange("day")}
+            variant={today === "day" ? "contained" : "text"}
+            sx={{ borderRadius: 0 }}
           >
             日
-          </Button>
-        </ButtonGroup>
+          </CssButton>
+
+          <CssButton onClick={(): void => handleDateChange("prev")}>
+            <ChevronLeftIcon />
+          </CssButton>
+          <CssButton onClick={(): void => handleDateChange("today")}>
+            {today === "day" && "今日"}
+            {today === "week" && "今週"}
+            {today === "month" && "今月"}
+          </CssButton>
+          <CssButton onClick={(): void => handleDateChange("next")}>
+            <ChevronRightIcon />
+          </CssButton>
+        </Grid>
+
+        <Grid item xs={4}>
+          <Typography
+            sx={{ fontWeight: "bold", fontSize: "2rem", textAlign: "center" }}
+          >
+            {title}
+          </Typography>
+        </Grid>
+        <Grid item xs={4}>
+          <Box />
+        </Grid>
       </Grid>
     </header>
   );
 };
+
+const CssButton = styled(Button)({
+  borderRadius: 0,
+});
